@@ -1,0 +1,20 @@
+version: current
+hash: 800c7ce50d0f908452caba9b8cd09ee982d086ef
+
+tables:
+    CHANGELOG:
+        columns:
+            - version:
+                type: string
+            - yml:
+                type: longtext
+            - applied_by:
+                type: string
+            - applied_on_utc:
+                type: datetime
+
+changes:
+    from_version: bootstrap
+    tables:
+        CHANGELOG:
+            - create_table

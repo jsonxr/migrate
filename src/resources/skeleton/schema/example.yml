@@ -1,0 +1,28 @@
+##
+# This is YAML format.  
+# Please note that you MUST have a space after every colon or it causes an error.
+#
+# 
+##
+
+tables: 
+    people:
+        columns:
+            - id: { type: identity }
+            - name: { type: string }
+            - birthday: { type: date }
+    
+    addresses:
+        columns:
+            - person_id: { type: foreignkey, table: people, columns: id }
+            - line1: { type: string }
+            - str_column: { type: string, max: 255, nullable: true }
+            - int_column: { type: integer, max: 255 } # Do we want to support check constraints for int and float values (max,min) NO.  Mysql doesn't support.
+            - float_column: { type: float, max: 255 } # Do we want to support check constraints for int and float values (max,min)
+            - blob_column: { type: blob, max: 4096 }
+            - text_column: { type: text, max: 4096 }
+            - bool_column: { type: boolean, default: true }
+
+    example2:
+        columns:
+            - blah: { type: string, max: 255 }

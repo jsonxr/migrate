@@ -1,0 +1,190 @@
+#!/usr/bin/env python
+# encoding: utf-8
+"""
+Consulted
+https://code.djangoproject.com/wiki/SchemaEvolution
+http://stackoverflow.com/questions/1305532/convert-python-dict-to-object
+http://mikkel.elmholdt.dk/?p=4
+
+Copyright (c) 2012 Jason Rowland. All rights reserved.
+"""
+
+import sys
+import argparse
+
+import project
+from errors import AppError
+
+
+# Create your models here.
+class Migrate():
+    parser = None
+    subparser = None
+
+
+    def get_parser(self):
+        self.parser = argparse.ArgumentParser(description='Painless database migrations.')
+
+        self.parser.add_argument('--version', action='version', version='%(prog)s 1.0')
+        self.parser.add_argument('-e', '--env', dest='environment',
+                help='Use this to override the environment specified in the .jake file')
+        self.subparsers = self.parser.add_subparsers(title='commands', description='valid commands',
+                dest='command')
+
+        # help
+        sub_parser = self.subparsers.add_parser('help', add_help=False,
+                help='show this help message and exit')
+        sub_parser.add_argument('subcommand', nargs='?', metavar='N', default='commands',
+                help='Show help for a specific topic')
+        sub_parser.set_defaults(func=self.showhelp)
+
+        # init
+        sub_parser = self.subparsers.add_parser('init', add_help=False,
+                description='Creates (if necessary) and initializes a migration path.',
+                help='Creates (if necessary) and initializes a migration path.')
+        sub_parser.set_defaults(func=self.init_project)
+
+        # status
+        sub_parser = self.subparsers.add_parser('status', add_help=False,
+                help='display the status of the database')
+        sub_parser.add_argument('-v', '--verbose', action='count', help='shows what tables have changed')
+        sub_parser.set_defaults(func=self.status)
+
+
+        # bootstrap
+        sub_parser = self.subparsers.add_parser('bootstrap', add_help=False,
+                description='Initializes the database for use with the migration utility.',
+                help='Initializes the database for use with the migration utility.')
+        sub_parser.set_defaults(func=self.bootstrap)
+
+        # add/rm/mv
+        sub_parser = self.subparsers.add_parser('add', add_help=False,
+                description='Creates (if necessary) and initializes a migration path.',
+                help='Creates (if necessary) and initializes a migration path.')
+        sub_parser.add_argument('name', nargs='?',
+                help='Adds table to the database ')
+        sub_parser.set_defaults(func=self.add)
+
+
+        # dump
+        sub_parser = self.subparsers.add_parser('dump', add_help=False,
+                description='Dumps the database structure to a file.',
+                help='Dumps the database structure to a file.')
+        sub_parser.add_argument('name', nargs='?',
+                help='Show help for a specific topic')
+        sub_parser.set_defaults(func=self.dump)
+
+        # version
+        sub_parser = self.subparsers.add_parser('version', add_help=False,
+                description='Lists the database versions',
+                help='Lists the database versions')
+        sub_parser.add_argument('subcommand', nargs='?', choices=['list', 'new'],
+                help='The subcommand to use for version')
+        sub_parser.set_defaults(func=self.version)
+
+
+        # dataset
+        sub_parser = self.subparsers.add_parser('dataset', add_help=False,
+                description='Loads/Saves a dataset to/from the database.  Loading a dataset can only be done on an empty dataset unless the --force flag is used.  The dataset is wrapped in a transaction so it will load all or none.',
+                help='')
+        sub_parser.add_argument('datasetcommand', choices=['load', 'save'],
+                help='Either save or load')
+        sub_parser.add_argument('filename',
+                help='Name of dataset')
+        sub_parser.set_defaults(func=self.dataset)
+
+        # create/drop
+        sub_parser = self.subparsers.add_parser('db-create', add_help=False,
+                help='This will create the database')
+        sub_parser.set_defaults(func=self.db_create)
+
+        sub_parser = self.subparsers.add_parser('db-drop', add_help=False,
+                help='This will drop the database')
+        sub_parser.set_defaults(func=self.db_drop)
+
+        # sync/up/down
+        sub_parser = self.subparsers.add_parser('sync', add_help=False,
+                help='This will perform a database')
+        sub_parser.add_argument('version', nargs='?',
+                help='The version to sync the database to.')
+        sub_parser.set_defaults(func=self.sync)
+
+#        sub_parser = self.subparsers.add_parser('down', add_help=False,
+#                help='migrate the database down.  default is one version.')
+#        sub_parser.add_argument('versions', type=int, nargs='?', metavar='N', default=1,
+#                help='Number of versions to up.  default is 1.')
+
+
+    def showhelp(self, args):
+        if (args.subcommand == "commands"):
+            self.parser.print_help()
+        else:
+            self.subparsers.choices[args.subcommand].print_help()
+
+    def init_project(self, p, args):
+        p.init()
+
+    def status(self, p, args):
+        p.status()
+
+    def add(self, p, args):
+        pass
+
+    def dump(self, p, args):
+        name = args.name
+        p.dump(name)
+
+    def sync(self, p, args):
+        p.sync()
+
+    def db_create(self, p, args):
+        p.db_create()
+
+    def db_drop(self, p, args):
+        p.db_drop()
+
+    def dataset(self, args):
+        p = project.Project()
+        if args.datasetcommand == "load":
+            p.load_dataset(args.filename)
+        else:
+            p.save_dataset(args.filename)
+
+    def bootstrap(self, p, args):
+        p.bootstrap()
+
+    def version(self, p, args):
+        p.list_versions()
+
+    def main(self):
+        self.get_parser()
+
+        # If the user didn't supply a command, assume help
+        if (len(sys.argv) < 2):
+            args = self.parser.parse_args(['help'])
+        else:
+            args = self.parser.parse_args()
+
+        if (args.command == 'help'):
+            self.showhelp(args)
+        else:
+            p = project.Project()
+            if args.environment != None:
+                p.environment = args.environment
+
+            args.func(p, args)
+
+
+
+
+def main(argv=None):
+    try:
+        migrate = Migrate()
+        migrate.main()
+    except AppError as exc:
+        sys.stdout.write("\033[0m")
+        print("Error: % s" % exc)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

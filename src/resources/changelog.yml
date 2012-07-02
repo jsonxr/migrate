@@ -1,0 +1,15 @@
+##############################################################################
+# Auto generated.  This table is required to make the migration utility work.
+##############################################################################
+
+tables:
+    changelog:
+        columns:
+            - version:
+                type: string
+            - yml:
+                type: longtext
+            - applied_by:
+                type: string
+            - applied_on_utc:
+                type: datetime
