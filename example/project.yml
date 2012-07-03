@@ -10,7 +10,7 @@
 
 settings:
     # The name of the changelog table that is used to track versions
-    changelog: CHANGELOG
+    migration_table: migrations
     
     # The number of spaces to indent in the yaml files, default is 4.
     indent: 4
