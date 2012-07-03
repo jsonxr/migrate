@@ -1,0 +1,3 @@
+identity: "int"
+string: "varchar(255)"
+text: "longtext"

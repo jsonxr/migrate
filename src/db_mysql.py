@@ -43,12 +43,11 @@ def connection(fnc, *args, **kws):
     return result
 
 
-
 # class connection(object):
-# 
+#
 #     def __init__(self, f):
 #         self.f = f
-# 
+#
 #     def __call__(self):
 #         print "entering", self.f.__name__
 #         self.f()
@@ -59,6 +58,7 @@ def connection(fnc, *args, **kws):
 # Database
 ##############################################################################
 
+
 class Database(database.Database):
     def __init__(self, connection_info):
         self.host = connection_info["host"]
@@ -66,7 +66,6 @@ class Database(database.Database):
         self.password = connection_info["password"]
         self.database = connection_info["database"]
         self.connection = None
-
 
     def exists(self):
         connected = False
@@ -81,22 +80,24 @@ class Database(database.Database):
                 raise e
         return connected
 
-
     @connection
     def get_version(self):
-        # If the changelog table does not exist, we return the bootstrap 
+        # If the changelog table does not exist, we return the bootstrap
         # and actual schema
         myversion = self.get_expected_version()
         db_schema = self.get_db_schema()
         myversion.syncable = (myversion.schema == db_schema)
         return myversion
 
-
     @connection
     def get_expected_version(self):
         v = schema.Version()
 
-        sql = "select version, yml from %s order by applied_on_utc desc limit 1" % config.changelog
+        sql = """select version, yml
+            from %s
+            order by applied_on_utc desc
+            limit 1""" % config.changelog
+
         with closing(self.connection.cursor()) as cursor:
             try:
                 cursor.execute(sql)
@@ -107,7 +108,8 @@ class Database(database.Database):
                 if e[0] == ER_NO_SUCH_TABLE:
                     v.name = "undefined"
                 elif e[0] == ER_BAD_FIELD_ERROR:
-                    raise AppError(config.changelog + " is not the expected structure.  Perhaps you need to rename the changelog table in the project.yaml file?")
+                    m = "%s is not the expected structure." % config.changelog
+                    raise AppError(m)
                 else:
                     raise e
 
@@ -119,7 +121,6 @@ class Database(database.Database):
         self.__get_tables(s)
         return s
 
-
     def __get_column_headers(self, description):
         headers = dict()
         index = 0
@@ -128,19 +129,17 @@ class Database(database.Database):
             index = index + 1
         return headers
 
-
     def __get_table_from_row(self, row, column_headers):
             table = schema.Table()
             table.name = row[column_headers['table_name']]
             return table
-
 
     def __get_column_from_row(self, row, column_headers):
         column = schema.Column()
         column.name = row[1]
         column.position = row[2]
         column.type = row[4].lower()
-        if (not row[3] == None):
+        if (not row[3] is None):
             column.default = str(row[3])
         if row[5] == "YES":
             column.nullable = True
@@ -153,13 +152,12 @@ class Database(database.Database):
 
         return column
 
-
     @connection
     def __get_tables(self, myschema):
         # Tables
         sql = """
-        select table_name, engine, table_rows, auto_increment 
-        from information_schema.tables 
+        select table_name, engine, table_rows, auto_increment
+        from information_schema.tables
         where table_schema = '""" + self.database + """'
         order by table_schema, table_name
         """
@@ -175,10 +173,10 @@ class Database(database.Database):
 
         # Columns
         sql = """
-        select table_name, column_name, ordinal_position, column_default, 
-            column_type, is_nullable, character_maximum_length, numeric_precision,
-            numeric_scale, column_key, extra 
-        from information_schema.columns 
+        select table_name, column_name, ordinal_position, column_default,
+            column_type, is_nullable, character_maximum_length,
+            numeric_precision, numeric_scale, column_key, extra
+        from information_schema.columns
         where table_schema = '""" + self.database + """'
         order by table_schema, table_name, ordinal_position
         """
@@ -195,11 +193,10 @@ class Database(database.Database):
             column = self.__get_column_from_row(row, column_headers)
             table.columns.append(column)
 
-
         # Foreign Keys
         sql = """
         select table_name, constraint_name, column_name, ordinal_position,
-            position_in_unique_constraint, referenced_table_name, 
+            position_in_unique_constraint, referenced_table_name,
             referenced_column_name
         from  information_schema.key_column_usage
         where table_schema = '""" + self.database + """'
@@ -211,43 +208,27 @@ class Database(database.Database):
         cursor.close()
         #print rows
 
-
     def is_connected(self):
-        return not (self.connection == None)
+        return not (self.connection is None)
 
     def connect(self, database_name=None):
         if (database_name):
-            self.connection = MySQLdb.connect (host=self.host, user=self.user,
+            self.connection = MySQLdb.connect(host=self.host, user=self.user,
                     passwd=self.password, db=database_name)
         else:
-            self.connection = MySQLdb.connect (host=self.host, user=self.user,
+            self.connection = MySQLdb.connect(host=self.host, user=self.user,
                     passwd=self.password)
         return self.connection
-
 
     def close(self):
         self.connection.close()
         self.connection = None
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def execute_create(self):
         try:
             sql = "CREATE DATABASE " + self.database
             cursor = self.connection.cursor()
             cursor.execute(sql)
-            rows = cursor.fetchall()
             cursor.close()
         except MySQLError, e:
             if e[0] == ER_DB_CREATE_EXISTS:
@@ -255,13 +236,11 @@ class Database(database.Database):
             else:
                 raise e
 
-
     def execute_drop(self):
         try:
             sql = "DROP DATABASE " + self.database
             cursor = self.connection.cursor()
             cursor.execute(sql)
-            rows = cursor.fetchall()
             cursor.close()
         except MySQLError, e:
             if e[0] == ER_DB_DROP_EXISTS:
@@ -269,12 +248,9 @@ class Database(database.Database):
             else:
                 raise e
 
-
-
-
-
-
-
+##############################################################################
+# Please review the below
+##############################################################################
 
     @property
     def schema(self):
@@ -286,14 +262,13 @@ class Database(database.Database):
             self.close()
         return myschema
 
-
     @property
     def is_expected(self):
         self.connect(self.database)
         myschema = schema.Schema()
 
         try:
-            sql = "select * from {changelog}".format(changelog=config.changelog)
+            sql = "select * from {s}" % config.changelog
             cursor = self.connection.cursor()
             cursor.execute(sql)
         except MySQLError, e:
@@ -304,7 +279,6 @@ class Database(database.Database):
 
         return True
 
-
     def __get_schema(self):
         # Validate mysql version
         # TODO: show variables like "version";
@@ -313,7 +287,6 @@ class Database(database.Database):
         self.__get_tables(myschema)
         #self.__get_procedures(myschema)
         return myschema
-
 
     def sync(self, change_set, yml_schema):
         self.connect(self.database)
@@ -335,7 +308,6 @@ class Database(database.Database):
                         print column.get_yaml()
                         oc = old.get_column_by_name(column.name)
                         print oc.get_yaml()
-
 
                     sql = self.__get_alter_sql_for_table(table, old)
                     print sql
@@ -359,7 +331,8 @@ class Database(database.Database):
                 t = dataset.Table()
                 t.table = data.schema.tables[table_name]
 
-                # headers = sorted(results["headers"].iteritems(), key=operator.itemgetter(1)) # sort by key
+                # headers = sorted(results["headers"].iteritems(),
+                #                  key=operator.itemgetter(1)) # sort by key
                 # header_row = [header[0] for header in headers]
                 # t.headers = header_row
                 t.columns = results["columns"]
@@ -409,9 +382,13 @@ class Database(database.Database):
             else:
                 after = "AFTER `%s`" % (table.columns[index - 1].name)
             if old.get_column_by_name(column.name):
-                s.write("  CHANGE COLUMN `%s` `%s` %s %s" % (column.name, column.name, column.type, after))
+                s.write("  CHANGE COLUMN `%s` `%s` %s %s" % (column.name,
+                                                             column.name,
+                                                             column.type,
+                                                             after))
             else:
-                s.write("  ADD COLUMN `%s` %s %s" % (column.name, column.name, column.type, after))
+                s.write("  ADD COLUMN `%s` %s %s" % (column.name, column.name,
+                                                     column.type, after))
             if (index + 1) < len(table.columns):
                 s.write(",\n")
             else:
@@ -420,11 +397,6 @@ class Database(database.Database):
         return_str = s.getvalue()
         s.close()
         return return_str
-
-
-
-
-
 
     def __execute(self, sql):
         cursor = self.connection.cursor()
@@ -439,18 +411,18 @@ class Database(database.Database):
 
         rows = cursor.fetchall()
         cursor.close()
-        return { "columns": column_headers, "rows": rows }
-
+        return {"columns": column_headers, "rows": rows}
 
     def __get_version(self, myschema):
-        if (self.connection == None):
+        if (self.connection is None):
             raise AppError("Connection not established.")
-        sql = "select version from " + config.changelog + " order by applied_at desc limit 1"
+        sql = "select version from " + config.changelog
+        sql += " order by applied_at desc limit 1"
 
         cursor = self.connection.cursor()
         try:
             cursor.execute(sql)
-            column_headers = self.__get_column_headers(cursor.description)
+            #column_headers = self.__get_column_headers(cursor.description)
             row = cursor.fetchone()
             print row
             myschema.version = row[0]
@@ -458,17 +430,16 @@ class Database(database.Database):
             if e[0] == ER_NO_SUCH_TABLE:
                 myschema.version = None
             elif e[0] == ER_BAD_FIELD_ERROR:
-                raise AppError(config.changelog + " is not the expected structure.  Perhaps you need to rename the changelog table in the project.yaml file?")
+                m = "%s is not the expected structure." % config.changelog
+                raise AppError(m)
             else:
                 raise e
         finally:
             cursor.close()
 
-
-
     def __get_procedures(self, myschema):
         sql = """
-        select name, body_utf8, comment, param_list, returns 
+        select name, body_utf8, comment, param_list, returns
         from mysql.proc
         where db = '""" + self.database + """'
         and type='PROCEDURE' and language='SQL'
@@ -483,7 +454,6 @@ class Database(database.Database):
             procedure.body = row[1]
             procedure.comment = row[2]
 
-
             if (row[3]):
                 parameters = [x.strip() for x in row[3].split(',')]
 
@@ -492,18 +462,16 @@ class Database(database.Database):
                     param = schema.Parameter()
                     param.mode = m.group(1)
                     param.name = m.group(2)
-                    param_type = m.group(3)
+                    #param_type = m.group(3)
                     procedure.parameters.append(param)
 
             myschema.procedures[procedure.name] = procedure
 
 
-
-
 ##############################################################################
 # MySQL constants
 #
-# Pulled from http://dev.mysql.com/doc/refman//5.5/en/error-messages-server.html
+# from http://dev.mysql.com/doc/refman//5.5/en/error-messages-server.html
 ##############################################################################
 ER_DB_CREATE_EXISTS = 1007
 ER_DB_DROP_EXISTS = 1008
@@ -517,4 +485,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

@@ -7,6 +7,7 @@ Copyright (c) 2012 Jason Rowland. All rights reserved.
 
 import errors
 
+
 def get(connection_info):
     vendor = connection_info["vendor"]
     if (vendor == "mysql"):
@@ -26,4 +27,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

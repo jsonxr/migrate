@@ -7,28 +7,28 @@ Copyright (c) 2012 Jason Rowland. All rights reserved.
 
 from cStringIO import StringIO
 
+
 class Table(object):
     def __init__(self):
         self.table = None
         self.columns = list
         self.rows = list
-        
+
     def get_yaml(self, indent=""):
         if not self.rows:
             return None
-            
+
         s = StringIO()
         s.write(indent + self.table.name + ":\n")
-        
+
         # Column Headers
-        s.write(indent + "  columns: [" )
+        s.write(indent + "  columns: [")
         for index in range(len(self.columns)):
             if (index > 0):
                 s.write(", ")
             s.write('"' + self.columns[index][0] + '"')
         s.write("]\n")
-        
-        
+
         s.write(indent + "  rows:\n")
         # Rows
         for row in self.rows:
@@ -36,12 +36,12 @@ class Table(object):
             for index in range(len(row)):
                 if (index > 0):
                     s.write(", ")
-                if row[index] == None:
+                if row[index] is None:
                     s.write('~')
                 else:
-                    s.write('"%s"' % row[index] )
+                    s.write('"%s"' % row[index])
             s.write("]\n")
-    
+
         return_str = s.getvalue()
         s.close()
         return return_str
@@ -57,4 +57,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

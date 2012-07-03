@@ -16,7 +16,6 @@ from errors import AppError
 import database
 import schema
 
-DEFAULT_INDENT = "    "
 
 class Project(object):
     FILENAME = "project.yml"
@@ -41,7 +40,6 @@ class Project(object):
         self._environment = value
         self.connection_info = self.project_settings['environments'][self.environment]
 
-
     def __load_project_file(self):
         filename = self.path + "/" + Project.FILENAME
         if os.path.exists(filename):
@@ -49,7 +47,7 @@ class Project(object):
             self.project_settings = yaml.load(stream)
             stream.close()
 
-        # Override main key values 
+        # Override main key values
         override_yaml = {}
         filename = self.path + "/" + Project.OVERRIDES
         if os.path.exists(filename):
@@ -65,9 +63,8 @@ class Project(object):
             if "settings" in self.project_settings and "environment" in self.project_settings["settings"]:
                 self.environment = self.project_settings["settings"]["environment"]
 
-
     def is_valid(self):
-        if self.project_settings == None:
+        if self.project_settings is None:
             return False
         else:
             return True
@@ -75,7 +72,6 @@ class Project(object):
     def __ensure_valid(self):
         if not self.is_valid():
             raise AppError('Not a valid repository.  Run init first.')
-
 
     def status(self):
         self.__ensure_valid()
@@ -99,7 +95,7 @@ class Project(object):
         # On dev04:migrate_dev version:bootstrap
         print('# On env={environment}, db={database}, version={version}'.format(environment=self.environment, database=self.connection_info["database"], version=v.name))
 
-        if previous == None:
+        if previous is None:
             print('#')
             if (db.exists()):
                 print('#  (use "jake bootstrap" to initialize project with database schema)')
@@ -117,13 +113,12 @@ class Project(object):
             print('#  (use "jake sync" to sync database to schema)')
             print('#  (use "jake reset HEAD <table>..." to unstage)')
 
-
     def init(self):
         if self.is_valid():
             raise AppError('Project has already been initialized')
 
-        # Create the directory if we pass it in.  Don't want to create the 
-        # 
+        # Create the directory if we pass it in.  Don't want to create the
+        #
         if not os.path.exists(self.path):
             os.mkdir(self.path)
 
@@ -148,29 +143,22 @@ class Project(object):
         db_schema = db.get_db_schema()
         bootstrap_version = schema.create_bootstrap(db_schema)
 
-        # Seed the current schema with the database
-        f = open('schema/all.yml', 'w')
-        f.write(repr(db_schema))
-        f.close()
+        # Save all the schema
+        changelog_table = schema.Table()
+        changelog_table.load_from_file(self.__getResourcePath('/changelog.yml'))
+        changelog_table.name = config.changelog
 
-        # Write the migration table to the current
-        with file('schema/%s.yml' % config.changelog, 'w') as f:
-            changelog_schema = schema.load_schema_from_file(self.__getResourcePath('/changelog.yml'))
-            changelog_table = changelog_schema.tables["changelog"]
-            changelog_table.name = config.changelog
-            changelog_schema.remove_table("changelog")
-            changelog_schema.add_table(changelog_table)
-            f.write(repr(changelog_schema))
-            f.close()
-
-        # Create the versions/index file.
-        with file('versions/index.yml', 'w') as f:
-            f.write('# Version index file.')
-            f.write('versions:\n')
-            f.write('    - %s:\n' % bootstrap_version.name)
-            f.write('        filename: "%s"\n' % bootstrap_version.filename)
-            f.write('        hashcode: "%s"' % bootstrap_version.hashcode)
-
+        db_schema.add_table(changelog_table)
+        #print(db_schema)
+        db_schema.save_to_path(self.path + "/schema")
+#
+#        # Create the versions/index file.
+#        with file('versions/index.yml', 'w') as f:
+#            f.write('# Version index file.')
+#            f.write('versions:\n')
+#            f.write('    - %s:\n' % bootstrap_version.name)
+#            f.write('        filename: "%s"\n' % bootstrap_version.filename)
+#            f.write('        hashcode: "%s"' % bootstrap_version.hashcode)
 
         current = bootstrap_version
         current.name = "current"
@@ -178,13 +166,11 @@ class Project(object):
         current.add_table(changelog_table)
         current.save()
 
-
     def add(self):
         pass
 
     def reset(self):
         pass
-
 
     def rm(self):
         pass
@@ -198,7 +184,7 @@ class Project(object):
 #        yml_schema = self.__load_yml_schema()
 #
 #        try:
-#            if db_schema == None:
+#            if db_schema is None:
 #                print "# On first version"
 #                print "Database does not exist. type jake db-create to create `%s`." % db.database
 #            else:
@@ -249,7 +235,6 @@ class Project(object):
 #        finally:
 #            sys.stdout.write("\033[0m")
 
-
     def sync(self):
         self.__ensure_valid()
         db = database.get(self.connection_info)
@@ -291,7 +276,6 @@ class Project(object):
             yml = db_schema.get_yaml()
         return yml
 
-
     def load_dataset(self, filename):
         pass
 
@@ -304,18 +288,15 @@ class Project(object):
         else:
             print "Need to either run bootstrap or version create."
 
-
     def save_dataset(self, filename):
         self.__ensure_valid()
         db = database.get(self.connection_info)
         db_dataset = db.get_dataset()
         print db_dataset
 
-
     def __getResourcePath(self, name):
         resource = os.path.dirname(os.path.realpath(__file__)) + '/resources' + name
         return resource
-
 
 
 def main(argv=None):

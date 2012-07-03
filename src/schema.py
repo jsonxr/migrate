@@ -8,21 +8,21 @@ Copyright (c) 2012 Jason Rowland. All rights reserved.
 import glob
 import hashlib
 import os
-import re
 import yaml
 from cStringIO import StringIO
 from contextlib import closing
 
-import config
-
+import changeset
 
 ##############################################################################
 # public functions
 ##############################################################################
 
-_path = os.path.abspath(".")
+_PROJECT_PATH = os.path.abspath(".")
+
+
 def get_versions():
-    filename = _path + "/versions/index.yml"
+    filename = _PROJECT_PATH + "/versions/index.yml"
     try:
         versions = Versions()
         with file(filename, 'r') as stream:
@@ -42,8 +42,6 @@ def get_versions():
             raise e
 
 
-
-
 def create_bootstrap(schema):
     b = VersionFile()
     b.name = 'bootstrap'
@@ -51,8 +49,6 @@ def create_bootstrap(schema):
     b.schema = schema
     b.save()
     return b
-
-
 
 
 def load_schema_from_file(filename):
@@ -63,20 +59,23 @@ def load_schema_from_file(filename):
         return s
 
 
+def save_to_path(schema):
+    for table in schema.tables:
+        #filename = _PROJECT_PATH + "/schema/tables/"
+        print(table)
 
 
 ##############################################################################
 # Versions
 ##############################################################################
 
+
 class Versions(object):
     def __init__(self):
         self.versions = []
 
-
     def append(self, version):
         self.versions.append(version)
-
 
     def get_previous(self):
         if len(self.versions) >= 1:
@@ -84,82 +83,70 @@ class Versions(object):
         else:
             return None
 
-
     def get_current(self):
         v = VersionFile()
         v.name = "current"
         v.filename = "current.yml"
         return v
 
-
     def get_from_path(self):
         v = Version()
         v.name = "path"
-        for filename in glob.glob(_path + "/schema/*.yml"):
+        for filename in glob.glob(_PROJECT_PATH + "/schema/*.yml"):
             with file(filename, 'r') as stream:
                 data = yaml.load(stream)
                 v.load_from_dict(data)
         return v
 
 
-
-
 ##############################################################################
 # Version
 ##############################################################################
+
 
 class Version(object):
     def __init__(self):
         self.name = None
         self._schema = Schema()
+        self._changes = changeset.Changeset()
         self.syncable = False
-
 
     @property
     def hashcode(self):
         return self._schema.hashcode
 
-
     @property
     def schema(self):
         return self._schema
-
 
     @schema.setter
     def schema(self, value):
         self._schema = value
 
-
     def __eq__(self, other):
         return (repr(self) == repr(other))
 
-
     def __repr__(self):
         with closing(StringIO()) as s:
-            s.write("version: %s" % self.name)
+            _write_string(s, "version", self.name)
             if (self.hashcode):
                 s.write("\nhash: %s\n" % self.hashcode)
             if (self.schema):
-                s.write("\n%s" % repr(self.schema))
+                s.write("%s" % repr(self.schema))
             return s.getvalue().rstrip()
-
 
     def load_from_dict(self, data):
         if "version" in data:
             self.name = data["version"]
         self._schema.load_from_dict(data)
 
-
     def remove_table(self, name):
         self.schema.remove_table(name)
         print("remove table in changelog")
 
-
     def add_table(self, table):
         self.schema.add_table(table)
-        print("add table in changelog")
-
-
+        print("!!add table in changelog")
 
 
 class VersionFile(Version):
@@ -167,32 +154,26 @@ class VersionFile(Version):
         super(VersionFile, self).__init__()
         self.filename = None
 
-
     def load(self):
-        with file(_path + "/versions/" + self.filename, 'r') as stream:
+        with file(_PROJECT_PATH + "/versions/" + self.filename, 'r') as stream:
             data = yaml.load(stream)
             self.load_from_dict(data)
-
 
     def save(self):
         with file('versions/%s' % self.filename, 'w') as f:
             f.write(repr(self))
 
-
-
-
 ##############################################################################
 # Schema
 ##############################################################################
+
 
 class Schema(object):
     def __init__(self):
         self.tables = {}
 
-
     def __eq__(self, other):
         return (repr(self) == repr(other))
-
 
     def __repr__(self):
         with closing(StringIO()) as s:
@@ -201,27 +182,30 @@ class Schema(object):
                 s.write("\n")
                 for name in self.tables:
                     table = self.tables[name]
-                    s.write(_indent(repr(table)))
+                    s.write(indent(repr(table), is_list=True))
                     s.write("\n")
             else:
                 s.write(" ~\n")
-            return s.getvalue()
-
+            return s.getvalue().strip()
 
     def clear(self):
         self.tables = {}
 
+    def save_to_path(self, path):
+        for table_name in self.tables:
+            table = self.tables[table_name]
+            print(table)
+            #print(table)
 
     def load_from_dict(self, data):
         assert "tables" in data, "expecting tables key in dictionary"
 
         tables = data["tables"]
         if tables:
-            for name in tables:
+            for d in tables:
                 table = Table()
-                table.name = name
-                table.load_from_dict(tables[name])
-                self.tables[table.name] = table
+                table.load_from_dict(d)
+                self.add_table(table)
 
     @property
     def hashcode(self):
@@ -229,31 +213,33 @@ class Schema(object):
         m.update(repr(self))
         return m.hexdigest()
 
-
     def remove_table(self, name):
         del self.tables[name]
 
-
     def add_table(self, table):
         self.tables[table.name] = table
-
-
 
 
 ##############################################################################
 # Table
 ##############################################################################
 
+
 class Table(object):
     def __init__(self):
         self.name = None
         self.columns = []
 
+    def load_from_file(self, filename):
+        with file(filename, 'r') as stream:
+            data = yaml.load(stream)
+            self.load_from_dict(data)
 
     def load_from_dict(self, data):
-        assert "columns" in data, "'columns' key must exist in table dictionary"
+        assert "columns" in data
 
-        self.columns = [] # Reset the columns list to empty
+        self.name = data["name"]
+        self.columns = []  # Reset the columns list to empty
 
         # columns
         columns = data["columns"]
@@ -264,21 +250,26 @@ class Table(object):
 
         # constraints
 
+    def add_column(self, name, col_type):
+        column = Column()
+        column.name = name
+        column.type = col_type
+        self.columns.append(column)
+        return column
 
     def __repr__(self):
         with closing(StringIO()) as s:
-            s.write("%s:\n" % self.name)
-            s.write(_indent("columns:\n"))
+            s.write("name: %s\n" % self.name)
+            s.write("columns:\n")
             for column in self.columns:
-                s.write(_indent(repr(column), 2))
-            return s.getvalue()
-
-
+                s.write(indent(repr(column), is_list=True) + "\n")
+            return s.getvalue().strip()
 
 
 ##############################################################################
 # Column
 ##############################################################################
+
 
 class Column(object):
     def __init__(self):
@@ -289,61 +280,53 @@ class Column(object):
         self.key = False
         self.autoincrement = False
 
-
     def load_from_dict(self, data):
-        assert len(data) == 1, "Expecting one element in the column dictionary"
-        assert "type" in data.items()[0][1]
+        assert "name" in data
+        assert "type" in data
 
-        item = data.items()[0]
-        self.name = item[0]
-        self.key = item[1]["key"] if "key" in item[1] else False
-        self.type = item[1]["type"]
-        self.default = item[1]["default"] if "default" in item[1] else None
-        self.nullable = item[1]["nullable"] if "nullable" in item[1] else None
-
+        self.name = data["name"]
+        self.type = data["type"]
+        self.key = data["key"] if "key" in data else False
+        self.default = data["default"] if "default" in data else None
+        self.nullable = data["nullable"] if "nullable" in data else True
 
     def __repr__(self):
         with closing(StringIO()) as s:
-            s.write("- %s:\n" % self.name)
-            s.write(_indent("type: %s\n" % self.type))
+            s.write('name: %s\n' % self.name)
+            s.write('type: %s\n' % self.type)
 
-            if (self.key):
-                s.write(_indent("key: true\n"))
+            _write_bool(s, "key", self.key)
+            _write_bool(s, "nullable", self.nullable)
             if (self.default):
-                s.write(_indent("default: %s\n" % self.default))
-            if (self.nullable):
-                s.write(_indent("nullable: %s\n" % self.nullable))
+                s.write('default: "%s"\n' % self.default)
 
             return s.getvalue()
-
-
 
 
 ##############################################################################
 # Procedure
 ##############################################################################
 
+
 class Procedure(object):
     def __init__(self):
         pass
-
-
 
 
 ##############################################################################
 # Parameter
 ##############################################################################
 
+
 class Parameter(object):
     def __init__(self):
         pass
 
 
-
-
 ##############################################################################
 # Changelog
 ##############################################################################
+
 
 class Changelog(object):
     def __init__(self):
@@ -351,24 +334,37 @@ class Changelog(object):
         self.to_version = None
 
 
-
-
 ##############################################################################
 # Helper functions
 ##############################################################################
 
-_compiled_re = re.compile('^(?P<all>.*)$', re.MULTILINE)
-def _indent(strings, indent=1):
-
-    #print('before: [%s]' % strings)
-    newstr = _compiled_re.sub(config.indent * indent + '\g<all>', strings.rstrip())
-    if strings[-1] == "\n":
-        newstr = newstr + "\n"
-
-    #print('after: [%s]' % newstr)
-    return newstr
+def _write_bool(s, name, value):
+    if (value):
+        s.write('%s: true\n' % name)
+    else:
+        s.write('%s: false\n' % name)
 
 
+def _write_string(s, name, value):
+    if (value):
+        s.write("%s: %s" % (name, value))
+    else:
+        s.write("%s: ~" % name)
+
+
+def indent(value, indent=1, is_list=False):
+    strings = value.rstrip().splitlines(True)
+
+    first = "    " * indent
+    others = "    " * indent
+    if is_list:
+        first += "- "
+        others += "  "
+
+    newlist = [first + strings[0]]
+    for i in range(1, len(strings)):
+        newlist.append(others + strings[i])
+    return "".join(newlist)
 
 
 def caseinsensitive_sort(stringList):
@@ -382,11 +378,8 @@ def caseinsensitive_sort(stringList):
     return [x[1] for x in tupleList]
 
 
-
-
 def main():
     pass
 
 if __name__ == '__main__':
     main()
-

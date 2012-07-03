@@ -10,15 +10,17 @@ import sys
 indent = "    "
 changelog = 'changelog'
 
+
 def load(yml):
     if (yml and 'settings' in yml):
         global changelog
         changelog = yml['settings']['changelog']
-        
+
         global indent
         i = yml['settings']['indent']
         if (i > 0):
             indent = " " * i
+
 
 def main(argv=None):
     pass

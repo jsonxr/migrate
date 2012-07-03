@@ -20,25 +20,25 @@ class Command(object):
         self.table_name = table_name
         self.params = None
 
-
     def display(self, schema, db_schema):
         """
         None = db.schema == current.schema
             The database table matches the current schema so nothing to do
-        
+
         sync = db.schema != current.schema && db.schema == changelog.schema
             The database table does not match the current schema
             The database table matches what the changelog table is reporting
-        
+
         force = db.schema != current.schema && db.schema != changelog.schema
             The database table does not match the current schema
-            The database table does not match what the changelog table is reporting
+            The database table does not match what the changelog table is
+            reporting
         """
-
 
         if self.name == 'create_table':
             if self.table_name in db_schema.tables:
                 table = db_schema.tables[self.table_name]
+                print(table)
                 _sync = "[force]"
                 _format_str = RED
             else:
@@ -47,7 +47,6 @@ class Command(object):
 
         s = "{:7} {:13} {:20}".format(_sync, "new table:", "migrations")
         return "{}".format(_format_str.format(s))
-
 
     def get_yaml(self):
         s = StringIO()
@@ -69,19 +68,17 @@ class AutoVivification(dict):
             value = self[item] = type(self)()
             return value
 
+
 class Changeset(object):
     def __init__(self):
         self.tables = AutoVivification()
 
-
     def __repr__(self):
         return self.get_yaml()
-
 
     def create_table(self, table):
         self.add(table.name, "create_table")
         self.tables[table.name].append(Command("create_table"))
-
 
     def load_from_dict(self, d):
         self.tables = AutoVivification()
@@ -91,14 +88,13 @@ class Changeset(object):
                     self.add(table_name, command)
                 else:
                     for command_name in command.keys():
-                        self.add(table_name, command_name, command[command_name])
-
+                        self.add(table_name, command_name,
+                                 command[command_name])
 
     def add(self, table_name, command_name, params=None):
         cmd = Command(command_name, table_name)
         cmd.params = params
         self.tables[table_name][command_name] = cmd
-
 
     def get_yaml(self, indent=""):
         s = StringIO()
@@ -120,10 +116,8 @@ class Changeset(object):
         return return_str
 
 
-
 def main():
     pass
 
 if __name__ == '__main__':
     main()
-
