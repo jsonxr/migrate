@@ -25,11 +25,11 @@ class Command(object):
         None = db.schema == current.schema
             The database table matches the current schema so nothing to do
 
-        sync = db.schema != current.schema && db.schema == changelog.schema
+        sync = db.schema != current.schema && db.schema == migration.schema
             The database table does not match the current schema
-            The database table matches what the changelog table is reporting
+            The database table matches what the migration_table is reporting
 
-        force = db.schema != current.schema && db.schema != changelog.schema
+        force = db.schema != current.schema && db.schema != migration.schema
             The database table does not match the current schema
             The database table does not match what the changelog table is
             reporting
@@ -71,6 +71,8 @@ class AutoVivification(dict):
 
 class Changeset(object):
     def __init__(self):
+        self.from_version = None
+        self.to_version = None
         self.tables = AutoVivification()
 
     def __repr__(self):

@@ -1,3 +1,9 @@
-identity: "int"
-string: "varchar(255)"
-text: "longtext"
+aliases:
+    - name: identity
+      type: int(11) autoincrement
+    - name: integer
+      type: int(11)
+    - name: string
+      type: varchar(255)
+    - name: text
+      type: longtext

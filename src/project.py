@@ -77,8 +77,13 @@ class Project(object):
         self.__ensure_valid()
 
         versions = schema.get_versions()
-        previous = versions.get_previous()
-        current = versions.get_current()
+
+        if versions is None:
+            previous = None
+            current = None
+        else:
+            previous = versions.get_previous()
+            current = versions.get_current()
 
         #print(versions.get_from_path())
         #print(current)
@@ -144,13 +149,13 @@ class Project(object):
         bootstrap_version = schema.create_bootstrap(db_schema)
 
         # Save all the schema
-        changelog_table = schema.Table()
-        changelog_table.load_from_file(self.__getResourcePath('/changelog.yml'))
-        changelog_table.name = config.changelog
+        migration_table = schema.Table()
+        migration_table.load_from_file(self.__getResourcePath('/migration.yml'))
+        migration_table.name = config.migration_table
 
-        db_schema.add_table(changelog_table)
-        #print(db_schema)
-        db_schema.save_to_path(self.path + "/schema")
+        db_schema.add_table(migration_table)
+
+        db_schema.save_to_path()
 #
 #        # Create the versions/index file.
 #        with file('versions/index.yml', 'w') as f:
@@ -163,7 +168,7 @@ class Project(object):
         current = bootstrap_version
         current.name = "current"
         current.filename = "current.yml"
-        current.add_table(changelog_table)
+        current.add_table(migration_table)
         current.save()
 
     def add(self):

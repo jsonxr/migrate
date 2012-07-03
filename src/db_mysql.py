@@ -82,7 +82,7 @@ class Database(database.Database):
 
     @connection
     def get_version(self):
-        # If the changelog table does not exist, we return the bootstrap
+        # If the migration_table table does not exist, we return the bootstrap
         # and actual schema
         myversion = self.get_expected_version()
         db_schema = self.get_db_schema()
@@ -96,7 +96,7 @@ class Database(database.Database):
         sql = """select version, yml
             from %s
             order by applied_on_utc desc
-            limit 1""" % config.changelog
+            limit 1""" % config.migration_table
 
         with closing(self.connection.cursor()) as cursor:
             try:
@@ -108,7 +108,7 @@ class Database(database.Database):
                 if e[0] == ER_NO_SUCH_TABLE:
                     v.name = "undefined"
                 elif e[0] == ER_BAD_FIELD_ERROR:
-                    m = "%s is not the expected structure." % config.changelog
+                    m = "%s is not the expected structure." % config.migration_table
                     raise AppError(m)
                 else:
                     raise e
@@ -268,7 +268,7 @@ class Database(database.Database):
         myschema = schema.Schema()
 
         try:
-            sql = "select * from {s}" % config.changelog
+            sql = "select * from {s}" % config.migration_table
             cursor = self.connection.cursor()
             cursor.execute(sql)
         except MySQLError, e:
@@ -416,7 +416,7 @@ class Database(database.Database):
     def __get_version(self, myschema):
         if (self.connection is None):
             raise AppError("Connection not established.")
-        sql = "select version from " + config.changelog
+        sql = "select version from " + config.migration_table
         sql += " order by applied_at desc limit 1"
 
         cursor = self.connection.cursor()
@@ -430,7 +430,7 @@ class Database(database.Database):
             if e[0] == ER_NO_SUCH_TABLE:
                 myschema.version = None
             elif e[0] == ER_BAD_FIELD_ERROR:
-                m = "%s is not the expected structure." % config.changelog
+                m = "%s is not the expected structure." % config.migration_table
                 raise AppError(m)
             else:
                 raise e

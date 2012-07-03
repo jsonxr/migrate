@@ -8,13 +8,13 @@ Copyright (c) 2012 Jason Rowland. All rights reserved.
 import sys
 
 indent = "    "
-changelog = 'changelog'
+migration_table = 'migrations'
 
 
 def load(yml):
     if (yml and 'settings' in yml):
-        global changelog
-        changelog = yml['settings']['changelog']
+        global migration_table
+        migration_table = yml['settings']['migration_table']
 
         global indent
         i = yml['settings']['indent']
