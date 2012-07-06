@@ -5,11 +5,13 @@ Created by Jason Rowland on 2012-05-28.
 Copyright (c) 2012 Jason Rowland. All rights reserved.
 """
 
-import MySQLdb
 from cStringIO import StringIO
 from contextlib import closing
 from decorator import decorator
+import MySQLdb
 import re
+import os
+import yaml
 
 import config
 import database
@@ -43,21 +45,26 @@ def connection(fnc, *args, **kws):
     return result
 
 
-# class connection(object):
-#
-#     def __init__(self, f):
-#         self.f = f
-#
-#     def __call__(self):
-#         print "entering", self.f.__name__
-#         self.f()
-#         print "exited", self.f.__name__
+@decorator
+def connectmyql(fnc, *args, **kws):
+    db = args[0]
+
+    already_connected = db.is_connected()
+    if not already_connected:
+        db.connect()
+
+    try:
+        result = fnc(*args, **kws)
+    finally:
+        if not already_connected:
+            db.close()
+
+    return result
 
 
 ##############################################################################
 # Database
 ##############################################################################
-
 
 class Database(database.Database):
     def __init__(self, connection_info):
@@ -73,26 +80,30 @@ class Database(database.Database):
             self.connect(self.database)
             self.close()
             connected = True
-        except MySQLError, e:
+        except MySQLError as e:
             if e[0] == ER_BAD_DB_ERROR:
                 connected = False
             else:
-                raise e
+                raise
         return connected
 
     @connection
     def get_version(self):
         # If the migration_table table does not exist, we return the bootstrap
         # and actual schema
-        myversion = self.get_expected_version()
-        db_schema = self.get_db_schema()
-        myversion.syncable = (myversion.schema == db_schema)
-        return myversion
+        dbversion = database.DatabaseVersion()
+        self._set_actual(dbversion)     # This is the actual
+        self._set_expected(dbversion)   # This is the sql_alias converted, verbose
+        return dbversion
 
-    @connection
-    def get_expected_version(self):
-        v = schema.Version()
+    def convert_schema_to_vendor(self, s):
+        for t in s.tables:
+            table = s.tables[t]
+            for c in table.columns:
+                _convert_column_to_vendor(c)
+        return s
 
+    def _set_expected(self, dbversion):
         sql = """select version, yml
             from %s
             order by applied_on_utc desc
@@ -102,24 +113,26 @@ class Database(database.Database):
             try:
                 cursor.execute(sql)
                 row = cursor.fetchone()
-                print row[0]
-                v.name = "UNDEFINED RIGHT NOW"
-            except MySQLError, e:
+                dbversion.name = row[0]
+                yml = row[1]
+                s = schema.Schema()
+                s.load_from_str(yml)
+                dbversion.expected_schema = s
+            except MySQLError as e:
                 if e[0] == ER_NO_SUCH_TABLE:
-                    v.name = "undefined"
+                    dbversion.name = "bootstrap"
+                    dbversion.expected_schema = None
                 elif e[0] == ER_BAD_FIELD_ERROR:
                     m = "%s is not the expected structure." % config.migration_table
                     raise AppError(m)
                 else:
-                    raise e
+                    raise
 
-        return v
-
-    @connection
-    def get_db_schema(self):
+    def _set_actual(self, dbversion):
         s = schema.Schema()
         self.__get_tables(s)
-        return s
+        if (s):
+            dbversion.actual_schema = s
 
     def __get_column_headers(self, description):
         headers = dict()
@@ -149,6 +162,8 @@ class Database(database.Database):
         column.scale = row[8]
         if row[9] == "PRI":
             column.key = True
+        if row[10] == "auto_increment":
+            column.autoincrement = True
 
         return column
 
@@ -224,29 +239,31 @@ class Database(database.Database):
         self.connection.close()
         self.connection = None
 
+    @connectmyql
     def execute_create(self):
         try:
             sql = "CREATE DATABASE " + self.database
             cursor = self.connection.cursor()
             cursor.execute(sql)
             cursor.close()
-        except MySQLError, e:
+        except MySQLError as e:
             if e[0] == ER_DB_CREATE_EXISTS:
                 raise AppError("%s already exists." % self.database)
             else:
-                raise e
+                raise
 
+    @connectmyql
     def execute_drop(self):
         try:
             sql = "DROP DATABASE " + self.database
             cursor = self.connection.cursor()
             cursor.execute(sql)
             cursor.close()
-        except MySQLError, e:
+        except MySQLError as e:
             if e[0] == ER_DB_DROP_EXISTS:
                 raise AppError("%s does not exist." % self.database)
             else:
-                raise e
+                raise
 
 ##############################################################################
 # Please review the below
@@ -271,11 +288,11 @@ class Database(database.Database):
             sql = "select * from {s}" % config.migration_table
             cursor = self.connection.cursor()
             cursor.execute(sql)
-        except MySQLError, e:
+        except MySQLError as e:
             if e[0] == ER_NO_SUCH_TABLE:
                 myschema.version = None
             else:
-                raise e
+                raise
 
         return True
 
@@ -290,36 +307,36 @@ class Database(database.Database):
 
     def sync(self, change_set, yml_schema):
         self.connect(self.database)
-        try:
-            if change_set.create_tables:
-                for table_name in schema.caseinsensitive_sort(change_set.create_tables):
-                    table = change_set.left_schema.tables[table_name]
-                    sql = self.__get_create_sql_for_table(table)
-                    print sql
+#        try:
+#            if change_set.create_tables:
+#                for table_name in schema.caseinsensitive_sort(change_set.create_tables):
+#                    table = change_set.left_schema.tables[table_name]
+#                    sql = self.__get_create_sql_for_table(table)
+#                    print sql
                     #self.__execute(sql)
 
-            if change_set.alter_tables:
-                for table_name in schema.caseinsensitive_sort(change_set.alter_tables):
-                    old = change_set.alter_tables[table_name].right
-                    table = change_set.left_schema.tables[table_name]
-
-                    for column in table.columns:
-                        print "---------"
-                        print column.get_yaml()
-                        oc = old.get_column_by_name(column.name)
-                        print oc.get_yaml()
-
-                    sql = self.__get_alter_sql_for_table(table, old)
-                    print sql
+#            if change_set.alter_tables:
+#                for table_name in schema.caseinsensitive_sort(change_set.alter_tables):
+#                    old = change_set.alter_tables[table_name].right
+#                    table = change_set.left_schema.tables[table_name]
+#
+#                    for column in table.columns:
+#                        print "---------"
+#                        print column.get_yaml()
+#                        oc = old.get_column_by_name(column.name)
+#                        print oc.get_yaml()
+#
+#                    sql = self.__get_alter_sql_for_table(table, old)
+#                    print sql
                     #self.__execute(sql)
 
-            if change_set.drop_tables:
-                for table_name in schema.caseinsensitive_sort(change_set.drop_tables):
-                    sql = self.__get_drop_sql_for_table(table_name)
-                    print sql
+#            if change_set.drop_tables:
+#                for table_name in schema.caseinsensitive_sort(change_set.drop_tables):
+#                    sql = self.__get_drop_sql_for_table(table_name)
+#                    print sql
                     #self.__execute(sql)
-        finally:
-            self.close()
+#        finally:
+#            self.close()
 
     def get_dataset(self):
         self.connect(self.database)
@@ -426,14 +443,14 @@ class Database(database.Database):
             row = cursor.fetchone()
             print row
             myschema.version = row[0]
-        except MySQLError, e:
+        except MySQLError as e:
             if e[0] == ER_NO_SUCH_TABLE:
                 myschema.version = None
             elif e[0] == ER_BAD_FIELD_ERROR:
                 m = "%s is not the expected structure." % config.migration_table
                 raise AppError(m)
             else:
-                raise e
+                raise
         finally:
             cursor.close()
 
@@ -467,12 +484,55 @@ class Database(database.Database):
 
             myschema.procedures[procedure.name] = procedure
 
+#-----------------------------------------------------------------------------
+# Load Type mappings
+#-----------------------------------------------------------------------------
 
-##############################################################################
+filename = os.path.dirname(os.path.realpath(__file__)) + '/resources/mysql.yml'
+with file(filename, 'r') as stream:
+    data = yaml.load(stream)
+    sql_aliases = []
+    for sr in data["sql_aliases"]:
+        alias = {"search": re.compile(sr["search"]), "replace": sr["replace"]}
+        if "attributes" in sr:
+            alias["attributes"] = sr["attributes"]
+        sql_aliases.append(alias)
+
+    sql_to_type = []
+    for sr in data["sql_to_yml"]:
+        sql_to_type.append({"search": re.compile(sr["search"]), "replace": sr["replace"]})
+
+
+def _convert_column_to_vendor(column):
+    new_type = column.type
+    for sr in sql_aliases:
+        search = sr["search"]
+        replace = sr["replace"]
+        result = search.subn(replace, new_type)
+        if result[1] >= 1:
+            new_type = result[0]
+            if "attributes" in sr:
+                for attr in sr["attributes"]:
+                    column.__dict__[attr] = sr["attributes"][attr]
+    column.type = new_type
+
+
+#def _sql_to_type(sql_type):
+#    new_type = sql_type
+#    for sr in sql_to_type:
+#        search = sr["search"]
+#        replace = sr["replace"]
+#        result = search.subn(replace, new_type)
+#        if result[1] >= 1:
+#            new_type = result[0]
+#    return new_type
+
+#-----------------------------------------------------------------------------
 # MySQL constants
 #
 # from http://dev.mysql.com/doc/refman//5.5/en/error-messages-server.html
-##############################################################################
+#-----------------------------------------------------------------------------
+
 ER_DB_CREATE_EXISTS = 1007
 ER_DB_DROP_EXISTS = 1008
 ER_BAD_DB_ERROR = 1049

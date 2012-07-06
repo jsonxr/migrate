@@ -1,0 +1,41 @@
+#-----------------------------------------------------------------------------
+# Diff
+#-----------------------------------------------------------------------------
+
+There are generic versions and vendor versions.
+
+A generic version uses types that are portable between vendors.
+int, double, string, blob, text, etc.
+
+A vendor version contains the actual vendor types as returned from information_schema
+int(11), varchar(255), etc.
+
+When comparing two generic versions, it is enough to compare the two schemas.
+When comparing a generic version against a database, the generic version must
+be converted into a vendor specific version.
+
+The only time we need to convert a database version to a generic version is 
+when we are reverse engineering the database.  In all other cases, we need to
+convert the schema into a database schema.
+
+
+#-----------------------------------------------------------------------------
+# Apply Changes
+#-----------------------------------------------------------------------------
+# How can we handle zero downtime deploys?
+# How do we handle indexes for seed data? drop/disable?
+# We want to do the renames first to support the following scenario
+# rename CHANGELOG -> CHANGELOG_MYBATIS
+# create CHANGELOG
+# Perform the changes in the following order:
+
+0) Figure out which indexes are affected first and then drop the affected indexes????????
+1) Rename tables (how does this affect indexes?)
+2) Rename columns (how does this affect indexes?)
+3) Create Tables
+4) Add columns
+5) custom migrations
+6) Perform data migration
+7) Restore indexes??????
+8) Drop tables (should we rename these tables instead so we can go back and not lose data?)
+9) Drop columns (should we make a backup first so when we go backwards, we don't lose data?)

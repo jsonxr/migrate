@@ -1,0 +1,79 @@
+Custom mappings...
+By default, this application is database specific.  But, you may use custom types if desired.
+This will enable things like database agnostic structures.  It comes with the standard
+Rails data types
+
+What do you do with "timestamp" for custom fields if timestamp maps to datetime in rails, but you 
+still want to create an actual "timestamp" data type in mysql?
+
+
+Rails       mysql           postgres        sqlite          mssql           oracle
+===================================================================================
+:binary     blob            bytea           blob            binary          ?
+:boolean    tinyint(1)      boolean         boolean     
+:date       date            date            date            datetime
+:datetime   datetime        timestamp       datetime        datetime
+:decimal    decimal         decimal         decimal         decimal
+:float      float           float           float           float
+:integer    int(11)         integer         integer         int
+:string     varchar(255)    *               varchar(255)    varchar(255)
+:string(x)  varchar(x)                      varchar(x)      varchar(x)
+:text       text            text            text            text
+:text(x)    text            text            text            text
+:time       time            time            datetime        datetime
+:timestamp  datetime        
+
+mysql:
+    ":binary": "blob"
+    ":boolean": "tinyint(1)"
+postgres:
+    ":binary": "bytea"
+    ":boolean": "boolean"
+
+
+
+Rails
+http://www.wetware.co.nz/2009/04/rails-migration-data-types-mysql-postgresql-sqlite/
+ms-sql
+http://msdn.microsoft.com/en-us/library/aa258271(v=sql.80)
+mysql
+http://dev.mysql.com/doc/refman/5.5/en/data-types.html
+
+
+# integers
+bigint
+int
+smallint
+tinyint
+
+bit
+# decimal/numeric
+decimal
+numeric # alias for decimal
+# money/smallmoney
+money # 
+smallmoney
+# approximage numerics
+float
+real
+# datetime and smalldatetime
+datetime
+smalldatetime
+# Character Strings
+char
+varchar
+text
+# Unicode Character strings
+nchar
+nvarchar
+ntext
+# Binary strings
+binary
+varbinary
+image
+# Other
+cursor
+sql_variant
+table
+timestamp
+uniqueidentifier

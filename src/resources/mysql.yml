@@ -1,9 +1,151 @@
-aliases:
-    - name: identity
-      type: int(11) autoincrement
-    - name: integer
-      type: int(11)
-    - name: string
-      type: varchar(255)
-    - name: text
-      type: longtext
+# mysql type mappings  
+
+rails:
+    # these are virtual types
+    - search: ^:string$
+      replace: varchar(255)
+    - search: ^:string\((?P<limit>\d*)\)$
+      replace: varchar(\g<limit>)
+    - search: ^:boolean$
+      replace: tinyint(1)
+
+
+sql_aliases:
+      # MySQL has many aliases for the same types.  for example 
+      #
+      # Examples:
+      # int -> int(11)
+      # integer -> int(11)
+      # decimal -> decimal(10,0)
+      #
+      # In order to do a proper comparison, we need to compare the yml schema
+      # using the column types stored returned information_schema.columns 
+      # table.
+      # These are taken directly from 
+      # http://dev.mysql.com/doc/refman/5.5/en/data-types.html
+      
+      
+      # Integer Types (Exact Value)
+      # http://dev.mysql.com/doc/refman/5.5/en/integer-types.html
+      # INTEGER, INT, SMALLINT, TINYINT, MEDIUMINT, BIGINT
+      #
+      # The aliases need to be at the top to avoid duplicating the rules 
+    - search: integer 
+      replace: int
+    - search: ^int$
+      replace: int(11)
+    - search: bigint unsigned       # This need to be before the int unsigned
+      replace: bigint(20) unsigned
+    - search: smallint unsigned     # This need to be before the int unsigned
+      replace: smallint(5) unsigned
+    - search: int unsigned
+      replace: int(10) unsigned
+    - search: ^smallint$
+      replace: smallint(6)
+    - search: ^tinyint$
+      replace: tinyint(4)
+    - search: tinyint unsigned
+      replace: tinyint(3) unsigned
+    - search: ^mediumint$
+      replace: mediumint(9)
+    - search: mediumint unsigned
+      replace: mediumint(8) unsigned
+    - search: ^bigint$
+      replace: bigint(20)
+      # Need to do further work to support serial as it is also an alias for
+      # key=true, nullable=false, autoincrement=true
+    - search: ^serial$
+      replace: bigint(20) unsigned
+      attributes: { key: true, nullable: false, autoincrement: true }
+      
+      # Fixed-Point Types (Exact Value)
+      # http://dev.mysql.com/doc/refman/5.5/en/fixed-point-types.html
+      # DECIMAL, NUMERIC, DEC
+      #
+      # The aliases need to be at the top to avoid duplicating the rules
+    - search: numeric
+      replace: decimal
+    - search: fixed
+      replace: decimal
+    - search: ^dec$     # Where did this come from?
+      replace: decimal
+    - search: ^dec\((?P<n>[\d,]*)\) # replace dec(10,2)
+      replace: decimal(\g<n>)
+    - search: ^decimal$
+      replace: decimal(10,0)
+    - search: decimal unsigned
+      replace: decimal(10,0) unsigned
+      
+      # Floating-Point Types (Approximate Value)
+      # http://dev.mysql.com/doc/refman/5.5/en/floating-point-types.html
+      # FLOAT, DOUBLE, REAL
+      #
+    - search: real
+      replace: double
+    - search: double precision
+      replace: double
+      
+      # Bit-Value Type
+      # http://dev.mysql.com/doc/refman/5.5/en/bit-type.html
+      # BIT
+    - search: ^bit$
+      replace: bit(1)
+      
+      # Date and Time Types
+      # http://dev.mysql.com/doc/refman/5.5/en/date-and-time-types.html
+      # DATE, DATETIME, TIMESTAMP, TIME, YEAR
+    - search: ^year$
+      replace: year(4)
+    - search: ^timestamp$
+      replace: timestamp
+      attributes: { default: "CURRENT_TIMESTAMP", nullable: false }
+      
+      # String Types
+      # http://dev.mysql.com/doc/refman/5.5/en/string-types.html
+      #
+      # http://dev.mysql.com/doc/refman/5.5/en/char.html
+      # CHAR, VARCHAR
+    - search: ^char$
+      replace: char(1)
+      # http://dev.mysql.com/doc/refman/5.5/en/binary-varbinary.html
+      # BINARY, VARBINARY
+    - search: ^binary$
+      replace: binary(1)
+      # http://dev.mysql.com/doc/refman/5.5/en/blob.html
+      # TINYBLOB, BLOB, MEDIUMBLOB, LONGBLOB
+      # TINYTEXT, TEXT, MEDIUMTEXT, LONGTEXT
+      # http://dev.mysql.com/doc/refman/5.5/en/enum.html
+      # ENUM
+      # http://dev.mysql.com/doc/refman/5.5/en/set.html
+      # SET
+    
+
+sql_to_yml:
+    - search: ^blah$
+      replace: blah
+
+sql_to_yml_old:
+    - search: ^varchar\(255\)$
+      replace: string
+    - search: ^varchar\((?P<limit>\d*)\)$
+      replace: string(\g<limit>)
+    - search: ^tinyint\(1\)$
+      replace: boolean
+    - search: ^int\(11\)$
+      replace: integer
+
+    - search: ^bit\(1\)$
+      replace: bit
+    - search: ^tinyint\(4\)$
+      replace: tinyint
+    - search: ^bool$
+      replace: tinyint(1)
+    - search: ^boolean$
+      replace: tinyint(1)
+      
+    - search: ^decimal\(10,0\)$
+      replace: decimal
+    - search: ^int\(11\)$ # We will never reach this because of replace="integer"
+      replace: int
+    - search: ^smallint\(6\)$
+      replace: smallint

@@ -1,0 +1,50 @@
+
+
+Schema development
+    When schema is in active development, it will sync the database to the HEAD
+    version.  Data migrations are not run when you "sync".  
+
+Seeds
+    Seeds are NOT deleted each time 
+
+Data Sets
+    The tool will create a data set from a versioned database.
+    The tool will restore a data set to an empty database.
+
+Schema Migrations
+    Supports the creation of scripts that will take a database from one released version to the next.
+    When developing on HEAD, it will make your database match the current
+
+Data Migrations
+    Data migrations are used to take the database from one version to the next
+
+
+
+DB-API 2.0 drivers
+==================
+MySQLdb: http://mysql-python.sourceforge.net/
+Postgres: http://initd.org/psycopg/
+MSSQL: http://code.google.com/p/pymssql/
+Oracle: http://cx-oracle.sourceforge.net/ (need to install instant client first:  http://www.oracle.com/technetwork/database/features/instant-client/index-097480.html
+http://www.xairon.net/2011/05/guide-installing-cx_oracle-on-mac-os-x/)
+
+
+MySQL Version Support:
+
+Known Limitations
+Does not support cross database foreign keys, routines, etc
+Does not support character sets
+Does not support column re-ordering
+
+TINYINT(1) TINYINT(4) is the same.  The only thing that is affected is
+when you use zerofill
+
+5.5.3 - Supports PARAMETERS table
+5.1.41 - Supports ?
+
+Assumptions that are made on a reverse:
+tinyint(1) is a boolean.  (it could be an int... with display width of 1 instead)
+varchar(255) is a string with length of 255 (default string)
+mysql before 5.0.3 varchar max length is 255
+5.0.3 and later varchar max is 65535
+

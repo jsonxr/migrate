@@ -17,9 +17,24 @@ def get(connection_info):
         raise errors.AppError('%s not supported.' % vendor)
 
 
+##############################################################################
+# DatabaseVersion
+##############################################################################
+
 class Database(object):
     def __init__(self):
         pass
+
+
+##############################################################################
+# DatabaseVersion
+##############################################################################
+
+class DatabaseVersion(object):
+    def __init__(self):
+        self.name = None
+        self.expected_schema = None
+        self.actual_schema = None
 
 
 def main():

@@ -19,12 +19,12 @@ class SchemaYmlTests(unittest.TestCase):
         data = yaml.load(expected)
         m = schema.Migration()
         m.load_from_dict(data)
-        yml = repr(m)
+        yml = m.get_yml()
         assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
 
     def testMigrationToYaml(self):
         m = _create_yml_migration()
-        yml = repr(m)
+        yml = m.get_yml()
         expected = YML_MIGRATION.strip()
         assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
 
@@ -33,24 +33,24 @@ class SchemaYmlTests(unittest.TestCase):
         data = yaml.load(expected)
         v = schema.Version()
         v.load_from_dict(data)
-        yml = repr(v)
+        yml = v.get_yml(verbose=True)
         assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
 
     def testVersionToYaml(self):
         expected = YML_VERSION.strip()
         v = _create_yml_version()
-        yml = repr(v)
+        yml = v.get_yml(True)
         assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
 
     def testPathToSchema(self):
-        expected = YML_TABLE.strip()
+        expected = YML_TABLE_VERBOSE.strip()
         path = tempfile.mkdtemp()
         try:
             os.mkdir(path + '/tables')
             with file(path + '/tables/test1.yml', 'w') as stream:
                 stream.write(YML_TABLE)
             t = _create_yml_table()
-            yml = repr(t)
+            yml = t.get_yml(verbose=True)
             assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
         finally:
             shutil.rmtree(path)  # Make sure we clean up after ourselves
@@ -74,13 +74,13 @@ class SchemaYmlTests(unittest.TestCase):
         data = yaml.load(expected)
         s = schema.Schema()
         s.load_from_dict(data)
-        yml = repr(s)
+        yml = s.get_yml(verbose=True)
         assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
 
     def testSchemaToYaml(self):
         expected = YML_SCHEMA.strip()
         s = _create_yml_schema()
-        yml = repr(s)
+        yml = s.get_yml(verbose=True)
         assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
 
     def testTableToFilename(self):
@@ -100,13 +100,13 @@ class SchemaYmlTests(unittest.TestCase):
         data = yaml.load(expected)
         t = schema.Table()
         t.load_from_dict(data)
-        yml = repr(t)
+        yml = t.get_yml()
         assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
 
     def testTableToYaml(self):
         expected = YML_TABLE.strip()
         t = _create_yml_table()
-        yml = repr(t)
+        yml = t.get_yml()
         assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
 
     def testIndent(self):
@@ -122,8 +122,13 @@ class SchemaYmlTests(unittest.TestCase):
 
 YML_TABLE = """name: test1
 columns:
-    - { name: "col1", type: "string", key: false, nullable: true }
+    - { name: "col1", type: "string" }
     - { name: "col2", type: "string", key: true, nullable: false }"""
+
+YML_TABLE_VERBOSE = """name: test1
+columns:
+    - { name: "col1", type: "string", key: false, nullable: true, autoincrement: false }
+    - { name: "col2", type: "string", key: true, nullable: false, autoincrement: false }"""
 
 
 def _create_yml_table():
@@ -143,16 +148,16 @@ def _create_yml_table():
 YML_SCHEMA = """tables:
     - name: test1
       columns:
-          - { name: "col1", type: "string", key: false, nullable: true }
-          - { name: "col2", type: "string", key: true, nullable: false }
+          - { name: "col1", type: "string", key: false, nullable: true, autoincrement: false }
+          - { name: "col2", type: "string", key: true, nullable: false, autoincrement: false }
     - name: test2
       columns:
-          - { name: "col1", type: "string", key: false, nullable: true }
-          - { name: "col2", type: "string", key: true, nullable: false }
+          - { name: "col1", type: "string", key: false, nullable: true, autoincrement: false }
+          - { name: "col2", type: "string", key: true, nullable: false, autoincrement: false }
     - name: test3
       columns:
-          - { name: "col1", type: "string", key: false, nullable: true }
-          - { name: "col2", type: "string", key: true, nullable: false }"""
+          - { name: "col1", type: "string", key: false, nullable: true, autoincrement: false }
+          - { name: "col2", type: "string", key: true, nullable: false, autoincrement: false }"""
 
 
 def _create_yml_schema():
@@ -178,7 +183,7 @@ YML_MIGRATION = """previous: ~
 commands:
     - { table: altered_table, name: add_column, column: added_column }
     - { table: altered_table, name: change_column, column: changed_column }
-    - { table: altered_table, name: drop_column, column: dropped_column }
+    - { table: altered_table, name: remove_column, column: dropped_column }
     - { table: altered_table, name: rename_column, column: renamed_column, old: old_column }
     - { table: migration, name: create_table }
     - { table: migration_bak, name: rename_table, old: migration }
@@ -192,7 +197,7 @@ def _create_yml_migration():
     m.add_command(schema.Command("migration_old", "drop_table"))
     m.add_command(schema.Command("altered_table", "rename_column", column="renamed_column", old="old_column"))
     m.add_command(schema.Command("altered_table", "add_column", column="added_column"))
-    m.add_command(schema.Command("altered_table", "drop_column", column="dropped_column"))
+    m.add_command(schema.Command("altered_table", "remove_column", column="dropped_column"))
     m.add_command(schema.Command("altered_table", "change_column", column="changed_column"))
 
     return m
@@ -203,12 +208,12 @@ def _create_yml_migration():
 #=============================================================================
 
 YML_VERSION = """version: current
-hash: 3142d5cf3cb235878aa9a3e74259a49ca0424434
+hash: 7b1702d8ee0b77cad4674f5998f2f0dc0246d68e
 tables:
     - name: test1
       columns:
-          - { name: "col1", type: "string", key: false, nullable: true }
-          - { name: "col2", type: "string", key: true, nullable: false }
+          - { name: "col1", type: "string", key: false, nullable: true, autoincrement: false }
+          - { name: "col2", type: "string", key: true, nullable: false, autoincrement: false }
 migration:
     previous: bootstrap
     commands:
