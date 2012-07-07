@@ -1,5 +1,4 @@
 version: current
-hash: e511f7e9ef0a600f2731df3dbeace7b8ebc411b8
 tables:
     - name: datatypes
       columns:

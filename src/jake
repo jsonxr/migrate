@@ -118,10 +118,10 @@ class Migrate():
             self.subparsers.choices[args.subcommand].print_help()
 
     def init_project(self, p, args):
-        p.init()
+        print(p.init())
 
     def status(self, p, args):
-        p.status()
+        print(p.status())
 
     def add(self, p, args):
         pass

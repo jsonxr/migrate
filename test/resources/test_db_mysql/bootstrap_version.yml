@@ -1,7 +1,7 @@
 tables:
     - name: test1
       columns:
-          - name: col1
+          - name: "col1"
             type: varchar(5)
           - name: col2
             type: int(11)

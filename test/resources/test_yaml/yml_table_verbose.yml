@@ -1,4 +1,0 @@
-name: test1
-columns:
-    - { name: "col1", type: "string", key: false, nullable: true, autoincrement: false }
-    - { name: "col2", type: "string", key: true, nullable: false, autoincrement: false }

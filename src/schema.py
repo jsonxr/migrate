@@ -6,7 +6,6 @@ Copyright (c) 2012 Jason Rowland. All rights reserved.
 """
 
 import glob
-import hashlib
 import os
 import yaml
 from cStringIO import StringIO
@@ -100,12 +99,12 @@ class Column(object):
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
             s.write('{ ')
-            s.write('name: "%s"' % self.name)
-            s.write(', type: "%s"' % self.type)
-            _write_bool(s, ", key: %s", self.key, Column.KEY_DEFAULT, verbose)
-            _write_str(s, ', default: "%s"', self.default)
-            _write_bool(s, ", nullable: %s", self.nullable, Column.NULLABLE_DEFAULT, verbose)
-            _write_bool(s, ", autoincrement: %s", self.autoincrement, Column.AUTOINCREMENT_DEFAULT, verbose)
+            _write_str(s, 'name: %s', self.name, verbose=True, quote=True)
+            _write_str(s, ', type: %s', self.type, verbose=True, quote=True)
+            _write_bool(s, ", key: %s", self.key, Column.KEY_DEFAULT, verbose=verbose)
+            _write_str(s, ', default: %s', self.default, verbose=verbose, quote=True)
+            _write_bool(s, ", nullable: %s", self.nullable, Column.NULLABLE_DEFAULT, verbose=verbose)
+            _write_bool(s, ", autoincrement: %s", self.autoincrement, Column.AUTOINCREMENT_DEFAULT, verbose=verbose)
             s.write(' }')
             return s.getvalue()
 
@@ -163,7 +162,7 @@ class Table(object):
 
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
-            s.write("name: %s\n" % self.name)
+            _write_str(s, "name: %s\n", self.name, verbose=True)
             s.write("columns:\n")
             for column in self.columns:
                 s.write(indent(column.get_yml(verbose), is_list=True) + "\n")
@@ -233,12 +232,10 @@ class Command(object):
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
             s.write("{ ")
-            s.write("table: %s" % self.table)
-            s.write(", name: %s" % self.name)
-            if self.column:
-                s.write(", column: %s" % self.column)
-            if self.old:
-                s.write(", old: %s" % self.old)
+            _write_str(s, "table: %s", self.table, verbose=True, quote=True)
+            _write_str(s, ", name: %s", self.name, verbose=True, quote=True)
+            _write_str(s, ", column: %s", self.column, verbose=verbose, quote=True)
+            _write_str(s, ", old: %s", self.old, verbose=verbose, quote=True)
             s.write(" }")
             return s.getvalue().strip()
 
@@ -307,11 +304,7 @@ class Schema(object):
         if other is None:
             return False
         else:
-            print("else...")
-            print(self.tables.items())
-            print(other.tables.items())
             result = self.tables.items() == other.tables.items()
-            print(result)
             return result
 
     def get_yml(self, verbose=False):
@@ -373,14 +366,6 @@ class Schema(object):
             table.save_to_file(filename, verbose)
         # Procedures
 
-    @property
-    def hashcode(self):
-        m = hashlib.sha1()
-        yml = self.get_yml(verbose=True)
-        m.update(yml)
-        hexdigest = m.hexdigest()
-        return hexdigest
-
     def remove_table(self, name):
         del self.tables[name]
 
@@ -434,13 +419,6 @@ class Version(object):
         self.syncable = False
 
     @property
-    def hashcode(self):
-        if self._schema:
-            return self._schema.hashcode
-        else:
-            return None
-
-    @property
     def schema(self):
         return self._schema
 
@@ -453,9 +431,7 @@ class Version(object):
 
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
-            _write_str(s, "version: %s", self.name, True)
-            if (self.hashcode):
-                s.write("\nhash: %s\n" % self.hashcode)
+            _write_str(s, "version: %s\n", self.name, True)
             if (self.schema):
                 s.write(self.schema.get_yml(verbose))
             if (self.migration):
@@ -518,11 +494,14 @@ def _write_int(s, formatstr, value):
         s.write(formatstr % value)
 
 
-def _write_str(s, string, value, write_if_empty=False):
+def _write_str(s, string, value, verbose=False, write_if_empty=False, quote=False):
     if (value):
-        s.write(string % value)
+        if quote:
+            s.write(string % '"' + value.replace('"', '\\"') + '"')
+        else:
+            s.write(string % value)
     else:
-        if write_if_empty:
+        if verbose or write_if_empty:
             s.write(string % "~")
 
 

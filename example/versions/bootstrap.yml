@@ -1,5 +1,4 @@
 version: bootstrap
-hash: d8375179fc493dd6c50a5cfe1c581d1ddc7bb4f2
 tables:
     - name: datatypes
       columns:

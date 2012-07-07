@@ -4,7 +4,8 @@
 Created by Jason Rowland on 2012-05-25.
 Copyright (c) 2012 Jason Rowland. All rights reserved.
 """
-
+from cStringIO import StringIO
+from contextlib import closing
 import os
 import shutil
 import sys
@@ -12,7 +13,6 @@ import yaml
 
 import config
 from errors import AppError
-
 import database
 import schema
 
@@ -95,26 +95,28 @@ class Project(object):
         #current = version.get_current(self.path)
         #previous = version.get_previous(self.path)
 
-        # On dev04:migrate_dev version:bootstrap
-        print('# On env={environment}, db={database}, version={version}'.format(environment=self.environment, database=self.connection_info["database"], version=v.name))
+        with closing(StringIO()) as s:
 
-        if previous is None:
-            print('#')
-            if (db.exists()):
-                print('#  (use "jake bootstrap" to initialize project with database schema)')
+            # On dev04:migrate_dev version:bootstrap
+            s.write('# On env={environment}, db={database}, version={version}\n'.format(environment=self.environment, database=self.connection_info["database"], version=v.name))
+            if previous is None:
+                s.write('#\n')
+                if (db.exists()):
+                    s.write('#  (use "jake bootstrap" to initialize project with database schema)\n')
+                else:
+                    s.write('#  (use "jake db-create" to create empty database)\n')
             else:
-                print('#  (use "jake db-create" to create empty database)')
-        else:
-            print('# Schema changes since %s' % previous.name)
-            print('#')
-            for table_name in current.changeset.tables:
-                commands = current.changeset.tables[table_name]
-                for command_name in commands:
-                    command = commands[command_name]
-                    print('#   {}'.format(command.display(current.schema, None)))
-            print('#')
-            print('#  (use "jake sync" to sync database to schema)')
-            print('#  (use "jake reset HEAD <table>..." to unstage)')
+                s.write('# Schema changes since %s\n' % previous.name)
+                s.write('#\n')
+                for table_name in current.changeset.tables:
+                    commands = current.changeset.tables[table_name]
+                    for command_name in commands:
+                        command = commands[command_name]
+                        s.write('#   {}\n'.format(command.display(current.schema, None)))
+                s.write('#\n')
+                s.write('#  (use "jake sync" to sync database to schema)\n')
+                s.write('#  (use "jake reset HEAD <table>..." to unstage)\n')
+            return s.getvalue()
 
     def init(self):
         if self.is_valid:
@@ -133,7 +135,7 @@ class Project(object):
             else:
                 shutil.copyfile(src, self.path + "/" + filename)
 
-        print("Edit the project.yaml file to connect to the database.")
+        return "Edit the project.yaml file to connect to the database."
 
     def bootstrap(self):
         self.__ensure_valid()
@@ -151,10 +153,11 @@ class Project(object):
         db_schema.add_table(migration_table)
         # Save the path for the db schema
         db_schema.save_to_path(self.path + "/schema")
+
         # Now, save the current.yml file
         current = bootstrap_version
         current.name = "current"
-        current.filename = "current.yml"
+        current.filename = self.path + "/versions/current.yml"
         current.create_table(migration_table)
         current.save()
 
@@ -189,10 +192,7 @@ class Project(object):
 #                print "Database does not exist. type jake db-create to create `%s`." % db.database
 #            else:
 #                print "# On schema version \"%s+\"" % current.name
-#                print "#        hashcode=\"%s\"" % yml_schema.get_hash()
-#                print "#    previous=\"%s\"" % current.hashcode
 #                print "# On database=\"%s\" version=\"%s\"" % (db.database, db_schema.version)
-#                print "#        hashcode=\"%s\"" % db_schema.get_hash()
 #
 #                cs = changeset.Changeset()
 #                cs.load(self.path + "/versions/current.yaml")

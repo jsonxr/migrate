@@ -42,7 +42,7 @@ class TestDbMysql(unittest.TestCase):
             yml = v.actual_schema.get_yml(verbose=True)
             expected = YML_DATATYPES_SCHEMA.strip()
             assert v.expected_schema is None
-            assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
+            utils.assert_yml_equal(yml, expected)
         finally:
             db.execute_drop()
 
@@ -72,7 +72,7 @@ class TestDbMysql(unittest.TestCase):
         s = _get_schema_to_convert()
         s = db.convert_schema_to_vendor(s)
         yml = s.get_yml(verbose=True)
-        assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
+        utils.assert_yml_equal(yml, expected)
 
 
 #-----------------------------------------------------------------------------

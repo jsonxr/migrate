@@ -5,7 +5,7 @@ settings:
 environments:
     dev:
         vendor: mysql
-        host: '%s'
-        database: '%s'
-        user: '%s'
-        password: '%s'
+        host: "%s"
+        database: "%s"
+        user: "%s"
+        password: "%s"

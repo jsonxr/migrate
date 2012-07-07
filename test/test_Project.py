@@ -18,6 +18,7 @@ import utils
 #-----------------------------------------------------------------------------
 
 class TestProject(unittest.TestCase):
+
     def test_project_init(self):
         path = tempfile.mkdtemp()
         try:
@@ -31,10 +32,9 @@ class TestProject(unittest.TestCase):
             assert os.path.exists(path + "/schema/procedures/readme.txt")
             assert os.path.exists(path + "/versions/readme.txt")
         finally:
-            #print(path)
             shutil.rmtree(path)  # Make sure we clean up after ourselves
 
-    def test_project_bootstrap(self):
+    def test_project_bootstrap_emptydb(self):
         path = tempfile.mkdtemp()
         try:
             p = project.Project(path)
@@ -52,16 +52,31 @@ class TestProject(unittest.TestCase):
             # bootstrap, the project is reloaded right before bootstrap
             p = project.Project(path)
             p.bootstrap()
+
+            yml = utils.read_from_file(path + "/schema/tables/migrations.yml")
+            expected = YML_MIGRATIONS
+            utils.assert_yml_equal(yml, expected)
+
+            yml = utils.read_from_file(path + "/versions/bootstrap.yml")
+            expected = YML_VERSION_BOOTSTRAP_EMPTY
+            utils.assert_yml_equal(yml, expected)
+
+            yml = utils.read_from_file(path + "/versions/current.yml")
+            expected = YML_VERSION_CURRENT_EMPTY
+            utils.assert_yml_equal(yml, expected)
         finally:
             db.execute_drop()
+            #print(path)
             shutil.rmtree(path)  # Make sure we clean up after ourselves
 
 
 #-----------------------------------------------------------------------------
 # Resources
 #-----------------------------------------------------------------------------
-YML_TEST_PROJECT = utils.get_resource("/test_project.yml")
-
+YML_TEST_PROJECT = utils.get_resource("/test_project/project.yml")
+YML_MIGRATIONS = utils.get_resource("/test_project/migrations.yml")
+YML_VERSION_BOOTSTRAP_EMPTY = utils.get_resource("/test_project/version_bootstrap_empty.yml")
+YML_VERSION_CURRENT_EMPTY = utils.get_resource("/test_project/version_current_empty.yml")
 
 #-----------------------------------------------------------------------------
 # main

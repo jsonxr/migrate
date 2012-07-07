@@ -1,66 +1,67 @@
+# datatypes
 tables:
     - name: datatypes
       columns:
-          - { name: "c_bit", type: "bit(1)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_bit_64", type: "bit(64)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_tinyint", type: "tinyint(4)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_tinyint1", type: "tinyint(1)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_tinyint4", type: "tinyint(4)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_tinyint_u", type: "tinyint(3) unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "c_tinyint_u_z", type: "tinyint(3) unsigned zerofill", key: false, nullable: true, autoincrement: false }
-          - { name: "c_bool", type: "tinyint(1)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_boolean", type: "tinyint(1)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_smallint", type: "smallint(6)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_smallint_u", type: "smallint(5) unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "c_smallint_u_z", type: "smallint(5) unsigned zerofill", key: false, nullable: true, autoincrement: false }
-          - { name: "c_mediumint", type: "mediumint(9)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_mediumint_u", type: "mediumint(8) unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "c_mediumint_u_z", type: "mediumint(8) unsigned zerofill", key: false, nullable: true, autoincrement: false }
-          - { name: "c_int", type: "int(11)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_integer", type: "int(11)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_int_u", type: "int(10) unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "c_int_u_z", type: "int(10) unsigned zerofill", key: false, nullable: true, autoincrement: false }
-          - { name: "c_bitint", type: "bigint(20)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_bigint_u", type: "bigint(20) unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "c_serial", type: "bigint(20) unsigned", key: true, nullable: false, autoincrement: true }
-          - { name: "c_decimal", type: "decimal(10,0)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_decimal_money", type: "decimal(65,2)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_decimal_u", type: "decimal(10,0) unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "c_decimal_u_z", type: "decimal(10,0) unsigned zerofill", key: false, nullable: true, autoincrement: false }
-          - { name: "c_dec", type: "decimal(10,0)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_numeric", type: "decimal(10,0)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_fixed", type: "decimal(10,0)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_float", type: "float", key: false, nullable: true, autoincrement: false }
-          - { name: "c_float_u", type: "float unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "c_float_u_z", type: "float unsigned zerofill", key: false, nullable: true, autoincrement: false }
-          - { name: "c_double", type: "double", key: false, nullable: true, autoincrement: false }
-          - { name: "c_double_u", type: "double unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "c_real", type: "double", key: false, nullable: true, autoincrement: false }
-          - { name: "c_date", type: "date", key: false, nullable: true, autoincrement: false }
-          - { name: "c_datetime", type: "datetime", key: false, nullable: true, autoincrement: false }
+          - { name: "c_bit", type: "bit(1)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_bit_64", type: "bit(64)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_tinyint", type: "tinyint(4)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_tinyint1", type: "tinyint(1)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_tinyint4", type: "tinyint(4)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_tinyint_u", type: "tinyint(3) unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_tinyint_u_z", type: "tinyint(3) unsigned zerofill", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_bool", type: "tinyint(1)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_boolean", type: "tinyint(1)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_smallint", type: "smallint(6)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_smallint_u", type: "smallint(5) unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_smallint_u_z", type: "smallint(5) unsigned zerofill", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_mediumint", type: "mediumint(9)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_mediumint_u", type: "mediumint(8) unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_mediumint_u_z", type: "mediumint(8) unsigned zerofill", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_int", type: "int(11)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_integer", type: "int(11)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_int_u", type: "int(10) unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_int_u_z", type: "int(10) unsigned zerofill", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_bitint", type: "bigint(20)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_bigint_u", type: "bigint(20) unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_serial", type: "bigint(20) unsigned", key: true, default: ~, nullable: false, autoincrement: true }
+          - { name: "c_decimal", type: "decimal(10,0)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_decimal_money", type: "decimal(65,2)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_decimal_u", type: "decimal(10,0) unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_decimal_u_z", type: "decimal(10,0) unsigned zerofill", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_dec", type: "decimal(10,0)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_numeric", type: "decimal(10,0)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_fixed", type: "decimal(10,0)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_float", type: "float", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_float_u", type: "float unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_float_u_z", type: "float unsigned zerofill", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_double", type: "double", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_double_u", type: "double unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_real", type: "double", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_date", type: "date", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_datetime", type: "datetime", key: false, default: ~, nullable: true, autoincrement: false }
           - { name: "c_timestamp", type: "timestamp", key: false, default: "CURRENT_TIMESTAMP", nullable: false, autoincrement: false }
-          - { name: "c_time", type: "time", key: false, nullable: true, autoincrement: false }
-          - { name: "c_year", type: "year(4)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_year2", type: "year(2)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_char", type: "char(1)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_char_5", type: "char(5)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_varchar_5", type: "varchar(5)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_char_binary", type: "char(5)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_varchar_binary", type: "varchar(5)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_binary", type: "binary(5)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_varbinary", type: "varbinary(5)", key: false, nullable: true, autoincrement: false }
-          - { name: "c_tinyblob", type: "tinyblob", key: false, nullable: true, autoincrement: false }
-          - { name: "c_blob", type: "blob", key: false, nullable: true, autoincrement: false }
-          - { name: "c_mediumblob", type: "mediumblob", key: false, nullable: true, autoincrement: false }
-          - { name: "c_longblob", type: "longblob", key: false, nullable: true, autoincrement: false }
-          - { name: "c_tinytext", type: "tinytext", key: false, nullable: true, autoincrement: false }
-          - { name: "c_tinytext_binary", type: "tinytext", key: false, nullable: true, autoincrement: false }
-          - { name: "c_text", type: "text", key: false, nullable: true, autoincrement: false }
-          - { name: "c_text_binary", type: "text", key: false, nullable: true, autoincrement: false }
-          - { name: "c_mediumtext", type: "mediumtext", key: false, nullable: true, autoincrement: false }
-          - { name: "c_mediumtext_binary", type: "mediumtext", key: false, nullable: true, autoincrement: false }
-          - { name: "c_longtext", type: "longtext", key: false, nullable: true, autoincrement: false }
-          - { name: "c_longtext_binary", type: "longtext", key: false, nullable: true, autoincrement: false }
-          - { name: "c_enum", type: "enum('x-small','small','medium','large','x-large')", key: false, nullable: true, autoincrement: false }
-          - { name: "c_set", type: "set('a','b','c')", key: false, nullable: true, autoincrement: false }
-          - { name: "c_set_notnull", type: "set('a','b','c')", key: false, nullable: false, autoincrement: false }
+          - { name: "c_time", type: "time", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_year", type: "year(4)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_year2", type: "year(2)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_char", type: "char(1)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_char_5", type: "char(5)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_varchar_5", type: "varchar(5)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_char_binary", type: "char(5)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_varchar_binary", type: "varchar(5)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_binary", type: "binary(5)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_varbinary", type: "varbinary(5)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_tinyblob", type: "tinyblob", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_blob", type: "blob", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_mediumblob", type: "mediumblob", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_longblob", type: "longblob", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_tinytext", type: "tinytext", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_tinytext_binary", type: "tinytext", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_text", type: "text", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_text_binary", type: "text", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_mediumtext", type: "mediumtext", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_mediumtext_binary", type: "mediumtext", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_longtext", type: "longtext", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_longtext_binary", type: "longtext", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_enum", type: "enum('x-small','small','medium','large','x-large')", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_set", type: "set('a','b','c')", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "c_set_notnull", type: "set('a','b','c')", key: false, default: ~, nullable: false, autoincrement: false }

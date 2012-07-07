@@ -37,6 +37,11 @@ def get_resource(path):
         return stream.read().strip()
 
 
+def read_from_file(path):
+    with file(path, 'r') as stream:
+        return stream.read().strip()
+
+
 def database_exists():
     try:
         conn = MySQLdb.connect(host=DB_HOST, user=DB_USER,
@@ -54,3 +59,17 @@ def get_database():
     connection = {"host": DB_HOST, "database": DB_DATABASE, "user": DB_USER, "password": DB_PASSWORD}
     db = db_mysql.Database(connection)
     return db
+
+
+def assert_yml_equal(yml, expected):
+    # Covert to dict
+    yml_dict = yaml.load(yml)
+    exp_dict = yaml.load(expected)
+    assert yml_dict == exp_dict, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
+#    # Convert to yml because this allows us to write yml of different styles
+#    # But still allow them to compare true
+#    yml = yaml.dump(yml_dict, default_flow_style=False)
+#    expected = yaml.dump(exp_dict, default_flow_style=False)
+#    print(yml)
+#    print(expected)
+#    assert yml == expected, "yml != expected"

@@ -1,0 +1,11 @@
+# version
+version: current
+tables:
+    - name: test1
+      columns:
+          - { name: "col1", type: "string", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "col2", type: "string", key: true, default: ~, nullable: false, autoincrement: false }
+migration:
+    previous: bootstrap
+    commands:
+        - { table: "test1", name: "create_table", column: ~, old: ~ }

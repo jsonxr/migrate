@@ -1,28 +1,29 @@
+# converted
 tables:
     - name: test
       columns:
-          - { name: "integer", type: "int(11)", key: false, nullable: true, autoincrement: false }
-          - { name: "int", type: "int(11)", key: false, nullable: true, autoincrement: false }
-          - { name: "int unsigned", type: "int(10) unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "smallint", type: "smallint(6)", key: false, nullable: true, autoincrement: false }
-          - { name: "smallint unsigned", type: "smallint(5) unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "tinyint", type: "tinyint(4)", key: false, nullable: true, autoincrement: false }
-          - { name: "tinyint unsigned", type: "tinyint(10) unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "mediumint", type: "mediumint(9)", key: false, nullable: true, autoincrement: false }
-          - { name: "mediumint unsigned", type: "mediumint(10) unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "bigint", type: "bigint(20)", key: false, nullable: true, autoincrement: false }
-          - { name: "bigint unsigned", type: "bigint(20) unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "serial", type: "bigint(20) unsigned", key: true, nullable: false, autoincrement: true }
-          - { name: "numeric", type: "decimal(10,0)", key: false, nullable: true, autoincrement: false }
-          - { name: "fixed", type: "decimal(10,0)", key: false, nullable: true, autoincrement: false }
-          - { name: "dec", type: "decimal(10,0)", key: false, nullable: true, autoincrement: false }
-          - { name: "dec(1,1)", type: "decimal(1,1)", key: false, nullable: true, autoincrement: false }
-          - { name: "decimal", type: "decimal(10,0)", key: false, nullable: true, autoincrement: false }
-          - { name: "decimal unsigned", type: "decimal(10,0) unsigned", key: false, nullable: true, autoincrement: false }
-          - { name: "real", type: "double", key: false, nullable: true, autoincrement: false }
-          - { name: "double precision", type: "double", key: false, nullable: true, autoincrement: false }
-          - { name: "bit", type: "bit(1)", key: false, nullable: true, autoincrement: false }
-          - { name: "year", type: "year(4)", key: false, nullable: true, autoincrement: false }
+          - { name: "integer", type: "int(11)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "int", type: "int(11)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "int unsigned", type: "int(10) unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "smallint", type: "smallint(6)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "smallint unsigned", type: "smallint(5) unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "tinyint", type: "tinyint(4)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "tinyint unsigned", type: "tinyint(10) unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "mediumint", type: "mediumint(9)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "mediumint unsigned", type: "mediumint(10) unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "bigint", type: "bigint(20)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "bigint unsigned", type: "bigint(20) unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "serial", type: "bigint(20) unsigned", key: true, default: ~, nullable: false, autoincrement: true }
+          - { name: "numeric", type: "decimal(10,0)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "fixed", type: "decimal(10,0)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "dec", type: "decimal(10,0)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "dec(1,1)", type: "decimal(1,1)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "decimal", type: "decimal(10,0)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "decimal unsigned", type: "decimal(10,0) unsigned", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "real", type: "double", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "double precision", type: "double", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "bit", type: "bit(1)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "year", type: "year(4)", key: false, default: ~, nullable: true, autoincrement: false }
           - { name: "timestamp", type: "timestamp", key: false, default: "CURRENT_TIMESTAMP", nullable: false, autoincrement: false }
-          - { name: "char", type: "char(1)", key: false, nullable: true, autoincrement: false }
-          - { name: "binary", type: "binary(1)", key: false, nullable: true, autoincrement: false }
+          - { name: "char", type: "char(1)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "binary", type: "binary(1)", key: false, default: ~, nullable: true, autoincrement: false }

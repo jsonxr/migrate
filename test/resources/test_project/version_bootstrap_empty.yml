@@ -1,0 +1,6 @@
+# Bootstrap version
+# Auto generated
+version: bootstrap
+migration:
+    previous: ~
+    commands: ~
