@@ -21,7 +21,7 @@ class Project(object):
     FILENAME = "project.yml"
     OVERRIDES = ".jake"
 
-    def __init__(self, path=None):
+    def __init__(self, path):
         self.path = path
         self._filename = self.path + "/" + Project.FILENAME
         self.project_settings = None
@@ -37,11 +37,23 @@ class Project(object):
         self._environment = value
         self.connection_info = self.project_settings['environments'][self.environment]
 
+    @property
+    def filename(self):
+        return self._filename
+
+    @property
+    def is_valid(self):
+        if self.project_settings is None:
+            return False
+        else:
+            return True
+
     def __load_project_file(self):
+        # project.yml
         if os.path.exists(self.filename):
             with file(self.filename, 'r') as stream:
                 self.project_settings = yaml.load(stream)
-        # Override main key values
+        # .jake file overrides
         override_yaml = {}
         filename = self.path + "/" + Project.OVERRIDES
         if os.path.exists(filename):
@@ -55,18 +67,8 @@ class Project(object):
             if "settings" in self.project_settings and "environment" in self.project_settings["settings"]:
                 self.environment = self.project_settings["settings"]["environment"]
 
-    @property
-    def filename(self):
-        return self._filename
-
-    def is_valid(self):
-        if self.project_settings is None:
-            return False
-        else:
-            return True
-
     def __ensure_valid(self):
-        if not self.is_valid():
+        if not self.is_valid:
             raise AppError('Not a valid repository.  Run init first.')
 
     def status(self):
@@ -115,7 +117,7 @@ class Project(object):
             print('#  (use "jake reset HEAD <table>..." to unstage)')
 
     def init(self):
-        if self.is_valid():
+        if self.is_valid:
             raise AppError('Project has already been initialized')
 
         # Create the directory if we pass it in.  Don't want to create the
@@ -135,37 +137,34 @@ class Project(object):
 
     def bootstrap(self):
         self.__ensure_valid()
-
         if os.path.exists('versions/bootstrap.yml'):
             raise AppError("bootstrap can only be run on an empty project without versions.")
-
         # Create the bootstrap version
         db = database.get(self.connection_info)
-        db_schema = db.get_db_schema()
-        bootstrap_version = schema.create_bootstrap(db_schema)
-
-        # Save all the schema
+        dbversion = db.get_version()
+        db_schema = dbversion.actual_schema
+        bootstrap_version = self.create_bootstrap(db_schema)
+        # Modify the migrations table to honor the migration_table setting.
         migration_table = schema.Table()
-        migration_table.load_from_file(self.__getResourcePath('/migration.yml'))
+        migration_table.load_from_file(self.__getResourcePath('/migrations.yml'))
         migration_table.name = config.migration_table
-
         db_schema.add_table(migration_table)
-
-        db_schema.save_to_path()
-#
-#        # Create the versions/index file.
-#        with file('versions/index.yml', 'w') as f:
-#            f.write('# Version index file.')
-#            f.write('versions:\n')
-#            f.write('    - %s:\n' % bootstrap_version.name)
-#            f.write('        filename: "%s"\n' % bootstrap_version.filename)
-#            f.write('        hashcode: "%s"' % bootstrap_version.hashcode)
-
+        # Save the path for the db schema
+        db_schema.save_to_path(self.path + "/schema")
+        # Now, save the current.yml file
         current = bootstrap_version
         current.name = "current"
         current.filename = "current.yml"
-        current.add_table(migration_table)
+        current.create_table(migration_table)
         current.save()
+
+    def create_bootstrap(self, dbschema):
+        filename = self.path + "/versions/bootstrap.yml"
+        b = schema.VersionFile(filename)
+        b.name = 'bootstrap'
+        b.schema = dbschema
+        b.save()
+        return b
 
     def add(self):
         pass

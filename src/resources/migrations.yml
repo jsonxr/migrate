@@ -6,9 +6,12 @@ name: migrations
 columns:
     - name: version
       type: string
+      nullable: false
     - name: yml
       type: text
+      nullable: false
     - name: applied_by
       type: string
-    - name: applied_on_utc
-      type: "datetime"
+    - name: applied_on
+      type: datetime
+      nullable: false

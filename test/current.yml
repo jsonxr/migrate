@@ -1,0 +1,13 @@
+version: current
+hash: 42c2e24b8509526d38da8ae444e0ebe7ca5be645
+tables:
+    - name: migrations
+      columns:
+          - { name: "version", type: "string", key: false, nullable: false, autoincrement: false }
+          - { name: "yml", type: "text", key: false, nullable: false, autoincrement: false }
+          - { name: "applied_by", type: "string", key: false, nullable: true, autoincrement: false }
+          - { name: "applied_on", type: "datetime", key: false, nullable: false, autoincrement: false }
+migration:
+    previous: ~
+    commands:
+        - { table: migrations, name: create_table }

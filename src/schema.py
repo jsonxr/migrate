@@ -42,15 +42,6 @@ def get_versions():
             raise e
 
 
-def create_bootstrap(schema):
-    b = VersionFile()
-    b.name = 'bootstrap'
-    b.filename = 'bootstrap.yml'
-    b.schema = schema
-    b.save()
-    return b
-
-
 #=============================================================================
 # Columns
 #=============================================================================
@@ -83,7 +74,14 @@ class Column(object):
         self.autoincrement = autoincrement or Column.AUTOINCREMENT_DEFAULT
 
     def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+        result = (self.name == other.name
+                  and self.type == other.type
+                  and self.key == other.key
+                  and self.default == other.default
+                  and self.nullable == other.nullable
+                  and self.autoincrement == other.autoincrement
+                  )
+        return result
 
     def __repr__(self):
         return "<column name='%s' type='%s'>" % (self.name, self.type)
@@ -125,7 +123,10 @@ class Table(object):
         return "<table name='%s' cols=%s>" % (self.name, self.columns)
 
     def __eq__(self, other):
-        return self.name == other.name and self.columns == other.columns
+        if other == None:
+            return False
+        else:
+            return self.name == other.name and self.columns == other.columns
 
     def clear(self):
         self.columns = Columns()
@@ -303,13 +304,15 @@ class Schema(object):
         return "<schema tablecount=%s>" % len(self.tables)
 
     def __eq__(self, other):
-        print("Schema.__eq__")
-        print("self: %s" % self)
-        print("other: %s" % other)
         if other is None:
             return False
         else:
-            return self.tables == other.tables
+            print("else...")
+            print(self.tables.items())
+            print(other.tables.items())
+            result = self.tables.items() == other.tables.items()
+            print(result)
+            return result
 
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
@@ -432,7 +435,10 @@ class Version(object):
 
     @property
     def hashcode(self):
-        return self._schema.hashcode
+        if self._schema:
+            return self._schema.hashcode
+        else:
+            return None
 
     @property
     def schema(self):
@@ -481,17 +487,17 @@ class Version(object):
 #=============================================================================
 
 class VersionFile(Version):
-    def __init__(self):
-        super().__init__()
-        self.filename = None
+    def __init__(self, filename):
+        Version.__init__(self)
+        self.filename = filename
 
     def load(self):
-        with file(_PROJECT_PATH + "/versions/" + self.filename, 'r') as stream:
+        with file(self.filename, 'r') as stream:
             data = yaml.load(stream)
             self.load_from_dict(data)
 
     def save(self, verbose=True):
-        with file('versions/%s' % self.filename, 'w') as f:
+        with file(self.filename, 'w') as f:
             f.write(self.get_yml(verbose))
 
 

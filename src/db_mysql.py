@@ -4,7 +4,7 @@
 Created by Jason Rowland on 2012-05-28.
 Copyright (c) 2012 Jason Rowland. All rights reserved.
 """
-
+from _mysql_exceptions import MySQLError
 from cStringIO import StringIO
 from contextlib import closing
 from decorator import decorator
@@ -17,9 +17,8 @@ import config
 import database
 import dataset
 from errors import AppError
-
 import schema
-from _mysql_exceptions import MySQLError
+
 
 
 ##############################################################################
@@ -107,7 +106,7 @@ class Database(database.Database):
 
         sql = """select version, yml
             from %s
-            order by applied_on_utc desc
+            order by applied_on desc
             limit 1""" % config.migration_table
 
         with closing(self.connection.cursor()) as cursor:
@@ -132,10 +131,7 @@ class Database(database.Database):
     def _get_actual_schema(self):
         s = schema.Schema()
         s.tables = self.__get_actual_tables()
-        if s:
-            return s
-        else:
-            return None
+        return s
 
     def __get_column_headers(self, description):
         headers = dict()

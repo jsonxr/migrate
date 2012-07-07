@@ -1,0 +1,13 @@
+tables:
+    - name: test1
+      columns:
+          - name: col1
+            type: varchar(5)
+          - name: col2
+            type: int(11)
+    - name: test2
+      columns:
+          - name: col1
+            type: float
+          - name: col2
+            type: char(2)

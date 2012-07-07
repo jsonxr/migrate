@@ -12,6 +12,7 @@ Copyright (c) 2012 Jason Rowland. All rights reserved.
 import sys
 import argparse
 
+import os
 import project
 from errors import AppError
 
@@ -163,7 +164,7 @@ class Migrate():
         if (args.command == 'help'):
             self.showhelp(args)
         else:
-            p = project.Project()
+            p = project.Project(os.path.abspath('.'))
             if args.environment != None:
                 p.environment = args.environment
 

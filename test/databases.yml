@@ -1,7 +1,14 @@
+#-----------------------------------------------------------------------------
+#  WARNING
+#
+# Do NOT use a databae that you care about.  The unit tests create/drop the
+# database listed.  This database should NOT exist
+#-----------------------------------------------------------------------------
 mysql:
   host: localhost
   user: root
   password: secret
+  database: migrateunittest
 postgres: ~
 sqlite3: ~
 mssql: ~
