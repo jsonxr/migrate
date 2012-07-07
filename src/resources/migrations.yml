@@ -2,7 +2,7 @@
 # Auto generated.  This table is required to make the migration utility work.
 ##############################################################################
 
-name: changelog
+name: migrations
 columns:
     - name: version
       type: string

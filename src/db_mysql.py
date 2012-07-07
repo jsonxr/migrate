@@ -92,8 +92,8 @@ class Database(database.Database):
         # If the migration_table table does not exist, we return the bootstrap
         # and actual schema
         dbversion = database.DatabaseVersion()
-        self._set_actual(dbversion)     # This is the actual
-        self._set_expected(dbversion)   # This is the sql_alias converted, verbose
+        dbversion.actual_schema = self._get_actual_schema()
+        self.__set_expected_version(dbversion)
         return dbversion
 
     def convert_schema_to_vendor(self, s):
@@ -103,7 +103,8 @@ class Database(database.Database):
                 _convert_column_to_vendor(c)
         return s
 
-    def _set_expected(self, dbversion):
+    def __set_expected_version(self, dbversion):
+
         sql = """select version, yml
             from %s
             order by applied_on_utc desc
@@ -128,11 +129,13 @@ class Database(database.Database):
                 else:
                     raise
 
-    def _set_actual(self, dbversion):
+    def _get_actual_schema(self):
         s = schema.Schema()
-        self.__get_tables(s)
-        if (s):
-            dbversion.actual_schema = s
+        s.tables = self.__get_actual_tables()
+        if s:
+            return s
+        else:
+            return None
 
     def __get_column_headers(self, description):
         headers = dict()
@@ -168,7 +171,9 @@ class Database(database.Database):
         return column
 
     @connection
-    def __get_tables(self, myschema):
+    def __get_actual_tables(self):
+        tables = schema.Tables()
+
         # Tables
         sql = """
         select table_name, engine, table_rows, auto_increment
@@ -184,7 +189,7 @@ class Database(database.Database):
         cursor.close()
         for row in rows:
             table = self.__get_table_from_row(row, column_headers)
-            myschema.tables[table.name] = table
+            tables[table.name] = table
 
         # Columns
         sql = """
@@ -203,7 +208,7 @@ class Database(database.Database):
         cursor.close()
         for row in rows:
             table_name = row[0]
-            table = myschema.tables[table_name]
+            table = tables[table_name]
 
             column = self.__get_column_from_row(row, column_headers)
             table.columns.append(column)
@@ -221,7 +226,7 @@ class Database(database.Database):
         cursor.execute(sql)
         rows = cursor.fetchall()
         cursor.close()
-        #print rows
+        return tables
 
     def is_connected(self):
         return not (self.connection is None)

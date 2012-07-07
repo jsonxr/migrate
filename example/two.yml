@@ -1,4 +1,4 @@
-[previous: ~
+previous: ~
 commands:
     - { name: create_table, table: migration }
     - { name: rename_table, table: migration_bak, old: migration }
@@ -6,4 +6,4 @@ commands:
     - { name: rename_column, table: altered_table, column: renamed_column, old: old_column }
     - { name: add_column, table: altered_table, column: added_column }
     - { name: drop_column, table: altered_table, column: dropped_column }
-    - { name: change_column, table: altered_table, column: changed_column }]
+    - { name: change_column, table: altered_table, column: changed_column }

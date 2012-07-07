@@ -21,12 +21,9 @@ class Project(object):
     FILENAME = "project.yml"
     OVERRIDES = ".jake"
 
-    # def __call__(self, parser, namespace, values, option_string=None):
-    #     print('%r %r %r' % (namespace, values, option_string))
-    #     #setattr(namespace, self.dest, values)
-
-    def __init__(self):
-        self.path = os.path.abspath(".")
+    def __init__(self, path=None):
+        self.path = path
+        self._filename = self.path + "/" + Project.FILENAME
         self.project_settings = None
         self._environment = None
         self.__load_project_file()
@@ -41,27 +38,26 @@ class Project(object):
         self.connection_info = self.project_settings['environments'][self.environment]
 
     def __load_project_file(self):
-        filename = self.path + "/" + Project.FILENAME
-        if os.path.exists(filename):
-            stream = file(filename, 'r')
-            self.project_settings = yaml.load(stream)
-            stream.close()
-
+        if os.path.exists(self.filename):
+            with file(self.filename, 'r') as stream:
+                self.project_settings = yaml.load(stream)
         # Override main key values
         override_yaml = {}
         filename = self.path + "/" + Project.OVERRIDES
         if os.path.exists(filename):
-            stream = file(filename, 'r')
-            override_yaml = yaml.load(stream)
-            stream.close()
+            with file(filename, 'r') as stream:
+                override_yaml = yaml.load(stream)
         for key in override_yaml:
             self.project_settings[key].update(override_yaml[key])
-
         if self.project_settings:
             config.load(self.project_settings)
             # Set the default environment
             if "settings" in self.project_settings and "environment" in self.project_settings["settings"]:
                 self.environment = self.project_settings["settings"]["environment"]
+
+    @property
+    def filename(self):
+        return self._filename
 
     def is_valid(self):
         if self.project_settings is None:

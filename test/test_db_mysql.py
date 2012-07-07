@@ -17,60 +17,98 @@ DB_PASSWORD = "j@s0n"
 DB_DATABASE_PREFIX = "python_"
 
 
-class Test(unittest.TestCase):
+def test_db_create_drop():
+    """
+    mysql: db.execute_create() and db.execute_drop()
+    """
+    name = _get_unused_dbname("test_db_create_drop")
+    db = _getDatabase(name)
+    db.execute_create()
+    assert _database_exists(name)
+    db.execute_drop()
+    assert not _database_exists(name)
 
-    def test_db_create_drop(self):
-        name = _get_unused_dbname("test_db_create_drop")
+
+def test_db_empty_schema():
+    """
+    mysql: schema for an empty database
+    """
+    name = _get_unused_dbname("test_db_empty_schema")
+    try:
         db = _getDatabase(name)
         db.execute_create()
-        assert _database_exists(name)
+        v = db.get_version()
+        assert v.name == "bootstrap"
+        assert v.actual_schema is None
+        assert v.expected_schema is None
+    finally:
         db.execute_drop()
-        assert not _database_exists(name)
 
-    def test_db_empty_schema(self):
-        name = _get_unused_dbname("test_db_schema")
-        try:
-            db = _getDatabase(name)
-            db.execute_create()
-            v = db.get_version()
-            assert v.name == "bootstrap"
-            assert v.actual_schema is None
-            assert v.expected_schema is None
-        finally:
-            db.execute_drop()
 
-    def test_db_existing_schema(self):
-        """
-        Tests all the datatypes
-        """
-        name = _get_unused_dbname("test_db_existing_schema")
-        db = _getDatabase(name)
-        try:
-            db.execute_create()
-            _create_db_schema(name)
-            v = db.get_version()
-            assert v.name == "bootstrap"
-            assert v.actual_schema is not None
-            yml = v.actual_schema.get_yml(verbose=True)
-            expected = YML_DATATYPES_SCHEMA.strip()
-            assert v.expected_schema is None
-            assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
-        finally:
-            db.execute_drop()
-
-    def test_db_converted_schema(self):
-        """
-        Converts int -> int(11)
-                 integer -> int(11)
-                 etc.
-        """
-        name = _get_unused_dbname("test_db_converted_schema")
-        db = _getDatabase(name)
-        expected = YML_SCHEMA_CONVERTED.strip()
-        s = _get_schema_to_convert()
-        s = db.convert_schema_to_vendor(s)
-        yml = s.get_yml(verbose=True)
+def test_db_version_actual_schema_get_yml():
+    """
+    mysql: db.get_version.actual_schema.get_yml
+    """
+    name = _get_unused_dbname("test_db_version_actual_schema_get_yml")
+    db = _getDatabase(name)
+    try:
+        db.execute_create()
+        _create_db_schema(name)
+        v = db.get_version()
+        assert v.name == "bootstrap"
+        assert v.actual_schema is not None
+        yml = v.actual_schema.get_yml(verbose=True)
+        expected = YML_DATATYPES_SCHEMA.strip()
+        assert v.expected_schema is None
         assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
+    finally:
+        db.execute_drop()
+
+
+def test_db_version_bootstrap_is_syncable():
+    """
+    mysql: db.get_version.is_syncable
+    """
+    name = _get_unused_dbname("test_db_version_bootstrap_is_syncable")
+    db = _getDatabase(name)
+    try:
+        db.execute_create()
+        _create_db_schema(name)
+        v = db.get_version()
+        assert v.is_syncable
+    finally:
+        db.execute_drop()
+
+
+def test_db_version_current_is_syncable():
+    """
+    mysql: db.get_version.is_syncable
+    """
+    name = _get_unused_dbname("test_db_version_bootstrap_is_syncable")
+    db = _getDatabase(name)
+    try:
+        db.execute_create()
+        _create_db_schema_current_version(name)
+        v = db.get_version()
+        assert v.is_syncable
+    finally:
+        db.execute_drop()
+
+
+def test_db_converted_schema_to_vendor():
+    """
+    mysql: database.convert_schema_to_vendor
+    Converts int -> int(11)
+             integer -> int(11)
+             etc.
+    """
+    name = _get_unused_dbname("test_db_converted_schema_to_vendor")
+    db = _getDatabase(name)
+    expected = YML_SCHEMA_CONVERTED.strip()
+    s = _get_schema_to_convert()
+    s = db.convert_schema_to_vendor(s)
+    yml = s.get_yml(verbose=True)
+    assert yml == expected, "yml != expected\n\n[%s]\n\n[%s]\n" % (yml, expected)
 
 
 #-----------------------------------------------------------------------------
@@ -114,6 +152,17 @@ def _create_db_schema(name):
         sql = stream.read()
     cursor = conn.cursor()
     cursor.execute(sql)
+
+
+def _create_db_schema_current_version(name):
+    conn = MySQLdb.connect(host=DB_HOST, user=DB_USER,
+            passwd=DB_PASSWORD, db=name)
+    filename = os.path.dirname(os.path.realpath(__file__)) + '/resources/mysql_current_version.sql'
+    with file(filename, 'r') as stream:
+        sql = stream.read()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+
 
 YML_DATATYPES_SCHEMA = """tables:
     - name: datatypes

@@ -28,6 +28,7 @@ MSSQL: http://code.google.com/p/pymssql/
 Oracle: http://cx-oracle.sourceforge.net/ (need to install instant client first:  http://www.oracle.com/technetwork/database/features/instant-client/index-097480.html
 http://www.xairon.net/2011/05/guide-installing-cx_oracle-on-mac-os-x/)
 
+Jython: http://www.jython.org/jythonbook/en/1.0/DatabasesAndJython.html
 
 MySQL Version Support:
 

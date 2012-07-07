@@ -186,8 +186,11 @@ class Tables(dict):
             raise KeyError(name)
 
     def __eq__(self, other):
-        equal = self.items() == other.items()
-        return equal
+        if (other is None):
+            return False
+        else:
+            equal = self.items() == other.items()
+            return equal
 
 
 #=============================================================================
@@ -296,8 +299,17 @@ class Schema(object):
     def __init__(self):
         self.tables = Tables()
 
+    def __repr__(self):
+        return "<schema tablecount=%s>" % len(self.tables)
+
     def __eq__(self, other):
-        return self.tables == other.tables
+        print("Schema.__eq__")
+        print("self: %s" % self)
+        print("other: %s" % other)
+        if other is None:
+            return False
+        else:
+            return self.tables == other.tables
 
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
@@ -315,7 +327,10 @@ class Schema(object):
             return s.getvalue().strip()
 
     def __nonzero__(self):
-        return len(self.tables)
+        if self.tables is None:
+            return 0
+        else:
+            return len(self.tables)
 
     def __bool__(self):
         return self.__nonzero__() > 0
