@@ -1,8 +1,8 @@
-- vendor: mysql
+mysql:
   host: localhost
   user: root
-  password: j@s0n
-- vendor: postgres
-- vendor: sqlite3
-- vendor: mssql
-- vendor: oracle
+  password: secret
+postgres: ~
+sqlite3: ~
+mssql: ~
+oracle: ~

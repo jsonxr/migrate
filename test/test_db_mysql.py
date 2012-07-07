@@ -6,15 +6,23 @@ from _mysql_exceptions import MySQLError
 import MySQLdb
 import os
 import unittest
+import yaml
 
 import db_mysql
 import schema
 
-DB_HOST = "localhost"
-DB_USER = "root"
-DB_PASSWORD = "j@s0n"
 
-DB_DATABASE_PREFIX = "python_"
+#-----------------------------------------------------------------------------
+# Test settings for mysql
+#-----------------------------------------------------------------------------
+
+filename = os.path.dirname(os.path.realpath(__file__)) + '/.databases.yml'
+with file(filename) as stream:
+    data = yaml.load(stream)
+DB_HOST = data["mysql"]["host"]
+DB_USER = data["mysql"]["user"]
+DB_PASSWORD = data["mysql"]["password"]
+DB_DATABASE_PREFIX = "py_"
 
 
 def test_db_create_drop():
