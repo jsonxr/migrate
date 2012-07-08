@@ -5,13 +5,14 @@
 name: migrations
 columns:
     - name: version
-      type: string
+      type: varchar(255)
       nullable: false
+      key: true
     - name: yml
-      type: text
+      type: longtext
       nullable: false
     - name: applied_by
-      type: string
+      type: string ###### Needs to be varchar(255) why aren't tests failing here
     - name: applied_on
       type: datetime
       nullable: false

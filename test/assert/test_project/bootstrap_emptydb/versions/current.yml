@@ -2,11 +2,11 @@ version: current
 tables:
     - name: migrations
       columns:
-          - { name: "version", type: "string", key: false, default: ~, nullable: false, autoincrement: false }
-          - { name: "yml", type: "text", key: false, default: ~, nullable: false, autoincrement: false }
+          - { name: "version", type: "varchar(255)", key: true, default: ~, nullable: false, autoincrement: false }
+          - { name: "yml", type: "longtext", key: false, default: ~, nullable: false, autoincrement: false }
           - { name: "applied_by", type: "string", key: false, default: ~, nullable: true, autoincrement: false }
           - { name: "applied_on", type: "datetime", key: false, default: ~, nullable: false, autoincrement: false }
 migration:
-    previous: ~
+    previous: bootstrap
     commands:
         - { table: "migrations", name: "create_table", column: ~, old: ~ }

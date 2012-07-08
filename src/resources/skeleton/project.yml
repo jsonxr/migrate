@@ -24,6 +24,6 @@ environments:
     dev:
         vendor: mysql  # postgres, mssql
         host: localhost
-        database: migrate_dev
+        database: test
         user: root
-        password: j@s0n
+        password: secret

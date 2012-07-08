@@ -1,6 +1,6 @@
 # converted
 tables:
-    - name: test
+    - name: converted
       columns:
           - { name: "integer", type: "int(11)", key: false, default: ~, nullable: true, autoincrement: false }
           - { name: "int", type: "int(11)", key: false, default: ~, nullable: true, autoincrement: false }

@@ -1,0 +1,13 @@
+version: bootstrap
+tables:
+    - name: test1
+      columns:
+          - { name: "col1", type: "varchar(5)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "col2", type: "int(11)", key: false, default: ~, nullable: true, autoincrement: false }
+    - name: test2
+      columns:
+          - { name: "col1", type: "float", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "col2", type: "char(2)", key: false, default: ~, nullable: true, autoincrement: false }
+migration:
+    previous: ~
+    commands: ~

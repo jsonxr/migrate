@@ -17,6 +17,21 @@ import database
 import schema
 
 
+#-----------------------------------------------------------------------------
+# Helper function
+#-----------------------------------------------------------------------------
+
+def _get_resource_path(name):
+    resource = os.path.dirname(os.path.realpath(__file__)) + '/resources' + name
+    return resource
+
+skeleton = _get_resource_path('/skeleton/')
+
+
+#-----------------------------------------------------------------------------
+# Project
+#-----------------------------------------------------------------------------
+
 class Project(object):
     FILENAME = "project.yml"
     OVERRIDES = ".jake"
@@ -127,7 +142,6 @@ class Project(object):
         if not os.path.exists(self.path):
             os.mkdir(self.path)
 
-        skeleton = self.__getResourcePath('/skeleton/')
         for filename in os.listdir(skeleton):
             src = skeleton + filename
             if os.path.isdir(src) == True:
@@ -148,25 +162,26 @@ class Project(object):
         bootstrap_version = self.create_bootstrap(db_schema)
         # Modify the migrations table to honor the migration_table setting.
         migration_table = schema.Table()
-        migration_table.load_from_file(self.__getResourcePath('/migrations.yml'))
+        migration_table.load_from_file(_get_resource_path('/migrations.yml'))
         migration_table.name = config.migration_table
-        db_schema.add_table(migration_table)
-        # Save the path for the db schema
-        db_schema.save_to_path(self.path + "/schema")
-
-        # Now, save the current.yml file
-        current = bootstrap_version
-        current.name = "current"
+        # Create the current schema
+        current = schema.Version()
         current.filename = self.path + "/versions/current.yml"
+        current.name = "current"
+        current.schema = bootstrap_version.schema
+        current.migration.previous = bootstrap_version.name
         current.create_table(migration_table)
-        current.save()
+        # Save the current version to the path and the current.yml
+        current.save_to_file()
+        current.save_to_path(self.path + "/schema")
 
     def create_bootstrap(self, dbschema):
-        filename = self.path + "/versions/bootstrap.yml"
-        b = schema.VersionFile(filename)
+        os.makedirs(self.path + '/versions')
+        b = schema.Version()
+        b.filename = self.path + "/versions/bootstrap.yml"
         b.name = 'bootstrap'
         b.schema = dbschema
-        b.save()
+        b.save_to_file()
         return b
 
     def add(self):
@@ -293,10 +308,6 @@ class Project(object):
         db = database.get(self.connection_info)
         db_dataset = db.get_dataset()
         print db_dataset
-
-    def __getResourcePath(self, name):
-        resource = os.path.dirname(os.path.realpath(__file__)) + '/resources' + name
-        return resource
 
 
 def main(argv=None):

@@ -1,0 +1,3 @@
+previous: bootstrap
+commands:
+    - { table: "migrations", name: "create_table" }

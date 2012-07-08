@@ -2,10 +2,6 @@
 Created by Jason Rowland on 2012-05-28.
 Copyright (c) 2012 Jason Rowland. All rights reserved.
 '''
-import datetime
-import getpass
-import MySQLdb
-import socket
 import unittest
 
 import schema
@@ -13,111 +9,48 @@ import utils
 
 
 class TestDbMysql(unittest.TestCase):
-    def test_db_create_drop(self):
-        db = utils.get_database()
-        db.execute_create()
-        assert utils.database_exists()
-        db.execute_drop()
-        assert not utils.database_exists()
 
     def test_db_empty_schema(self):
-        try:
-            db = utils.get_database()
-            db.execute_create()
-            v = db.get_version()
+        with utils.TestVersion("bootstrap_empty") as tv:
+            v = tv.db.get_version()
             assert v.name == "bootstrap"
             #assert v.actual_schema.tables
             assert v.expected_schema is None
-        finally:
-            db.execute_drop()
 
     def test_db_version_actual_schema_get_yml(self):
-        db = utils.get_database()
-        try:
-            db.execute_create()
-            _create_db_schema()
-            v = db.get_version()
+        with utils.TestVersion("datatypes") as tv:
+            v = tv.db.get_version()
             assert v.name == "bootstrap"
             assert v.actual_schema is not None
             yml = v.actual_schema.get_yml(verbose=True)
-            expected = YML_DATATYPES_SCHEMA.strip()
+            tv.assert_yml_equal(yml, "/datatypes_schema.yml")
             assert v.expected_schema is None
-            utils.assert_yml_equal(yml, expected)
-        finally:
-            db.execute_drop()
 
     def test_db_version_bootstrap_is_syncable(self):
-        db = utils.get_database()
-        try:
-            db.execute_create()
-            _create_db_schema()
-            v = db.get_version()
+        with utils.TestVersion("bootstrap_empty") as tv:
+            v = tv.db.get_version()
             assert v.is_syncable
-        finally:
-            db.execute_drop()
 
     def test_db_version_current_is_syncable(self):
-        db = utils.get_database()
-        try:
-            db.execute_create()
-            _create_db_schema_current_version()
-            v = db.get_version()
+        with utils.TestVersion("bootstrap_test1test2") as tv:
+            v = tv.db.get_version()
             assert v.is_syncable
-        finally:
-            db.execute_drop()
 
     def test_db_converted_schema_to_vendor(self):
-        db = utils.get_database()
-        expected = YML_SCHEMA_CONVERTED.strip()
-        s = _get_schema_to_convert()
-        s = db.convert_schema_to_vendor(s)
-        yml = s.get_yml(verbose=True)
-        utils.assert_yml_equal(yml, expected)
+        with utils.TestVersion() as tv:
+            s = _get_schema_to_convert()
+            s = tv.db.convert_schema_to_vendor(s)
+            yml = s.get_yml(verbose=True)
+            tv.assert_yml_equal(yml, '/converted_schema.yml')
 
 
 #-----------------------------------------------------------------------------
 # Helper functions
 #-----------------------------------------------------------------------------
 
-
-def _create_db_schema():
-    conn = MySQLdb.connect(host=utils.DB_HOST, user=utils.DB_USER,
-            passwd=utils.DB_PASSWORD, db=utils.DB_DATABASE)
-    sql = SQL_DATATYPES
-    cursor = conn.cursor()
-    cursor.execute(sql)
-    cursor.close()
-    conn.commit()
-    conn.close()
-
-
-def _create_db_schema_current_version():
-    conn = MySQLdb.connect(host=utils.DB_HOST, user=utils.DB_USER,
-            passwd=utils.DB_PASSWORD, db=utils.DB_DATABASE)
-    sql = SQL_CURRENT_VERSION
-    cursor = conn.cursor()
-    cursor.execute(sql)
-    cursor.close()
-    conn.commit()
-
-    sql = "INSERT INTO migrations (version, yml, applied_by, applied_on) values (%s,%s,%s,%s)"
-    username = socket.gethostname() + "/" + getpass.getuser()
-    values = [
-              ('bootstrap', YML_BOOTSTRAP_VERSION, username, datetime.datetime.now()),
-              ('current', YML_CURRENT_VERSION, username, datetime.datetime.now()),
-              ]
-    cursor = conn.cursor()
-    cursor.executemany(sql, values)
-    cursor.close()
-    conn.commit()
-
-    #cursor.close()
-    conn.close()
-
-
 def _get_schema_to_convert():
     s = schema.Schema()
-    t = schema.Table("test")
+    t = schema.Table("converted")
     t.add_column("integer", "integer")
     t.add_column("int", "int")
     t.add_column("int unsigned", "int unsigned")
@@ -151,12 +84,12 @@ def _get_schema_to_convert():
 # Resources
 #-----------------------------------------------------------------------------
 
-SQL_DATATYPES = utils.get_resource('/test_db_mysql/datatypes.sql')
-SQL_CURRENT_VERSION = utils.get_resource('/test_db_mysql/current_version.sql')
-YML_DATATYPES_SCHEMA = utils.get_resource('/test_db_mysql/datatypes_schema.yml')
-YML_SCHEMA_CONVERTED = utils.get_resource('/test_db_mysql/schema_converted.yml')
-YML_CURRENT_VERSION = utils.get_resource("/test_db_mysql/current_version.yml")
-YML_BOOTSTRAP_VERSION = utils.get_resource("/test_db_mysql/bootstrap_version.yml")
+#SQL_DATATYPES = utils.get_resource('/test_db_mysql/datatypes.sql')
+#SQL_CURRENT_VERSION = utils.get_resource('/test_db_mysql/current_version.sql')
+#YML_DATATYPES_SCHEMA = utils.get_resource('/test_db_mysql/datatypes_schema.yml')
+#YML_SCHEMA_CONVERTED = utils.get_resource('/test_db_mysql/schema_converted.yml')
+#YML_CURRENT_VERSION = utils.get_resource("/test_db_mysql/current_version.yml")
+#YML_BOOTSTRAP_VERSION = utils.get_resource("/test_db_mysql/bootstrap_version.yml")
 
 #-----------------------------------------------------------------------------
 # main

@@ -29,7 +29,7 @@ def get_versions():
             if data:
                 for v in data:
                     name = v.keys()[0]
-                    version = VersionFile()
+                    version = Version()
                     version.name = name
                     version.filename = v[name]
                     versions.append(version)
@@ -285,6 +285,10 @@ class Migration(object):
             command.load_from_dict(d)
             self.add_command(command)
 
+    def save_to_file(self, filename, verbose=False):
+        with file(filename, 'w') as stream:
+            stream.write(self.get_yml(verbose))
+
     def add_command(self, command):
         self.commands.append(command)
 
@@ -392,7 +396,7 @@ class Versions(object):
             return None
 
     def get_current(self):
-        v = VersionFile()
+        v = Version()
         v.name = "current"
         v.filename = "current.yml"
         return v
@@ -417,6 +421,7 @@ class Version(object):
         self._schema = Schema()
         self.migration = Migration()
         self.syncable = False
+        self.filename = None
 
     @property
     def schema(self):
@@ -441,6 +446,13 @@ class Version(object):
                 s.write("\nmigration: ~")
             return s.getvalue().rstrip()
 
+    def load_from_file(self, filename=None):
+        if filename:
+            self.filename = filename
+        with file(filename, 'r') as stream:
+            data = yaml.load(stream)
+            self.load_from_dict(data)
+
     def load_from_dict(self, data):
         if "version" in data:
             self.name = data["version"]
@@ -449,6 +461,17 @@ class Version(object):
         if "migration" in data:
             self.migration.load_from_dict(data["migration"])
 
+    def save_to_file(self, filename=None, verbose=True):
+        if filename is None:
+            filename = self.filename
+        with file(filename, 'w') as f:
+            f.write(self.get_yml(verbose))
+
+    def save_to_path(self, path, verbose=False):
+        os.makedirs(path)
+        self.schema.save_to_path(path, verbose)
+        self.migration.save_to_file(path + "/migration.yml", verbose)
+
     def drop_table(self, name):
         self.schema.remove_table(name)
         self.migration.add_command(Command(name, 'drop_table'))
@@ -456,25 +479,6 @@ class Version(object):
     def create_table(self, table):
         self.schema.add_table(table)
         self.migration.add_command(Command(table.name, 'create_table'))
-
-
-#=============================================================================
-# VersionFile
-#=============================================================================
-
-class VersionFile(Version):
-    def __init__(self, filename):
-        Version.__init__(self)
-        self.filename = filename
-
-    def load(self):
-        with file(self.filename, 'r') as stream:
-            data = yaml.load(stream)
-            self.load_from_dict(data)
-
-    def save(self, verbose=True):
-        with file(self.filename, 'w') as f:
-            f.write(self.get_yml(verbose))
 
 
 #=============================================================================

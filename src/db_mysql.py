@@ -20,7 +20,6 @@ from errors import AppError
 import schema
 
 
-
 ##############################################################################
 # @connection
 # This ensures that the method uses a connection if there isn't one already
@@ -74,17 +73,15 @@ class Database(database.Database):
         self.connection = None
 
     def exists(self):
-        connected = False
         try:
             self.connect(self.database)
             self.close()
-            connected = True
+            return True
         except MySQLError as e:
             if e[0] == ER_BAD_DB_ERROR:
-                connected = False
+                return False
             else:
                 raise
-        return connected
 
     @connection
     def get_version(self):
@@ -266,6 +263,23 @@ class Database(database.Database):
             else:
                 raise
 
+    @connection
+    def execute_many(self, sql, values):
+        cursor = self.connection.cursor()
+        cursor.executemany(sql, values)
+        cursor.close()
+        self.connection.commit()
+
+    @connection
+    def execute(self, sql, values=None):
+        cursor = self.connection.cursor()
+        if values:
+            cursor.execute(sql, values)
+        else:
+            cursor.execute(sql)
+        cursor.close()
+        self.connection.commit()
+
 ##############################################################################
 # Please review the below
 ##############################################################################
@@ -307,6 +321,10 @@ class Database(database.Database):
         return myschema
 
     def sync(self, change_set, yml_schema):
+        #import datetime (datetime.datetime.now())
+        #import getpass   (get username
+        #import socket    (get hostname)
+
         self.connect(self.database)
 #        try:
 #            if change_set.create_tables:

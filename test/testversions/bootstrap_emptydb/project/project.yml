@@ -2,6 +2,7 @@ settings:
     migration_table: migrations
     indent: 4
     environment: dev
+
 environments:
     dev:
         vendor: mysql
