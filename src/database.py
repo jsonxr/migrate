@@ -60,7 +60,10 @@ class DatabaseVersion(object):
         self.__set_syncable()
 
     def __set_syncable(self):
+        print('   expected: %s' % self._expected_schema)
+        print('     actual: %s' % self._actual_schema)
         self._is_syncable = self._expected_schema == None or self._actual_schema == self._expected_schema
+        print('is_syncable: %s' % self._is_syncable)
 
 
 def main():

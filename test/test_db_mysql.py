@@ -5,43 +5,48 @@ Copyright (c) 2012 Jason Rowland. All rights reserved.
 import unittest
 
 import schema
-import utils
+import fixtures
 
 
 class TestDbMysql(unittest.TestCase):
 
     def test_db_empty_schema(self):
-        with utils.TestVersion("bootstrap_empty") as tv:
-            v = tv.db.get_version()
+        with fixtures.TestFixture("bootstrap_empty") as tf:
+            v = tf.db.get_version()
             assert v.name == "bootstrap"
             #assert v.actual_schema.tables
             assert v.expected_schema is None
 
     def test_db_version_actual_schema_get_yml(self):
-        with utils.TestVersion("datatypes") as tv:
-            v = tv.db.get_version()
+        with fixtures.TestFixture("datatypes") as tf:
+            v = tf.db.get_version()
             assert v.name == "bootstrap"
             assert v.actual_schema is not None
             yml = v.actual_schema.get_yml(verbose=True)
-            tv.assert_yml_equal(yml, "/datatypes_schema.yml")
+            tf.assert_yml_equal(yml, "/datatypes_schema.yml")
             assert v.expected_schema is None
 
-    def test_db_version_bootstrap_is_syncable(self):
-        with utils.TestVersion("bootstrap_empty") as tv:
-            v = tv.db.get_version()
+    def test_db_bootstrap_empty_is_syncable(self):
+        with fixtures.TestFixture("bootstrap_empty") as tf:
+            v = tf.db.get_version()
+            assert v.is_syncable
+
+    def test_db_bootstrap_test1test2_is_syncable(self):
+        with fixtures.TestFixture("bootstrap_test1test2") as tf:
+            v = tf.db.get_version()
             assert v.is_syncable
 
     def test_db_version_current_is_syncable(self):
-        with utils.TestVersion("bootstrap_test1test2") as tv:
-            v = tv.db.get_version()
+        with fixtures.TestFixture("current_test1test2", clean=True) as tf:
+            v = tf.db.get_version()
             assert v.is_syncable
 
     def test_db_converted_schema_to_vendor(self):
-        with utils.TestVersion() as tv:
+        with fixtures.TestFixture() as tf:
             s = _get_schema_to_convert()
-            s = tv.db.convert_schema_to_vendor(s)
+            s = tf.db.convert_schema_to_vendor(s)
             yml = s.get_yml(verbose=True)
-            tv.assert_yml_equal(yml, '/converted_schema.yml')
+            tf.assert_yml_equal(yml, '/converted_schema.yml')
 
 
 #-----------------------------------------------------------------------------

@@ -2,7 +2,7 @@ import unittest
 import yaml
 
 import schema
-import utils
+import fixtures
 
 
 #=============================================================================
@@ -12,32 +12,32 @@ import utils
 class TestYml(unittest.TestCase):
 
     def test_migration_load_from_dict(self):
-        with utils.TestVersion() as tv:
-            expected = tv.get_assert_file('/test_yaml/migration.yml')
+        with fixtures.TestFixture() as tf:
+            expected = tf.get_assert_file('/test_yaml/migration.yml')
             data = yaml.load(expected)
             m = schema.Migration()
             m.load_from_dict(data)
             yml = m.get_yml()
-            utils.assert_yml_equal(yml, expected)
+            fixtures.assert_yml_equal(yml, expected)
 
     def test_migration_get_yml(self):
-        with utils.TestVersion() as tv:
-            expected = tv.get_assert_file('/test_yaml/migration.yml')
+        with fixtures.TestFixture() as tf:
+            expected = tf.get_assert_file('/test_yaml/migration.yml')
             m = _create_yml_migration()
             yml = m.get_yml()
-            utils.assert_yml_equal(yml, expected)
+            fixtures.assert_yml_equal(yml, expected)
 
     def test_version_load_from_dict(self):
-        with utils.TestVersion() as tv:
-            expected = tv.get_assert_file('/test_yaml/current.yml')
+        with fixtures.TestFixture() as tf:
+            expected = tf.get_assert_file('/test_yaml/current.yml')
             data = yaml.load(expected)
             v = schema.Version()
             v.load_from_dict(data)
             yml = v.get_yml(verbose=True)
-            tv.assert_yml_equal(yml, '/test_yaml/current.yml')
+            tf.assert_yml_equal(yml, '/test_yaml/current.yml')
 
     def test_version_get_yml(self):
-        with utils.TestVersion() as tv:
+        with fixtures.TestFixture() as tf:
             # Create the version
             v = schema.Version()
             v.migration.previous = "bootstrap"
@@ -46,71 +46,71 @@ class TestYml(unittest.TestCase):
             v.create_table(t)
             # Compare the version
             yml = v.get_yml(True)
-            tv.assert_yml_equal(yml, '/test_yaml/current.yml')
+            tf.assert_yml_equal(yml, '/test_yaml/current.yml')
 
     def test_table_load_from_file(self):
-        with utils.TestVersion() as tv:
+        with fixtures.TestFixture() as tf:
             t = schema.Table()
-            filename = tv.get_assert_filename('/test_yaml/test1.yml')
+            filename = tf.get_assert_filename('/test_yaml/test1.yml')
             t.load_from_file(filename)
             yml = t.get_yml(verbose=True)
-            tv.assert_yml_equal(yml, '/test_yaml/test1_verbose.yml')
+            tf.assert_yml_equal(yml, '/test_yaml/test1_verbose.yml')
 
     def test_schema_save_to_path(self):
-        with utils.TestVersion() as tv:
+        with fixtures.TestFixture() as tf:
             s = _create_yml_schema()
-            s.save_to_path(tv.temp_path)
-            tv.assert_directory(tv.get_assert_filename('/test_yaml/test123'), tv.temp_path + "/tables")
+            s.save_to_path(tf.temp_path)
+            tf.assert_directory(tf.get_assert_filename('/test_yaml/test123'), tf.temp_path + "/tables")
 
     def test_schema_load_from_dict(self):
-        with utils.TestVersion() as tv:
-            expected = tv.get_assert_file('/test_yaml/schema.yml')
+        with fixtures.TestFixture() as tf:
+            expected = tf.get_assert_file('/test_yaml/schema.yml')
             data = yaml.load(expected)
             s = schema.Schema()
             s.load_from_dict(data)
             yml = s.get_yml(verbose=True)
-            utils.assert_yml_equal(yml, expected)
+            fixtures.assert_yml_equal(yml, expected)
 
     def test_schema_get_yml(self):
-        with utils.TestVersion() as tv:
-            expected = tv.get_assert_file('/test_yaml/current123.yml')
+        with fixtures.TestFixture() as tf:
+            expected = tf.get_assert_file('/test_yaml/current123.yml')
             s = _create_yml_schema()
             yml = s.get_yml(verbose=True)
-            utils.assert_yml_equal(yml, expected)
+            fixtures.assert_yml_equal(yml, expected)
 
     def test_table_save_to_file(self):
-        with utils.TestVersion() as tv:
-            expected = tv.get_assert_file('/test_yaml/test1.yml')
-            filename = tv.temp_path + "/test1.yml"
+        with fixtures.TestFixture() as tf:
+            expected = tf.get_assert_file('/test_yaml/test1.yml')
+            filename = tf.temp_path + "/test1.yml"
             t = _create_yml_table()
             t.save_to_file(filename, False)
-            yml = utils.read_from_file(filename)
-            utils.assert_yml_equal(yml, expected)
+            yml = fixtures.read_from_file(filename)
+            fixtures.assert_yml_equal(yml, expected)
 
     def test_table_save_to_file_verbose(self):
-        with utils.TestVersion() as tv:
-            expected = tv.get_assert_file('/test_yaml/test1_verbose.yml')
-            filename = tv.temp_path + "/test1.yml"
+        with fixtures.TestFixture() as tf:
+            expected = tf.get_assert_file('/test_yaml/test1_verbose.yml')
+            filename = tf.temp_path + "/test1.yml"
             t = _create_yml_table()
             t.save_to_file(filename, True)
-            yml = utils.read_from_file(filename)
-            utils.assert_yml_equal(yml, expected)
+            yml = fixtures.read_from_file(filename)
+            fixtures.assert_yml_equal(yml, expected)
 
     def test_table_load_from_dict(self):
-        with utils.TestVersion() as tv:
-            expected = tv.get_assert_file('/test_yaml/test1.yml')
+        with fixtures.TestFixture() as tf:
+            expected = tf.get_assert_file('/test_yaml/test1.yml')
             data = yaml.load(expected)
             t = schema.Table()
             t.load_from_dict(data)
             yml = t.get_yml()
-            utils.assert_yml_equal(yml, expected)
+            fixtures.assert_yml_equal(yml, expected)
 
     def test_table_get_yml(self):
-        with utils.TestVersion() as tv:
-            expected = tv.get_assert_file('/test_yaml/test1.yml')
+        with fixtures.TestFixture() as tf:
+            expected = tf.get_assert_file('/test_yaml/test1.yml')
             t = _create_yml_table()
             yml = t.get_yml()
-            utils.assert_yml_equal(yml, expected)
+            fixtures.assert_yml_equal(yml, expected)
 
     def test_indent(self):
         original = """name"""

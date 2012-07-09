@@ -101,10 +101,10 @@ class Database(database.Database):
 
     def __set_expected_version(self, dbversion):
 
-        sql = """select version, yml
+        sql = '''select version, yml
             from %s
             order by applied_on desc
-            limit 1""" % config.migration_table
+            limit 1''' % config.migration_table
 
         with closing(self.connection.cursor()) as cursor:
             try:
@@ -168,16 +168,15 @@ class Database(database.Database):
         tables = schema.Tables()
 
         # Tables
-        sql = """
+        sql = '''
         select table_name, engine, table_rows, auto_increment
         from information_schema.tables
-        where table_schema = '""" + self.database + """'
+        where table_schema = \'''' + self.database + '''\'
         order by table_schema, table_name
-        """
+        '''
         cursor = self.connection.cursor()
         cursor.execute(sql)
         column_headers = self.__get_column_headers(cursor.description)
-
         rows = cursor.fetchall()
         cursor.close()
         for row in rows:
@@ -185,36 +184,34 @@ class Database(database.Database):
             tables[table.name] = table
 
         # Columns
-        sql = """
+        sql = '''
         select table_name, column_name, ordinal_position, column_default,
             column_type, is_nullable, character_maximum_length,
             numeric_precision, numeric_scale, column_key, extra
         from information_schema.columns
-        where table_schema = '""" + self.database + """'
+        where table_schema = \'''' + self.database + '''\'
         order by table_schema, table_name, ordinal_position
-        """
+        '''
         cursor = self.connection.cursor()
         cursor.execute(sql)
         rows = cursor.fetchall()
         column_headers = self.__get_column_headers(cursor.description)
-
         cursor.close()
         for row in rows:
             table_name = row[0]
             table = tables[table_name]
-
             column = self.__get_column_from_row(row, column_headers)
             table.columns.append(column)
 
         # Foreign Keys
-        sql = """
+        sql = '''
         select table_name, constraint_name, column_name, ordinal_position,
             position_in_unique_constraint, referenced_table_name,
             referenced_column_name
         from  information_schema.key_column_usage
-        where table_schema = '""" + self.database + """'
+        where table_schema = \'''' + self.database + '''\'
         order by table_name, constraint_name
-        """
+        '''
         cursor = self.connection.cursor()
         cursor.execute(sql)
         rows = cursor.fetchall()

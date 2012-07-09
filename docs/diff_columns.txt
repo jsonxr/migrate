@@ -1,0 +1,211 @@
+#-----------------------------------------------------------------------------
+# Comparing columns
+#-----------------------------------------------------------------------------
+Comparing columns.  In order to determine when a column has changed, you must
+first compare all attributes of a column.  It is not intuitive, but when you
+are determining if a column changed, you do not consider it's position.
+
+For example:
+CREATE TABLE test1 (
+    col_a varchar(255),
+    col_b varchar(255),
+    col_c varchar(255)
+)
+
+- name: test1
+  columns:
+      - { name: col_a, type: varchar(255) }
+      - { name: col_b, type: varchar(255) }
+      - { name: col_c, type: varchar(255) }
+
+changeto:
+
+- name: test1
+  columns:
+      - { name: col_b, type: varchar(255) }
+      - { name: col_c, type: varchar(255) }
+      - { name: col_a, type: varchar(255) }
+
+Even though all three columns are in a different position, only two columns
+changed.  "col_b", and "col_a".  col_c did not change because it still follows
+col_b.  If we were to construct an alter statment for this, it would look like:
+ALTER TABLE tablename
+CHANGE COLUMN col_b col_b varchar(255) FIRST,
+CHANGE COLUMN col_a col_a varchar(255) AFTER col_c;
+
+So the way you diff a column is by checking all column values EXCEPT it's 
+current position in the list.  You in fact, need to know the field before
+it as an intrinsic property of the column.  If it's field position moves from
+position 4 to position 6, this is completely irrelevant if the field that 
+came before it is still the same.
+
+- name: test1
+  columns:
+      - { name: col_a, type: varchar(255) }
+      - { name: col_b, type: varchar(255) }
+      - { name: col_c, type: varchar(255) }
+
+changeto:
+- name: test1
+  columns:
+      - { name: col_c, type: varchar(255) }
+      - { name: col_b, type: varchar(255) }
+      - { name: col_a, type: varchar(255) }
+
+We could simply move column c to be after column b and then move column a to
+
+col_c is no longer after column b, so we move it to FIRST
+col_b is the same, so leave it a lone
+col_a is no longer first, so move it AFTER col_b
+
+ALTER TABLE tablename
+CHANGE COLUMN col_c col_c varchar(255) FIRST,
+CHANGE COLUMN col_a col_a varchar(255) AFTER col_b;
+
+
+Adding a column
+
+- name: test1
+  columns:
+      - { name: col_a, type: varchar(255) }
+      - { name: col_b, type: varchar(255) }
+      - { name: col_c, type: varchar(255) }
+
+- name: test1
+  columns:
+#      - { name: col_a, type: varchar(255) } DROP but it's still here when we "alter table" because we don't remove fields until the last step 
+      - { name: col_d, type: varchar(255) }  ADD FIRST  (d,a,b,c)
+      - { name: col_b, type: varchar(255) }
+      - { name: col_c, type: varchar(255) }
+--------------
+a
+b
+c
+
+a
+d (add after a)
+b (no change because ignoring adds, it's still after a)
+c (no change)
+--------------
+a
+b
+c
+d
+
+a (no change
+#b (drop later)
+e ADD after a
+c (no change)
+d (no change)
+--------------
+a
+b
+c
+d
+
+a (no change
+e (add after a
+f (add after e)
+c (no change because ignoring adds it is after A because b (which is dropped has A as previous)
+d (no change cause still after c)
+
+#b (drop later
+--------------
+a
+a1
+b
+c
+d
+
+a (no change
+e (add after a
+f (add after e)
+c (no change because ignoring adds it is after A because b (which is dropped has A as previous)
+d (no change cause still after c)
+a1 (change after d)
+
+#b (drop later
+--------------
+a move to end
+a1 move after a
+b drop
+c
+d
+
+e (add FIRST     (e,a,a1,b,c,d)
+f (add after e)  (e,f,a,a1,b,c,d)
+c (CHANGE aftr f) (e,f,c,a,a1,b,d)
+d (no change? this is wrong!  so perhaps we need to change all that come after if we change order of element
+a
+#b
+a1(change after d)
+--------------
+A
+B   (move b to end)
+C
+D
+--------------
+A   no change    (A,B,C,D)
+C   AFTER A      (A,C,B,D)
+D   AFTER C      (A,C,D,B)
+B   AFTER D      (no change was really necessary)
+
+really what we did was moved b to the end so what if we looked at old list first...
+A   no change   (A,B,C,D)
+B   AFTER D     (A,C,D,B)
+--------------
+A
+B
+C (move to beginning)
+D
+
+CHANGE TO:
+C
+A
+B
+D
+--------------
+A   AFTER C     (B,C,A,D)
+B   AFTER A     (C,A,B,D)
+--------------
+A,B,C,D -> A,C,D,B
+How do I know that B moved to end?
+A: (null,B) -> (null, C)    :0,1
+B: (A,C)    -> (D,null)     :1,1 * This is my change
+C: (B,D)    -> (A,D)        :1,0
+D: (C,null) -> (C,B)        :1,0
+
+--------------
+A,B,C,D -> D,A,B,C
+How do I know that D moved to the beginning?
+A: (null,B) -> (D,B)        :1,0
+B: (A,C)    -> (A,C)        :0,0
+C: (B,D)    -> (B,null)     :0,1
+D: (C,null) -> (null,A)     :1,1 * this changed
+--------------
+A,A1,B,C,D -> E,F,C,D,A,A1
+How do I know that (A,A1 moved to the end), (E,F were added at the beginning), (B was dropped)?
+ A: (null, A1)  -> (D,A1)       :1,0
+A1: (A,B)       -> (A,null)     :0,1
+ B: (A1,C)      -> NULL         :!!! DROP
+ C: (B,D)       -> (F,D)        :1,0
+ D: (C,null)    -> (C,A)        :0,1
+ E: NULL        -> (null,F)     :!!! ADD FIRST
+ F: NULL        -> (E,C)        :!!! ADD AFTER E
+
+
+ADD E FIRST (E,A,A1,B,C,D)
+ADD F AFTER E (E,F,A,A1,B,C,D)
+Create list without ADD and DROP in both lists
+(A,A1,C,D)  -> (C,D,A,A1)
+ 
+Screw this! This is too hard.  I'm adding a new command called "column_reorder"
+
+ 
+
+
+
+
+
+
+So construct a new field list with no change, drops, adds

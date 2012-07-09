@@ -34,7 +34,7 @@ DB_PASSWORD = data["mysql"]["password"]
 DB_DATABASE = data["mysql"]["database"]
 
 
-class TestVersion(object):
+class TestFixture(object):
     """
     This is responsible for initializing the project to the known state
 
@@ -49,13 +49,14 @@ class TestVersion(object):
     themselves don't have to match, but the dictionary that they create needs
     to match.
     """
-    def __init__(self, name=None):
+    def __init__(self, name=None, clean=True):
         self.name = name
+        self.clean_when_finished = clean
         conn = {"host": DB_HOST, "database": DB_DATABASE, "user": DB_USER, "password": DB_PASSWORD}
         self.db = db_mysql.Database(conn)
         self.temp_path = tempfile.mkdtemp()  # This is just to get a tmpdir name
         if name:
-            self.testversion_path = os.path.dirname(os.path.realpath(__file__)) + "/testversions/%s" % name
+            self.testversion_path = os.path.dirname(os.path.realpath(__file__)) + "/fixtures/%s" % name
             assert os.path.exists(self.testversion_path), "%s does not exist" % self.testversion_path
 
     def __enter__(self):
@@ -112,7 +113,7 @@ class TestVersion(object):
             self.db.execute_create()
             self.db.execute(sql)
             # Create migrations entries
-            migration_versions = self.get_resource('/migration_versions.yml')
+            migration_versions = self.get_resource('/data/migrations.yml')
             if migration_versions:
                 values = []
                 data = yaml.load(migration_versions)
@@ -150,10 +151,13 @@ class TestVersion(object):
                             base + filename, project_file, assert_file)
 
     def clean(self):
-        if self.db.exists():
-            self.db.execute_drop()
-        if self.temp_path:
-            shutil.rmtree(self.temp_path)
+        if self.clean_when_finished:
+            if self.db.exists():
+                self.db.execute_drop()
+            if self.temp_path:
+                shutil.rmtree(self.temp_path)
+        else:
+            print('manually delete %s' % self.temp_path)
 
 
 def assert_yml_equal(yml, exp):

@@ -302,7 +302,7 @@ class Schema(object):
         self.tables = Tables()
 
     def __repr__(self):
-        return "<schema tablecount=%s>" % len(self.tables)
+        return "<schema tables=%s>" % self.tables
 
     def __eq__(self, other):
         if other is None:
