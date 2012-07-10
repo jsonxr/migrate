@@ -1,9 +1,13 @@
-previous: ~
-commands:
-    - { name: create_table, table: migration }
-    - { name: rename_table, table: migration_bak, old: migration }
-    - { name: drop_table, table: migration_old }
-    - { name: rename_column, table: altered_table, column: renamed_column, old: old_column }
-    - { name: add_column, table: altered_table, column: added_column }
-    - { name: drop_column, table: altered_table, column: dropped_column }
-    - { name: change_column, table: altered_table, column: changed_column }
+[{'tables': [{'name': 'migrations', 'columns': [{'name': 'version', 'key': True, 'nullable': False, 'default': None, 'autoincrement': False, 'type': 'varchar(255)'}, {'name': 'yml', 'key': False, 'nullable': False, 'default': None, 'autoincrement': False, 'type': 'longtext'}, {'name': 'applied_by', 'key': False, 'nullable': True, 'default': None, 'autoincrement': False, 'type': 'string'}, {'name': 'applied_on', 'key': False, 'nullable': False, 'default': None, 'autoincrement': False, 'type': 'datetime'}]}], 'version': 'current', 'migration': {'commands': [{'column': None, 'table': 'migrations', 'old': None, 'name': 'create_table'}], 'previous': 'bootstrap'}}]
+version: current
+tables:
+    - name: migrations
+      columns:
+          - { name: "version", type: "varchar(255)", key: true, default: ~, nullable: false, autoincrement: false }
+          - { name: "yml", type: "longtext", key: false, default: ~, nullable: false, autoincrement: false }
+          - { name: "applied_by", type: "string", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "applied_on", type: "datetime", key: false, default: ~, nullable: false, autoincrement: false }
+migration:
+    previous: bootstrap
+    commands:
+        - { table: "migrations", name: "create_table", column: ~, old: ~ }

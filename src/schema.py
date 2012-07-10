@@ -13,33 +13,6 @@ from contextlib import closing
 
 import errors
 
-#=============================================================================
-# public functions
-#=============================================================================
-
-_PROJECT_PATH = os.path.abspath(".")
-
-
-def get_versions():
-    filename = _PROJECT_PATH + "/versions/index.yml"
-    try:
-        versions = Versions()
-        with file(filename, 'r') as stream:
-            data = yaml.load(stream)
-            if data:
-                for v in data:
-                    name = v.keys()[0]
-                    version = Version()
-                    version.name = name
-                    version.filename = v[name]
-                    versions.append(version)
-        return versions
-    except IOError, e:
-        if e.errno == 2 and e.strerror == "No such file or directory":
-            return None
-        else:
-            raise e
-
 
 #=============================================================================
 # Columns
@@ -177,6 +150,10 @@ class Tables(dict):
     def __getattr__(self, name):
         return self[name]
 
+    def __getitem__(self, key):
+        if key in self:
+            return dict.__getitem__(self, key)
+
     def __setattr__(self, name, value):
         assert value.name
         assert "columns" in value.__dict__
@@ -229,6 +206,9 @@ class Command(object):
         self.column = column
         self._validate()
 
+    def __repr__(self):
+        return "<command table='%s' name='%s'>" % (self.table, self.name)
+
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
             s.write("{ ")
@@ -250,6 +230,16 @@ class Command(object):
         if not self.name is None and not self.name in Command.valid_commands:
             raise errors.AppError("%s is not a valid command" % self.name)
 
+    def display(self, sync=False, force=False):
+        _format_str = RED
+        _format_str = GREEN
+        if sync:
+            _sync = "[sync]"
+        if force:
+            _sync = "[force]"
+        s = "{:7} {:13} {:20}".format(_sync, "new table:", self.table)
+        return "{}".format(_format_str.format(s))
+
 
 #=============================================================================
 # Migration
@@ -259,6 +249,7 @@ class Migration(object):
     def __init__(self, previous=None):
         self.previous = previous
         self.commands = []
+        self._tables = {}
 
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
@@ -280,10 +271,11 @@ class Migration(object):
     def load_from_dict(self, data):
         self.clear()
         self.previous = data["previous"] if "previous" in data else None
-        for d in data["commands"]:
-            command = Command()
-            command.load_from_dict(d)
-            self.add_command(command)
+        if data["commands"]:
+            for d in data["commands"]:
+                command = Command()
+                command.load_from_dict(d)
+                self.add_command(command)
 
     def save_to_file(self, filename, verbose=False):
         with file(filename, 'w') as stream:
@@ -291,7 +283,18 @@ class Migration(object):
 
     def add_command(self, command):
         self.commands.append(command)
+        table_name = command.table
+        if not table_name in self._tables:
+            self._tables[table_name] = []
+        self._tables[table_name].append(command)
 
+    @property
+    def tables(self):
+        return self._tables
+
+    @tables.setter
+    def tables(self):
+        raise AttributeError("can't set attribute")
 
 #=============================================================================
 # Schema
@@ -351,8 +354,8 @@ class Schema(object):
         self.load_from_dict(data)
 
     def load_from_dict(self, data):
-        assert "tables" in data, "expecting tables key in dictionary"
-
+        if not "tables" in data:
+            return
         tables = data["tables"]
         if tables:
             for d in tables:
@@ -383,28 +386,47 @@ class Schema(object):
 #=============================================================================
 
 class Versions(object):
-    def __init__(self):
+    def __init__(self, path):
+        self.path = path
         self.versions = []
+        self._current = None
+        self._bootstrap = None
 
     def append(self, version):
         self.versions.append(version)
 
-    def get_previous(self):
-        if len(self.versions) >= 1:
-            return self.versions[-1]
+    def get_version_by_name(self, name):
+        filename = self.path + "/versions/%s.yml" % name
+        if os.path.exists(filename):
+            version = Version()
+            version.name = name
+            version.filename = filename
+            version.load_from_file()
+            return version
         else:
             return None
 
+    def get_bootstrap(self):
+        if not self._bootstrap:
+            self._bootstrap = self.get_version_by_name('bootstrap')
+        return self._bootstrap
+
     def get_current(self):
-        v = Version()
-        v.name = "current"
-        v.filename = "current.yml"
-        return v
+        if not self._current:
+            self._current = self.get_version_by_name('current')
+        return self._current
+
+    def get_previous(self, version):
+        if version is None:
+            return None
+        else:
+            previous = self.get_version_by_name(version.migration.previous)
+            return previous
 
     def get_from_path(self):
         v = Version()
         v.name = "path"
-        for filename in glob.glob(_PROJECT_PATH + "/schema/*.yml"):
+        for filename in glob.glob(self.path + "/schema/*.yml"):
             with file(filename, 'r') as stream:
                 data = yaml.load(stream)
                 v.load_from_dict(data)
@@ -449,7 +471,7 @@ class Version(object):
     def load_from_file(self, filename=None):
         if filename:
             self.filename = filename
-        with file(filename, 'r') as stream:
+        with file(self.filename, 'r') as stream:
             data = yaml.load(stream)
             self.load_from_dict(data)
 
@@ -468,7 +490,8 @@ class Version(object):
             f.write(self.get_yml(verbose))
 
     def save_to_path(self, path, verbose=False):
-        os.makedirs(path)
+        if not os.path.exists(path):
+            os.makedirs(path)
         self.schema.save_to_path(path, verbose)
         self.migration.save_to_file(path + "/migration.yml", verbose)
 
@@ -526,6 +549,11 @@ def indent(value, indent=1, is_list=False):
     if value[-1] == "\n":
         newstr += "\n"
     return newstr
+
+
+RED = "\033[31m{}\033[0m"
+GREEN = "\033[32m{}\033[0m"
+YELLOW = "\033[33m{}\033[0m"
 
 
 #=============================================================================

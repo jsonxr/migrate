@@ -41,6 +41,9 @@ class Project(object):
         self._filename = self.path + "/" + Project.FILENAME
         self.project_settings = None
         self._environment = None
+        self.versions = None
+        self.current = None
+        self.db = None
         self.__load_project_file()
 
     @property
@@ -61,7 +64,10 @@ class Project(object):
         if self.project_settings is None:
             return False
         else:
-            return True
+            if self.current is None:
+                return False
+            else:
+                return True
 
     def __load_project_file(self):
         # project.yml
@@ -81,67 +87,88 @@ class Project(object):
             # Set the default environment
             if "settings" in self.project_settings and "environment" in self.project_settings["settings"]:
                 self.environment = self.project_settings["settings"]["environment"]
+            self.connection_info = self.project_settings['environments'][self.environment]
+            self.versions = schema.Versions(self.path)
+            self.current = self.versions.get_current()
+            self.db = database.get(self.connection_info)
 
     def __ensure_valid(self):
         if not self.is_valid:
-            raise AppError('Not a valid repository.  Run init first.')
+            raise AppError('Not a valid repository.  Run "jake init" first.')
 
     def status(self):
         self.__ensure_valid()
-
-        versions = schema.get_versions()
-
-        if versions is None:
-            previous = None
-            current = None
-        else:
-            previous = versions.get_previous()
-            current = versions.get_current()
-
-        #print(versions.get_from_path())
-        #print(current)
-        #print(previous)
-        #exit()
-
-        # Get the database version
-        db = database.get(self.connection_info)
-        v = db.get_version()
-
-        #current = version.get_current(self.path)
-        #previous = version.get_previous(self.path)
-
+        # Get all the versions
+        previous = self.versions.get_previous(self.current)
+        dbversion = self.db.get_version(previous)
+        # Write the output
         with closing(StringIO()) as s:
-
-            # On dev04:migrate_dev version:bootstrap
-            s.write('# On env={environment}, db={database}, version={version}\n'.format(environment=self.environment, database=self.connection_info["database"], version=v.name))
-            if previous is None:
+            s.write('# On env={environment}, db={database}, version={version}\n'.format(environment=self.environment, database=self.connection_info["database"], version=dbversion.name))
+            if self.current is None:
                 s.write('#\n')
-                if (db.exists()):
+                if (self.db.exists()):
                     s.write('#  (use "jake bootstrap" to initialize project with database schema)\n')
                 else:
                     s.write('#  (use "jake db-create" to create empty database)\n')
             else:
-                s.write('# Schema changes since %s\n' % previous.name)
-                s.write('#\n')
-                for table_name in current.changeset.tables:
-                    commands = current.changeset.tables[table_name]
-                    for command_name in commands:
-                        command = commands[command_name]
-                        s.write('#   {}\n'.format(command.display(current.schema, None)))
-                s.write('#\n')
-                s.write('#  (use "jake sync" to sync database to schema)\n')
-                s.write('#  (use "jake reset HEAD <table>..." to unstage)\n')
+                self._status_changes_to_sync(s, self.current, previous, dbversion)
+                self._status_changes_not_added(s, self.current, previous, dbversion)
+                self._status_changes_in_database(s, self.current, previous, dbversion)
             return s.getvalue()
+
+    def _status_changes_to_sync(self, s, current, previous, dbversion):
+        # These are the changes that are in the commands list
+        #print(dbversion.is_syncable)
+        s.write('# Changes to sync to database:\n')
+        s.write('#   (use "jake undo <table>..." to undo change to database)\n')
+        s.write('#   (use "jake sync [--force]" to sync database to schema)\n')
+        s.write('#\n')
+        for table_name in current.migration.tables:
+            commands = current.migration.tables[table_name]
+            for command in commands:
+                if command.name == "create_table":
+                    if dbversion.actual_schema.tables[table_name] is None:
+                        s.write('#   {}\n'.format(command.display(sync=True)))
+                    else:
+                        if not current.schema.tables[table_name] == dbversion.actual_schema.tables[table_name]:
+                            s.write('#   {}\n'.format(command.display(force=True)))
+                        else:
+                            # They are the same, so it doesn't need to be synced at all
+                            pass
+                elif command.name == "drop_table":
+                    pass
+        s.write('#\n')
+
+    def _status_changes_not_added(self, s, current, previous, dbversion):
+        # These are the changes that are in the path, but are NOT in the current.yml file
+        # This includes changes to the path migration.yml file (for example a rename intead of drop/create
+        s.write('# Changed in directory but not added to sync:\n')
+        s.write('#   (use "jake add/drop/rename <table>..." to update what will sync)\n')
+        s.write('#   (use "jake undo <table>..." to undo change in directory)\n')
+        s.write('#\n')
+        s.write('# \033[31m{}\033[0m\n'.format('          new table:    test2'))
+        s.write('#\n')
+
+    def _status_changes_in_database(self, s, current, previous, dbversion):
+        s.write('# Changed in database but not in project:\n')
+        s.write('#   (use "jake reverse <table>..." to save changes to directory)\n')
+        s.write('#\n')
+        s.write('# \033[31m{}\033[0m\n'.format('          new table:    test1'))
+        s.write('#\n')
 
     def init(self):
         if self.is_valid:
             raise AppError('Project has already been initialized')
+        if self.project_settings is None:
+            self.create_folders()
+            return 'Edit the project.yaml file for your database and rerun "jake init"'
+        else:
+            self.bootstrap()
+            return 'The schema from the "%s" database is located in the "schema" directory.' % self.db.database
 
-        # Create the directory if we pass it in.  Don't want to create the
-        #
+    def create_folders(self):
         if not os.path.exists(self.path):
             os.mkdir(self.path)
-
         for filename in os.listdir(skeleton):
             src = skeleton + filename
             if os.path.isdir(src) == True:
@@ -149,15 +176,14 @@ class Project(object):
             else:
                 shutil.copyfile(src, self.path + "/" + filename)
 
-        return "Edit the project.yaml file to connect to the database."
-
     def bootstrap(self):
-        self.__ensure_valid()
         if os.path.exists('versions/bootstrap.yml'):
             raise AppError("bootstrap can only be run on an empty project without versions.")
         # Create the bootstrap version
         db = database.get(self.connection_info)
-        dbversion = db.get_version()
+        versions = schema.Versions(self.path)
+        bootstrap = versions.get_bootstrap()
+        dbversion = db.get_version(bootstrap)
         db_schema = dbversion.actual_schema
         bootstrap_version = self.create_bootstrap(db_schema)
         # Modify the migrations table to honor the migration_table setting.
@@ -176,7 +202,8 @@ class Project(object):
         current.save_to_path(self.path + "/schema")
 
     def create_bootstrap(self, dbschema):
-        os.makedirs(self.path + '/versions')
+        if not os.path.exists(self.path + '/versions'):
+            os.makedirs(self.path + '/versions')
         b = schema.Version()
         b.filename = self.path + "/versions/bootstrap.yml"
         b.name = 'bootstrap'
@@ -262,15 +289,15 @@ class Project(object):
         db.sync(cs, yml_schema)
 
     def db_create(self):
-        self.__ensure_valid()
-        db = database.get(self.connection_info)
-        db_schema = db.create()
-        return db_schema
+        if not self.project_settings is None:
+            db = database.get(self.connection_info)
+            db_schema = db.execute_create()
+            return db_schema
 
     def db_drop(self):
-        self.__ensure_valid()
-        db = database.get(self.connection_info)
-        db.drop()
+        if not self.project_settings is None:
+            db = database.get(self.connection_info)
+            db.execute_drop()
 
     def dump(self, name=None):
         self.__ensure_valid()
@@ -295,7 +322,7 @@ class Project(object):
         pass
 
     def list_versions(self):
-        versions = schema.get_versions()
+        versions = schema.Versions()
         if (versions):
             print
             for version in versions:

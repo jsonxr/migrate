@@ -4,6 +4,7 @@ Copyright (c) 2012 Jason Rowland. All rights reserved.
 '''
 import unittest
 
+import project
 import schema
 import fixtures
 
@@ -12,14 +13,18 @@ class TestDbMysql(unittest.TestCase):
 
     def test_db_empty_schema(self):
         with fixtures.TestFixture("bootstrap_empty") as tf:
-            v = tf.db.get_version()
+            versions = schema.Versions(tf.temp_path)
+            bootstrap = versions.get_bootstrap()
+            v = tf.db.get_version(bootstrap)
             assert v.name == "bootstrap"
             #assert v.actual_schema.tables
             assert v.expected_schema is None
 
     def test_db_version_actual_schema_get_yml(self):
         with fixtures.TestFixture("datatypes") as tf:
-            v = tf.db.get_version()
+            versions = schema.Versions(tf.temp_path)
+            bootstrap = versions.get_bootstrap()
+            v = tf.db.get_version(bootstrap)
             assert v.name == "bootstrap"
             assert v.actual_schema is not None
             yml = v.actual_schema.get_yml(verbose=True)
@@ -28,17 +33,23 @@ class TestDbMysql(unittest.TestCase):
 
     def test_db_bootstrap_empty_is_syncable(self):
         with fixtures.TestFixture("bootstrap_empty") as tf:
-            v = tf.db.get_version()
+            versions = schema.Versions(tf.temp_path)
+            bootstrap = versions.get_bootstrap()
+            v = tf.db.get_version(bootstrap)
             assert v.is_syncable
 
     def test_db_bootstrap_test1test2_is_syncable(self):
         with fixtures.TestFixture("bootstrap_test1test2") as tf:
-            v = tf.db.get_version()
+            versions = schema.Versions(tf.temp_path)
+            bootstrap = versions.get_bootstrap()
+            v = tf.db.get_version(bootstrap)
             assert v.is_syncable
 
     def test_db_version_current_is_syncable(self):
         with fixtures.TestFixture("current_test1test2", clean=True) as tf:
-            v = tf.db.get_version()
+            versions = schema.Versions(tf.temp_path)
+            bootstrap = versions.get_bootstrap()
+            v = tf.db.get_version(bootstrap)
             assert v.is_syncable
 
     def test_db_converted_schema_to_vendor(self):

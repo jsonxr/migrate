@@ -19,6 +19,17 @@ when we are reverse engineering the database.  In all other cases, we need to
 convert the schema into a database schema.
 
 
+
+jake diff <tablename>
+This will show all the differences of a table.  It shows previous, current, db.expected, db.actual
+
+#-----------------------------------------------------------------------------
+# is_syncable
+#-----------------------------------------------------------------------------
+If the db.actual_schema = db.expected_schema then it is syncable.
+db.expected_schema is what is returned in the row
+if the migrations table is empty, then the db.actual_schema must match bootstrap.schema
+
 #-----------------------------------------------------------------------------
 # Apply Changes
 #-----------------------------------------------------------------------------

@@ -1,10 +1,11 @@
-migrate
-=======
+these are instructions on how to use this tool.
 
+Database versioning:
+1)  undefined
+2)  bootstrap
+3)  current
 
-#-----------------------------------------------------------------------------
-Running Tests
-#-----------------------------------------------------------------------------
-1) Rename the tests/databases.yml file to tests/.databases.yml
-2) Edit to include proper credentials
-3) nosetests
+Commands
+1)  init
+2)  Modify the project.yml file to point to the database
+3)  run bootstrap command to get the initial database

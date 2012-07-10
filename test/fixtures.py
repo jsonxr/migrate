@@ -152,7 +152,7 @@ class TestFixture(object):
 
     def clean(self):
         if self.clean_when_finished:
-            if self.db.exists():
+            if self.name and self.db.exists():
                 self.db.execute_drop()
             if self.temp_path:
                 shutil.rmtree(self.temp_path)

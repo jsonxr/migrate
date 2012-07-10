@@ -23,10 +23,15 @@ class TestProject(unittest.TestCase):
     def test_project_bootstrap_emptydb(self):
         with fixtures.TestFixture("bootstrap_emptydb") as tf:
             p = project.Project(tf.temp_path)
-            p.bootstrap()
+            p.init()
             assert_dir = tf.get_assert_filename('/test_project/bootstrap_emptydb')
             tf.assert_directory(assert_dir, p.path)
 
+    def test_project_bootstrap_emptydb_status(self):
+        with fixtures.TestFixture("current_emptydb", clean=True) as tf:
+            p = project.Project(tf.temp_path)
+            print(p.status())
+            pass
 
 #-----------------------------------------------------------------------------
 # main

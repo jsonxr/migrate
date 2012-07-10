@@ -15,13 +15,8 @@ class TestTable(unittest.TestCase):
 
     def test_tables_getattr_setattr_keyerror(self):
         tables = schema.Tables()
-        try:
-            t = tables.frank
-            assert t  # Just here to prevent a warning
-        except KeyError as e:
-            assert e[0] == "frank"
-        else:
-            assert False, "table 'frank' should not exist"
+        t = tables.frank
+        assert t is None  # Just here to prevent a warning
 
     def test_tables_getattr_setattr_mismatch_tablename(self):
         tables = schema.Tables()

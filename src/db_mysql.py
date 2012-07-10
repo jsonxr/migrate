@@ -5,6 +5,7 @@ Created by Jason Rowland on 2012-05-28.
 Copyright (c) 2012 Jason Rowland. All rights reserved.
 """
 from _mysql_exceptions import MySQLError
+from _mysql_exceptions import OperationalError
 from cStringIO import StringIO
 from contextlib import closing
 from decorator import decorator
@@ -84,12 +85,12 @@ class Database(database.Database):
                 raise
 
     @connection
-    def get_version(self):
+    def get_version(self, previous_version):
         # If the migration_table table does not exist, we return the bootstrap
         # and actual schema
         dbversion = database.DatabaseVersion()
         dbversion.actual_schema = self._get_actual_schema()
-        self.__set_expected_version(dbversion)
+        self.__set_expected_version(dbversion, previous_version)
         return dbversion
 
     def convert_schema_to_vendor(self, s):
@@ -99,7 +100,7 @@ class Database(database.Database):
                 _convert_column_to_vendor(c)
         return s
 
-    def __set_expected_version(self, dbversion):
+    def __set_expected_version(self, dbversion, previous_version):
 
         sql = '''select version, yml
             from %s
@@ -110,11 +111,14 @@ class Database(database.Database):
             try:
                 cursor.execute(sql)
                 row = cursor.fetchone()
-                dbversion.name = row[0]
-                yml = row[1]
-                s = schema.Schema()
-                s.load_from_str(yml)
-                dbversion.expected_schema = s
+                if row:
+                    dbversion.name = row[0]
+                    yml = row[1]
+                    s = schema.Schema()
+                    s.load_from_str(yml)
+                    dbversion.expected_schema = s
+                else:
+                    dbversion.expected_schema = previous_version.schema
             except MySQLError as e:
                 if e[0] == ER_NO_SUCH_TABLE:
                     dbversion.name = "bootstrap"
@@ -222,13 +226,23 @@ class Database(database.Database):
         return not (self.connection is None)
 
     def connect(self, database_name=None):
-        if (database_name):
-            self.connection = MySQLdb.connect(host=self.host, user=self.user,
-                    passwd=self.password, db=database_name)
-        else:
-            self.connection = MySQLdb.connect(host=self.host, user=self.user,
-                    passwd=self.password)
-        return self.connection
+        try:
+            if (database_name):
+                self.connection = MySQLdb.connect(host=self.host, user=self.user,
+                        passwd=self.password, db=database_name)
+            else:
+                self.connection = MySQLdb.connect(host=self.host, user=self.user,
+                        passwd=self.password)
+            return self.connection
+        except OperationalError as e:
+            if e[0] == ER_ACCESS_DENIED_ERROR:
+                raise AppError(e[1])
+            elif e[0] == ER_BAD_DB_ERROR:
+                message = 'Database "%s" does not exist.\n' % self.database
+                message += 'run "jake db-create" to create an empty db.'
+                raise AppError(message)
+            else:
+                raise
 
     def close(self):
         self.connection.close()
@@ -457,7 +471,6 @@ class Database(database.Database):
             cursor.execute(sql)
             #column_headers = self.__get_column_headers(cursor.description)
             row = cursor.fetchone()
-            print row
             myschema.version = row[0]
         except MySQLError as e:
             if e[0] == ER_NO_SUCH_TABLE:
@@ -551,6 +564,8 @@ def _convert_column_to_vendor(column):
 
 ER_DB_CREATE_EXISTS = 1007
 ER_DB_DROP_EXISTS = 1008
+ER_DBACCESS_DENIED_ERROR = 1044
+ER_ACCESS_DENIED_ERROR = 1045
 ER_BAD_DB_ERROR = 1049
 ER_BAD_FIELD_ERROR = 1054
 ER_NO_SUCH_TABLE = 1146
