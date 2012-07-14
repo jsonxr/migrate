@@ -1,0 +1,38 @@
+I've been thinking about data formats to represent the schema.  The format doesn't much matter to my code as it is fairly trivial to write a serializer/deserializer for the few objects I'm using.  
+
+JSON
+"table": "schema_migrations",
+"columns": [
+    { "name": "version", "type": "varchar(255)", "nullable": false, "key": true },
+    { "name": "yml", "type": "longtext", "nullable": false },
+    { "name": "applied_by", "type": "varchar(255)" },
+    { "name": "applied_on", "type": "datetime", "nullable": false }
+]
+
+Yaml
+table: schema_migrations
+columns:
+    - { name: "version", type: "string", key: false, nullable: true }
+    - { name: "yml", type: "text", key: false, nullable: true }
+    - { name: "applied_by", type: "string", key: false, nullable: true }
+    - { name: "applied_on_utc", type: "datetime", key: false, nullable: true }
+
+You can see that they are basically the same.  One thing that interests me in using JSON is that it is based on javascript which everyone already knows.  The other thing that is interesting with using JSON/javascript is that it is a more flexible format to do interesting things when it comes time to support data migrations.  For example, let's say as part of my schema migration I wanted to create two fields from one (full_name -> (first_name, last_name).  I could support this in either yml or json with a regular expression quite easily like follows:
+
+Yaml/ (JSON similar)
+table: person
+up:
+    first_name: 
+        - column: full_name
+        - regex: '^(*.) *.$'
+    last_name:
+        - column: full_name
+        - regex: '^*. (*.)$'
+down:
+    full_name:
+        - column: first_name
+        - literal: ' '
+        - column: last_name
+
+If I used javascript I could represent that migration like the snippet below.  But what this allows me to do is to put arbitrarily complex transformations to the data but store it in a data file.  I would provide my own helper global objects that would even allow you to do table lookups, arbitrary SQL, etc. 
+

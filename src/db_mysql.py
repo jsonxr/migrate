@@ -228,14 +228,16 @@ class Database(database.Database):
     def connect(self, database_name=None):
         try:
             if (database_name):
+                print("dbname: " + database_name + " host: " + self.host + " user: " + self.user + " password: " + self.password)
                 self.connection = MySQLdb.connect(host=self.host, user=self.user,
                         passwd=self.password, db=database_name)
             else:
+                print("host: " + self.host + " user: " + self.user + " password: " + self.password)
                 self.connection = MySQLdb.connect(host=self.host, user=self.user,
                         passwd=self.password)
             return self.connection
         except OperationalError as e:
-            if e[0] == ER_ACCESS_DENIED_ERROR:
+            if e[0] in (ER_ACCESS_DENIED_ERROR, MYSQLDB_ER_CANT_CONNECT_TO_SERVER):
                 raise AppError(e[1])
             elif e[0] == ER_BAD_DB_ERROR:
                 message = 'Database "%s" does not exist.\n' % self.database
@@ -569,7 +571,7 @@ ER_ACCESS_DENIED_ERROR = 1045
 ER_BAD_DB_ERROR = 1049
 ER_BAD_FIELD_ERROR = 1054
 ER_NO_SUCH_TABLE = 1146
-
+MYSQLDB_ER_CANT_CONNECT_TO_SERVER = 2002
 
 def main():
     pass

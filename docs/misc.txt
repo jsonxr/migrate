@@ -1,5 +1,7 @@
 
 
+
+
 Schema development
     When schema is in active development, it will sync the database to the HEAD
     version.  Data migrations are not run when you "sync".  
@@ -41,7 +43,7 @@ TINYINT(1) TINYINT(4) is the same.  The only thing that is affected is
 when you use zerofill
 
 5.5.3 - Supports PARAMETERS table
-5.1.41 - Supports ?
+5.1.41 - Supports ?Nothing!!!!
 
 Assumptions that are made on a reverse:
 tinyint(1) is a boolean.  (it could be an int... with display width of 1 instead)

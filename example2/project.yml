@@ -1,0 +1,12 @@
+settings:
+    migration_table: migrations
+    indent: 4
+    environment: dev
+
+environments:
+    dev:
+        vendor: mysql
+        host: "localhost"
+        database: "migrate_dev"
+        user: "root"
+        password: "j@s0n_example2"

@@ -1,0 +1,22 @@
+//----------------------------------------------------------------------------
+// Auto generated.  This table is required to make the migration utility work.
+//----------------------------------------------------------------------------
+
+"name": "schema_migrations",
+"columns": [
+    { "name": "version", "type": "varchar(255)", "nullable": false, "key": true },
+    { "name": "yml", "type": "longtext", "nullable": false },
+    { "name": "applied_by", "type": "varchar(255)" },
+    { "name": "applied_on", "type": "datetime", "nullable": false }
+]
+
+
+table: person,
+"up": function(row_in, row_out) {
+    var result = /^(\w*) (\w*)$/.exec(row_in.full_name)
+    row_out.first_name = result[1]
+    row_out.last_name = result[2]
+},
+"down": function(row_in, row_out) {
+    row_out.full_name = row_in.first_name + " " + row_in.last_name
+}

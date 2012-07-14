@@ -4,7 +4,7 @@
 # When the --env=test string is passed in, it will use the database settings
 #   specified in the "test" portion of the file. You can pass any environment
 #   string as long as there is a corresponding entry here or ".project.yaml" 
-#   file.  The ".project.yaml" file should contain settings that should NOT 
+#   file.  The ".jake" file should contain settings that should NOT 
 #   be checked into a version control system.  Typically, they should contain
 #   things like the production database credentials.
 
@@ -16,12 +16,14 @@ settings:
     indent: 4
     
     # This is the default environment to use if none is specified
+    # This should probably go in the ".jake" file
     environment: dev
 
 environments:
+    # The name of the environment
     dev:
         vendor: mysql  # postgres, mssql
         host: localhost
-        database: migrate_dev
+        database: test
         user: root
-        password: j@s0n_example
+        password: j@s0n_example3
