@@ -1,0 +1,11 @@
+name: registration_widgets
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "website_id", type: "integer" }
+    - { name: "label", type: "string" }
+    - { name: "summary", type: "text" }
+    - { name: "text", type: "string" }
+    - { name: "style", type: "string" }
+    - { name: "active", type: "boolean" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

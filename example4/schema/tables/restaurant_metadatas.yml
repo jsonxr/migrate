@@ -1,0 +1,13 @@
+name: restaurant_metadatas
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "owner_id", type: "integer" }
+    - { name: "owner_type", type: "string" }
+    - { name: "reservation_option_id", type: "integer" }
+    - { name: "price_range_id", type: "integer" }
+    - { name: "dress_code_id", type: "integer" }
+    - { name: "chef_name", type: "string" }
+    - { name: "year_founded", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "about_us", type: "text" }

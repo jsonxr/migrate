@@ -1,0 +1,52 @@
+name: marketing_campaigns
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "current_state", type: "string" }
+    - { name: "customer_base_id", type: "integer" }
+    - { name: "delivery_type", type: "string" }
+    - { name: "name", type: "string" }
+    - { name: "marketing_campaign_template_id", type: "integer" }
+    - { name: "email_start_date", type: "datetime" }
+    - { name: "frequency", type: "string" }
+    - { name: "delivery_time_qualifier", type: "string" }
+    - { name: "delivery_time_direction", type: "string" }
+    - { name: "email_delivery_time", type: "string" }
+    - { name: "subject", type: "string" }
+    - { name: "email_body", type: "longtext" }
+    - { name: "variables", type: "text" }
+    - { name: "owner_id", type: "integer" }
+    - { name: "owner_type", type: "string" }
+    - { name: "template_type", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "text_message_id", type: "integer" }
+    - { name: "delivery_time_quantity", type: "integer" }
+    - { name: "from_address", type: "text" }
+    - { name: "report_url", type: "text" }
+    - { name: "email_end_date", type: "date" }
+    - { name: "text_message_body", type: "string" }
+    - { name: "send_email", type: "boolean", default: "0" }
+    - { name: "send_text_message", type: "boolean", default: "0" }
+    - { name: "text_message_delivery_time", type: "string" }
+    - { name: "post_delivery_time", type: "string" }
+    - { name: "offer_incentive_id", type: "integer" }
+    - { name: "landing_page_id", type: "integer" }
+    - { name: "landing_page_body", type: "longtext" }
+    - { name: "email_bitly", type: "string" }
+    - { name: "unresolved_email_body", type: "longtext" }
+    - { name: "loyalty_program_reward_trigger_amount", type: "integer" }
+    - { name: "period_days", type: "string" }
+    - { name: "period_start_time", type: "string" }
+    - { name: "period_end_time", type: "string" }
+    - { name: "text_message_start_date", type: "datetime" }
+    - { name: "post_start_date", type: "datetime" }
+    - { name: "text_message_end_date", type: "date" }
+    - { name: "post_end_date", type: "date" }
+    - { name: "period_days_and_times", type: "string" }
+    - { name: "resolved_landing_page_body", type: "longtext" }
+    - { name: "canceled_at", type: "datetime" }
+    - { name: "unresolved_text_message_body", type: "string" }
+    - { name: "landing_page_resource", type: "string" }
+    - { name: "text_message_bitly", type: "string(25)" }
+    - { name: "landing_page_link", type: "string" }
+    - { name: "full_sms_body", type: "string" }

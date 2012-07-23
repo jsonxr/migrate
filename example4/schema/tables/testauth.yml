@@ -1,0 +1,9 @@
+name: testauth
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "user_id", type: "integer", nullable: false }
+    - { name: "IBUser", type: "string", nullable: false }
+    - { name: "IBToken", type: "string", nullable: false }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "merchantId", type: "integer" }

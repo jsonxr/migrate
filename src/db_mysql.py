@@ -85,13 +85,45 @@ class Database(database.Database):
                 raise
 
     @connection
-    def get_version(self, previous_version):
-        # If the migration_table table does not exist, we return the bootstrap
-        # and actual schema
-        dbversion = database.DatabaseVersion()
-        dbversion.actual_schema = self._get_actual_schema()
-        self.__set_expected_version(dbversion, previous_version)
-        return dbversion
+    def get_actual_schema(self):
+        s = schema.Schema()
+        s.tables = self.__get_actual_tables()
+        return s
+
+    @connection
+    def get_versions(self):
+        sql = '''select version, content
+            from %s
+            order by applied_on desc''' % config.migration_table
+        versions = self.__get_version_list(sql)
+        return versions
+
+    @connection
+    def get_version(self, name):
+        assert type(name) is str
+        sql = '''select version, content
+            from ''' + config.migration_table + '''
+            where version = %s
+            order by applied_on desc
+            limit 1'''
+        values = [name]
+        versions = self.__get_version_list(sql, values)
+        if versions:
+            return versions[0]
+        else:
+            return None
+
+    @connection
+    def get_expected_version(self):
+        sql = '''select version, content
+            from %s
+            order by applied_on desc
+            limit 1''' % config.migration_table
+        versions = self.__get_version_list(sql)
+        if versions:
+            return versions[0]
+        else:
+            return None
 
     def convert_schema_to_vendor(self, s):
         for t in s.tables:
@@ -100,39 +132,33 @@ class Database(database.Database):
                 _convert_column_to_vendor(c)
         return s
 
-    def __set_expected_version(self, dbversion, previous_version):
-
-        sql = '''select version, yml
-            from %s
-            order by applied_on desc
-            limit 1''' % config.migration_table
-
+    def __get_version_list(self, sql, values=None):
+        print("__get_version_list %s" % sql)
         with closing(self.connection.cursor()) as cursor:
+            versions = []
             try:
-                cursor.execute(sql)
+                if values:
+                    cursor.execute(sql, values)
+                else:
+                    cursor.execute(sql)
                 row = cursor.fetchone()
                 if row:
+                    dbversion = schema.Version()
                     dbversion.name = row[0]
-                    yml = row[1]
-                    s = schema.Schema()
-                    s.load_from_str(yml)
-                    dbversion.expected_schema = s
-                else:
-                    dbversion.expected_schema = previous_version.schema
+                    content = row[1]
+                    dbversion.load_from_str(content)
+                    versions.append(dbversion)
             except MySQLError as e:
                 if e[0] == ER_NO_SUCH_TABLE:
-                    dbversion.name = "bootstrap"
-                    dbversion.expected_schema = None
+                    # The table doesn't exist so no versions available
+                    pass
                 elif e[0] == ER_BAD_FIELD_ERROR:
-                    m = "%s is not the expected structure." % config.migration_table
+                    m = "%s is not the expected structure.\n\n%s" % (config.migration_table,
+                                                                     e[1])
                     raise AppError(m)
                 else:
                     raise
-
-    def _get_actual_schema(self):
-        s = schema.Schema()
-        s.tables = self.__get_actual_tables()
-        return s
+            return versions
 
     def __get_column_headers(self, description):
         headers = dict()
@@ -152,23 +178,17 @@ class Database(database.Database):
         column.name = row[1]
         column.position = row[2]
         column.type = row[4].lower()
-        if (not row[3] is None):
-            column.default = str(row[3])
-        if row[5] == "YES":
-            column.nullable = True
-        else:
-            column.nullable = False
+        column.default = str(row[3]) if not row[3] is None else None
+        column.nullable = True if row[5] == 'YES' else False
         column.precision = row[7]
         column.scale = row[8]
-        if row[9] == "PRI":
-            column.key = True
-        if row[10] == "auto_increment":
-            column.autoincrement = True
-
+        column.key = True if row[9] == "PRI" else False
+        column.autoincrement = True if row[10] else False
         return column
 
     @connection
     def __get_actual_tables(self):
+        print("__get_actual_tables")
         tables = schema.Tables()
 
         # Tables
@@ -205,6 +225,7 @@ class Database(database.Database):
             table_name = row[0]
             table = tables[table_name]
             column = self.__get_column_from_row(row, column_headers)
+            column = _convert_column_from_vendor(column)
             table.columns.append(column)
 
         # Foreign Keys
@@ -228,11 +249,9 @@ class Database(database.Database):
     def connect(self, database_name=None):
         try:
             if (database_name):
-                print("dbname: " + database_name + " host: " + self.host + " user: " + self.user + " password: " + self.password)
                 self.connection = MySQLdb.connect(host=self.host, user=self.user,
                         passwd=self.password, db=database_name)
             else:
-                print("host: " + self.host + " user: " + self.user + " password: " + self.password)
                 self.connection = MySQLdb.connect(host=self.host, user=self.user,
                         passwd=self.password)
             return self.connection
@@ -241,7 +260,7 @@ class Database(database.Database):
                 raise AppError(e[1])
             elif e[0] == ER_BAD_DB_ERROR:
                 message = 'Database "%s" does not exist.\n' % self.database
-                message += 'run "jake db-create" to create an empty db.'
+                message += 'run "db db-create" to create an empty db.'
                 raise AppError(message)
             else:
                 raise
@@ -534,9 +553,9 @@ with file(filename, 'r') as stream:
         sql_to_type.append({"search": re.compile(sr["search"]), "replace": sr["replace"]})
 
 
-def _convert_column_to_vendor(column):
+def _convert_column(array, column):
     new_type = column.type
-    for sr in sql_aliases:
+    for sr in array:
         search = sr["search"]
         replace = sr["replace"]
         result = search.subn(replace, new_type)
@@ -546,6 +565,15 @@ def _convert_column_to_vendor(column):
                 for attr in sr["attributes"]:
                     column.__dict__[attr] = sr["attributes"][attr]
     column.type = new_type
+    return column
+
+
+def _convert_column_to_vendor(column):
+    return _convert_column(sql_aliases, column)
+
+
+def _convert_column_from_vendor(column):
+    return _convert_column(sql_to_type, column)
 
 
 #def _sql_to_type(sql_type):
@@ -572,6 +600,7 @@ ER_BAD_DB_ERROR = 1049
 ER_BAD_FIELD_ERROR = 1054
 ER_NO_SUCH_TABLE = 1146
 MYSQLDB_ER_CANT_CONNECT_TO_SERVER = 2002
+
 
 def main():
     pass

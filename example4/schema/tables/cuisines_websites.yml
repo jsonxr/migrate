@@ -1,0 +1,4 @@
+name: cuisines_websites
+columns:
+    - { name: "website_id", type: "integer", key: true, nullable: false }
+    - { name: "cuisine_id", type: "integer", key: true, nullable: false }

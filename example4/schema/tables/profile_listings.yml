@@ -1,0 +1,14 @@
+name: profile_listings
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_id", type: "integer" }
+    - { name: "active", type: "boolean" }
+    - { name: "status", type: "string", default: "new" }
+    - { name: "languages", type: "text" }
+    - { name: "categories", type: "text" }
+    - { name: "credit_cards", type: "text" }
+    - { name: "custom_keywords", type: "text" }
+    - { name: "hours", type: "text" }
+    - { name: "year_founded", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

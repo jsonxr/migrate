@@ -1,0 +1,10 @@
+name: guest_histories
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "guest_id", type: "integer" }
+    - { name: "reservation_id", type: "integer" }
+    - { name: "at", type: "datetime" }
+    - { name: "ticket_total_in_cents", type: "integer", default: "0" }
+    - { name: "source", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

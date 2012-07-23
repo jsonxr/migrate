@@ -1,0 +1,9 @@
+name: marketing_campaign_triggers
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "actionable_field", type: "string" }
+    - { name: "actionable_object", type: "string" }
+    - { name: "actionable_type", type: "string" }
+    - { name: "event_definition_id", type: "integer" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

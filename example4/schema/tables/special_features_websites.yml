@@ -1,0 +1,4 @@
+name: special_features_websites
+columns:
+    - { name: "website_id", type: "integer", key: true, nullable: false }
+    - { name: "special_feature_id", type: "integer", key: true, nullable: false }

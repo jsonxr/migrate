@@ -1,0 +1,4 @@
+name: restaurant_metadatas_services
+columns:
+    - { name: "service_id", type: "integer" }
+    - { name: "restaurant_metadata_id", type: "integer" }

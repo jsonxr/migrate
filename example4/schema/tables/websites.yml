@@ -1,0 +1,38 @@
+name: websites
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_id", type: "integer" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "meta_keywords", type: "string" }
+    - { name: "meta_description", type: "string" }
+    - { name: "analytics_key", type: "string" }
+    - { name: "css", type: "text" }
+    - { name: "publication_status", type: "string(100)", default: "new" }
+    - { name: "generated_keywords", type: "text" }
+    - { name: "restaurant_name", type: "string" }
+    - { name: "tagline", type: "string" }
+    - { name: "hours", type: "text" }
+    - { name: "website_template_id", type: "integer" }
+    - { name: "website_home_page_id", type: "integer" }
+    - { name: "website_menu_page_id", type: "integer" }
+    - { name: "website_whats_new_page_id", type: "integer" }
+    - { name: "website_contact_us_page_id", type: "integer" }
+    - { name: "website_press_page_id", type: "integer" }
+    - { name: "displays_cuisines", type: "boolean" }
+    - { name: "cuisine_label", type: "string" }
+    - { name: "displays_accepted_payments", type: "boolean" }
+    - { name: "displays_special_features", type: "boolean" }
+    - { name: "displays_parking", type: "boolean" }
+    - { name: "displays_alcohols", type: "boolean" }
+    - { name: "displays_services", type: "boolean" }
+    - { name: "displays_dress_code", type: "boolean" }
+    - { name: "dress_code_id", type: "integer" }
+    - { name: "displays_price_range", type: "boolean" }
+    - { name: "price_range_id", type: "integer" }
+    - { name: "url", type: "string" }
+    - { name: "displays_chef_name", type: "boolean" }
+    - { name: "chef_name", type: "string" }
+    - { name: "displays_reservation_option", type: "boolean" }
+    - { name: "reservation_option_id", type: "integer" }
+    - { name: "is_previewable", type: "boolean", default: "0" }

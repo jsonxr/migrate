@@ -1,0 +1,10 @@
+name: keywords
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "website_id", type: "integer", nullable: false }
+    - { name: "date_for", type: "date", nullable: false }
+    - { name: "keyword", type: "string", nullable: false }
+    - { name: "visits", type: "integer", nullable: false }
+    - { name: "new_visits", type: "integer", nullable: false }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

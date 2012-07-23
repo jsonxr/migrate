@@ -1,0 +1,7 @@
+name: special_features
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "special_feature", type: "string", nullable: false }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "deleted_at", type: "datetime" }

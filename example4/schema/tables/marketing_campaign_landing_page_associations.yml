@@ -1,0 +1,7 @@
+name: marketing_campaign_landing_page_associations
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "landing_page_id", type: "integer" }
+    - { name: "marketing_campaign_id", type: "integer" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

@@ -1,0 +1,7 @@
+name: migrations
+columns:
+    - { name: "version", type: "varchar(255)", key: true, nullable: false }
+    - { name: "content", type: "longtext", nullable: false }
+    - { name: "content_type", type: "varchar(255)", nullable: false }
+    - { name: "applied_by", type: "varchar(255)" }
+    - { name: "applied_on", type: "datetime", nullable: false }

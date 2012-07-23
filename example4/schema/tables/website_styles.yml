@@ -1,0 +1,17 @@
+name: website_styles
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "website_id", type: "integer", nullable: false }
+    - { name: "background_color", type: "string(6)" }
+    - { name: "title_color", type: "string(6)" }
+    - { name: "link_color", type: "string(6)" }
+    - { name: "sidebar_color", type: "string(6)" }
+    - { name: "tbgphoto_file_size", type: "integer" }
+    - { name: "tbgphoto_file_name", type: "string" }
+    - { name: "tbgphoto_content_type", type: "string" }
+    - { name: "tbgphoto_file_location", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "bgphoto_file_name", type: "string" }
+    - { name: "bgphoto_file_size", type: "integer" }
+    - { name: "bgphoto_content_type", type: "string" }

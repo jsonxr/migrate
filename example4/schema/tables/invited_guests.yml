@@ -1,0 +1,10 @@
+name: invited_guests
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "reservation_id", type: "integer" }
+    - { name: "first_name", type: "string(100)" }
+    - { name: "last_name", type: "string(100)" }
+    - { name: "email", type: "string(100)" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "deleted_at", type: "datetime" }

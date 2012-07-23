@@ -1,0 +1,4 @@
+name: services_websites
+columns:
+    - { name: "website_id", type: "integer" }
+    - { name: "service_id", type: "integer" }

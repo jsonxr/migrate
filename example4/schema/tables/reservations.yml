@@ -1,0 +1,24 @@
+name: reservations
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_id", type: "integer" }
+    - { name: "pos_reservation_id", type: "string" }
+    - { name: "reservation_availability_id", type: "integer" }
+    - { name: "at", type: "datetime" }
+    - { name: "first_name", type: "string(100)" }
+    - { name: "last_name", type: "string(100)" }
+    - { name: "email", type: "string(200)" }
+    - { name: "phone", type: "string(21)" }
+    - { name: "party_size", type: "integer", nullable: false }
+    - { name: "confirmation", type: "string" }
+    - { name: "note", type: "string" }
+    - { name: "deleted_at", type: "datetime" }
+    - { name: "status", type: "string(50)" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "source", type: "string(10)" }
+    - { name: "guest_id", type: "integer" }
+    - { name: "reminder_delayed_job_id", type: "integer" }
+    - { name: "thankyou_delayed_job_id", type: "integer" }
+    - { name: "version", type: "integer", default: "1" }
+    - { name: "syndication_message", type: "string" }

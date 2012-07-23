@@ -1,0 +1,4 @@
+name: parkings_websites
+columns:
+    - { name: "parking_id", type: "integer", key: true, nullable: false }
+    - { name: "website_id", type: "integer", key: true, nullable: false }

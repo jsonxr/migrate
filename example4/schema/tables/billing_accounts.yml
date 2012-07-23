@@ -1,0 +1,11 @@
+name: billing_accounts
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "business_id", type: "integer", nullable: false }
+    - { name: "vendor_token", type: "string(20)", nullable: false }
+    - { name: "cc_type", type: "string(15)", nullable: false }
+    - { name: "cc_mask", type: "string(16)" }
+    - { name: "cc_expires_at", type: "datetime" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "deleted_at", type: "datetime" }

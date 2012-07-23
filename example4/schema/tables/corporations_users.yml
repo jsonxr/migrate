@@ -1,0 +1,4 @@
+name: corporations_users
+columns:
+    - { name: "corporation_id", type: "integer", nullable: false }
+    - { name: "user_id", type: "integer", nullable: false }

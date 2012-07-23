@@ -1,0 +1,4 @@
+name: dealers_instances
+columns:
+    - { name: "instance_id", type: "integer" }
+    - { name: "dealer_id", type: "integer" }

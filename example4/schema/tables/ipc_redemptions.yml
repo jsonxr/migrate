@@ -1,0 +1,21 @@
+name: ipc_redemptions
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "business_id", type: "integer" }
+    - { name: "offer_incentive_id", type: "integer" }
+    - { name: "landing_page_id", type: "integer" }
+    - { name: "marketing_campaign_id", type: "integer" }
+    - { name: "marketing_campaign_history_id", type: "integer" }
+    - { name: "firstname", type: "string" }
+    - { name: "lastname", type: "string" }
+    - { name: "email", type: "string" }
+    - { name: "o2o_status", type: "string" }
+    - { name: "o2o_redemption_id", type: "string" }
+    - { name: "code", type: "string" }
+    - { name: "qr_code", type: "text" }
+    - { name: "state", type: "string" }
+    - { name: "published_expiration", type: "datetime" }
+    - { name: "unredeemable_reason", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "phone", type: "string" }

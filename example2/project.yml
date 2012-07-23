@@ -9,4 +9,4 @@ environments:
         host: "localhost"
         database: "migrate_dev"
         user: "root"
-        password: "j@s0n_example2"
+        password: "secret"

@@ -1,0 +1,15 @@
+name: profile_brandings
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_id", type: "integer" }
+    - { name: "style", type: "string", default: "none" }
+    - { name: "tagline", type: "string" }
+    - { name: "external_image_url", type: "string" }
+    - { name: "uploaded_image_file_name", type: "string" }
+    - { name: "uploaded_image_content_type", type: "string" }
+    - { name: "uploaded_image_file_size", type: "integer" }
+    - { name: "uploaded_image_updated_at", type: "datetime" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "owner_id", type: "integer" }
+    - { name: "owner_type", type: "string", default: "Business" }

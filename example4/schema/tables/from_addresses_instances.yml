@@ -1,0 +1,4 @@
+name: from_addresses_instances
+columns:
+    - { name: "from_address_id", type: "integer" }
+    - { name: "instance_id", type: "integer" }

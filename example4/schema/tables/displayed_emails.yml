@@ -1,0 +1,7 @@
+name: displayed_emails
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "website_page_id", type: "integer" }
+    - { name: "website_email_id", type: "integer" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

@@ -1,0 +1,4 @@
+name: nutritional_informations_restaurant_metadatas
+columns:
+    - { name: "cuisine_id", type: "integer" }
+    - { name: "restaurant_metadata_id", type: "integer" }

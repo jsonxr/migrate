@@ -1,0 +1,8 @@
+name: menus
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "website_id", type: "integer", nullable: false }
+    - { name: "name", type: "string(50)", nullable: false }
+    - { name: "description", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

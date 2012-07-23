@@ -1,0 +1,16 @@
+name: reservation_settings
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "reservation_settable_id", type: "integer", nullable: false }
+    - { name: "num_available", type: "integer", default: "10", nullable: false }
+    - { name: "num_available_type", type: "string(10)" }
+    - { name: "advance_notice", type: "integer", default: "60", nullable: false }
+    - { name: "scheduling_time", type: "integer", default: "30", nullable: false }
+    - { name: "guests_min", type: "integer", default: "2", nullable: false }
+    - { name: "guests_max", type: "integer", default: "8", nullable: false }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "email", type: "string" }
+    - { name: "fax", type: "string(13)" }
+    - { name: "reservation_settable_type", type: "string" }
+    - { name: "price_per_plate", type: "integer" }

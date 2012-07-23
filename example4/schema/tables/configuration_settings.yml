@@ -1,0 +1,7 @@
+name: configuration_settings
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "key", type: "string", nullable: false }
+    - { name: "value", type: "text" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

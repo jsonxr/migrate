@@ -12,6 +12,7 @@ from cStringIO import StringIO
 from contextlib import closing
 
 import errors
+import yaml_cache
 
 
 #=============================================================================
@@ -19,12 +20,17 @@ import errors
 #=============================================================================
 
 class Columns(list):
-
-    def __getattr__(self, name):
-        for c in self:
-            if c.name == name:
-                return c
-        raise KeyError(name)
+    pass
+#    def __getstate__(self):
+#        return self.__dict__
+#
+#    def __setstate__(self, d):
+#        self.__dict__.update(d)
+#    def __getattr__(self, name):
+#        for c in self:
+#            if c.name == name:
+#                return c
+#        raise KeyError(name)
 
 
 #=============================================================================
@@ -147,20 +153,27 @@ class Table(object):
 #=============================================================================
 
 class Tables(dict):
-    def __getattr__(self, name):
-        return self[name]
+
+#    def __getstate__(self):
+#        return self.__dict__
+#
+#    def __setstate__(self, d):
+#        self.__dict__.update(d)
 
     def __getitem__(self, key):
         if key in self:
             return dict.__getitem__(self, key)
 
-    def __setattr__(self, name, value):
-        assert value.name
-        assert "columns" in value.__dict__
-        if name == value.name:
-            self[name] = value
-        else:
-            raise KeyError(name)
+#    def __getattr__(self, name):
+#        return self[name]
+#
+#    def __setattr__(self, name, value):
+#        assert value.name
+#        assert "columns" in value.__dict__
+#        if name == value.name:
+#            self[name] = value
+#        else:
+#            raise KeyError(name)
 
     def __eq__(self, other):
         if (other is None):
@@ -296,12 +309,14 @@ class Migration(object):
     def tables(self):
         raise AttributeError("can't set attribute")
 
+
 #=============================================================================
 # Schema
 #=============================================================================
 
 class Schema(object):
     def __init__(self):
+        self.version = None
         self.tables = Tables()
 
     def __repr__(self):
@@ -324,16 +339,16 @@ class Schema(object):
                 for name in names:
                     table = self.tables[name]
                     s.write(indent(table.get_yml(verbose), is_list=True))
-                    s.write("\n")
+                    s.write("\n\n")
             else:
                 s.write(" ~\n")
             return s.getvalue().strip()
 
     def __nonzero__(self):
-        if self.tables is None:
-            return 0
-        else:
+        if self.tables:
             return len(self.tables)
+        else:
+            return 0
 
     def __bool__(self):
         return self.__nonzero__() > 0
@@ -382,6 +397,17 @@ class Schema(object):
 
 
 #=============================================================================
+# Release
+#=============================================================================
+
+class Release(object):
+    def __init__(self):
+        self._previous = None
+        self._name = None
+    pass
+
+
+#=============================================================================
 # Versions
 #=============================================================================
 
@@ -389,34 +415,36 @@ class Versions(object):
     def __init__(self, path):
         self.path = path
         self.versions = []
-        self._current = None
+        self._head = None
         self._bootstrap = None
 
     def append(self, version):
         self.versions.append(version)
 
     def get_version_by_name(self, name):
-        filename = self.path + "/versions/%s.yml" % name
-        if os.path.exists(filename):
-            version = Version()
-            version.name = name
-            version.filename = filename
-            version.load_from_file()
+        print("Versions.get_version_by_name(%s)" % name)
+        filename = "/versions/%s.yml" % name
+        if os.path.exists(self.path + filename):
+            version = yaml_cache.load(self.path, filename, Version)
             return version
         else:
+            print("Does not exist ehere")
             return None
 
     def get_bootstrap(self):
+        print("Versions.get_bootstrap")
         if not self._bootstrap:
             self._bootstrap = self.get_version_by_name('bootstrap')
         return self._bootstrap
 
-    def get_current(self):
-        if not self._current:
-            self._current = self.get_version_by_name('current')
-        return self._current
+    def get_head(self):
+        print("Versions.get_head")
+        if not self._head:
+            self._head = self.get_version_by_name('head')
+        return self._head
 
     def get_previous(self, version):
+        print("Versions.get_previous(%s)" % version.migration.previous)
         if version is None:
             return None
         else:
@@ -424,6 +452,7 @@ class Versions(object):
             return previous
 
     def get_from_path(self):
+        print("Versions.get_from_path(%s)" % self.path + "/schema/*.yml")
         v = Version()
         v.name = "path"
         for filename in glob.glob(self.path + "/schema/*.yml"):
@@ -442,8 +471,14 @@ class Version(object):
         self.name = None
         self._schema = Schema()
         self.migration = Migration()
-        self.syncable = False
         self.filename = None
+        self.filehash = None
+
+    def __repr__(self):
+        return "<version name='%s' schema.tables=%s>" % (self.name, len(self._schema.tables))
+
+    def __eq__(self, other):
+        return (self.get_yml() == other.get_yml())
 
     @property
     def schema(self):
@@ -453,14 +488,10 @@ class Version(object):
     def schema(self, value):
         self._schema = value
 
-    def __eq__(self, other):
-        return (self.get_yml(verbose=True) == other.get_yml(verbose=True))
-
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
             _write_str(s, "version: %s\n", self.name, True)
-            if (self.schema):
-                s.write(self.schema.get_yml(verbose))
+            s.write(self.schema.get_yml(verbose))
             if (self.migration):
                 s.write("\nmigration:")
                 s.write("\n" + indent(self.migration.get_yml(verbose)))
@@ -468,12 +499,24 @@ class Version(object):
                 s.write("\nmigration: ~")
             return s.getvalue().rstrip()
 
+    def load_from_str(self, string):
+        data = yaml.load(string)
+        self.load_from_dict(data)
+
+#    def load_from_file(self, filename=None):
+#        if filename:
+#            self.filename = filename
+#        with file(self.filename, 'r') as stream:
+#            data = yaml.load(stream)
+#            self.load_from_dict(data)
+
     def load_from_file(self, filename=None):
         if filename:
             self.filename = filename
         with file(self.filename, 'r') as stream:
-            data = yaml.load(stream)
-            self.load_from_dict(data)
+            string = stream.read()
+        data = yaml.load(string)
+        self.load_from_dict(data)
 
     def load_from_dict(self, data):
         if "version" in data:
@@ -483,7 +526,7 @@ class Version(object):
         if "migration" in data:
             self.migration.load_from_dict(data["migration"])
 
-    def save_to_file(self, filename=None, verbose=True):
+    def save_to_file(self, filename=None, verbose=False):
         if filename is None:
             filename = self.filename
         with file(filename, 'w') as f:

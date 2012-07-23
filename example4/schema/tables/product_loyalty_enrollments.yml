@@ -1,0 +1,13 @@
+name: product_loyalty_enrollments
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "owner_id", type: "integer" }
+    - { name: "owner_type", type: "string" }
+    - { name: "program_id", type: "string" }
+    - { name: "egift", type: "boolean" }
+    - { name: "online_ordering", type: "boolean" }
+    - { name: "gm_customer_widget", type: "boolean" }
+    - { name: "gm_host_app", type: "boolean" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "update_flag", type: "boolean", default: "0" }

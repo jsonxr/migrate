@@ -1,0 +1,104 @@
+name: website_templates
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "name", type: "string" }
+    - { name: "description", type: "text" }
+    - { name: "snapshot_file_name", type: "string" }
+    - { name: "snapshot_content_type", type: "string" }
+    - { name: "snapshot_file_size", type: "integer" }
+    - { name: "snapshot_updated_at", type: "datetime" }
+    - { name: "home_website_page_definition_id", type: "integer" }
+    - { name: "menu_website_page_definition_id", type: "integer" }
+    - { name: "whats_new_website_page_definition_id", type: "integer" }
+    - { name: "contact_us_website_page_definition_id", type: "integer" }
+    - { name: "press_website_page_definition_id", type: "integer" }
+    - { name: "base_css_file_name", type: "string" }
+    - { name: "base_css_content_type", type: "string" }
+    - { name: "base_css_file_size", type: "integer" }
+    - { name: "base_css_updated_at", type: "datetime" }
+    - { name: "header_class", type: "string", default: "#header" }
+    - { name: "header_background_color", type: "string", default: "#363331" }
+    - { name: "header_has_image", type: "boolean", default: "0" }
+    - { name: "header_image_file_name", type: "string" }
+    - { name: "header_image_content_type", type: "string" }
+    - { name: "header_image_file_size", type: "integer" }
+    - { name: "header_image_updated_at", type: "datetime" }
+    - { name: "header_image_repeat_style", type: "string", default: "no-repeat" }
+    - { name: "header_image_position", type: "string", default: "left top" }
+    - { name: "header_image_height", type: "string", default: "926" }
+    - { name: "header_image_width", type: "string", default: "224" }
+    - { name: "header_displays_business_name", type: "boolean", default: "1" }
+    - { name: "header_text_class", type: "string", default: "#branding" }
+    - { name: "header_text_color", type: "string", default: "#CCCCCC" }
+    - { name: "background_class", type: "string", default: "html, body" }
+    - { name: "background_background_color", type: "string", default: "#F1F1F1" }
+    - { name: "background_has_image", type: "boolean", default: "0" }
+    - { name: "background_image_file_name", type: "string" }
+    - { name: "background_image_content_type", type: "string" }
+    - { name: "background_image_file_size", type: "integer" }
+    - { name: "background_image_updated_at", type: "datetime" }
+    - { name: "background_image_repeat_style", type: "string", default: "no-repeat" }
+    - { name: "background_image_position", type: "string", default: "left top" }
+    - { name: "navigation_title", type: "string", default: "Navigation/Site Menu" }
+    - { name: "navigation_tab_class", type: "string", default: "#nav li" }
+    - { name: "navigation_has_background_image", type: "boolean", default: "0" }
+    - { name: "navigation_background_image_file_name", type: "string" }
+    - { name: "navigation_background_image_content_type", type: "string" }
+    - { name: "navigation_background_image_file_size", type: "string" }
+    - { name: "navigation_background_image_updated_at", type: "string" }
+    - { name: "navigation_current_class", type: "string", default: "#nav span, #nav a" }
+    - { name: "navigation_current_color", type: "string", default: "#222222" }
+    - { name: "navigation_link_class", type: "string", default: "#nav a, #nav a:visited, #nav a:link" }
+    - { name: "navigation_link_color", type: "string", default: "#A35B06" }
+    - { name: "navigation_rollover_class", type: "string", default: "#nav a:hover" }
+    - { name: "navigation_rollover_color", type: "string", default: "#DA7600" }
+    - { name: "heading1_class", type: "string", default: "#content-primary h1" }
+    - { name: "heading1_title", type: "string", default: "Page Title" }
+    - { name: "heading1_color", type: "string", default: "#222222" }
+    - { name: "heading2_class", type: "string", default: "#content-primary h2" }
+    - { name: "heading2_title", type: "string", default: "Headings [h2]" }
+    - { name: "heading2_color", type: "string", default: "#222222" }
+    - { name: "heading3_class", type: "string", default: ".mainH3" }
+    - { name: "heading3_title", type: "string", default: "Headings [h3]" }
+    - { name: "heading3_color", type: "string", default: "#222222" }
+    - { name: "heading4_class", type: "string", default: "#content-primary h4" }
+    - { name: "heading4_title", type: "string", default: "Headings [h4]" }
+    - { name: "heading4_color", type: "string", default: "#222222" }
+    - { name: "heading5_class", type: "string", default: "#content-primary h5" }
+    - { name: "heading5_title", type: "string", default: "Heading [h5]" }
+    - { name: "heading5_color", type: "string", default: "#222222" }
+    - { name: "heading6_class", type: "string", default: "#content-primary h6" }
+    - { name: "heading6_title", type: "string", default: "Heading [h6]" }
+    - { name: "heading6_color", type: "string", default: "#222222" }
+    - { name: "text_class", type: "string", default: "#content-primary p, #content-primary li, #content-primary span, #content-primary div" }
+    - { name: "text_title", type: "string", default: "Body Text [p, li, etc]" }
+    - { name: "text_color", type: "string", default: "#222222" }
+    - { name: "link_class", type: "string", default: "#content-primary a" }
+    - { name: "link_title", type: "string", default: "Link color" }
+    - { name: "link_color", type: "string", default: "#2491C4" }
+    - { name: "link_hover_class", type: "string", default: "#content-primary a:hover" }
+    - { name: "link_hover_title", type: "string", default: "Link :hover" }
+    - { name: "link_hover_color", type: "string", default: "#2491C4" }
+    - { name: "link_visited_class", type: "string", default: "#content-primary a:visited, #content-primary a:link" }
+    - { name: "link_visited_title", type: "string", default: "Link :visited" }
+    - { name: "link_visited_color", type: "string", default: "#2491C4" }
+    - { name: "button_title", type: "string", default: "Buttons/Call to actions" }
+    - { name: "button_class", type: "string", default: ".btn" }
+    - { name: "button_has_background_image", type: "boolean", default: "0" }
+    - { name: "button_background_image_file_name", type: "string" }
+    - { name: "button_background_image_content_type", type: "string" }
+    - { name: "button_background_image_file_size", type: "string" }
+    - { name: "button_background_image_updated_at", type: "string" }
+    - { name: "button_normal_class", type: "string", default: ".btn, a.btn, input.btn" }
+    - { name: "button_normal_color", type: "string", default: "#025D87" }
+    - { name: "button_rollover_class", type: "string", default: ".btn:hover, a.btn:hover, input.btn:hover" }
+    - { name: "button_rollover_color", type: "string", default: "#2491C4" }
+    - { name: "button_visited_class", type: "string", default: ".btn:visited, a.btn:visited, input.btn:visited, .btn:link, a.btn:link, input.btn:link" }
+    - { name: "button_visited_color", type: "string", default: "#025D87" }
+    - { name: "home_page_template", type: "text" }
+    - { name: "menu_page_template", type: "text" }
+    - { name: "whats_new_page_template", type: "text" }
+    - { name: "contact_us_page_template", type: "text" }
+    - { name: "press_page_template", type: "text" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

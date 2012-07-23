@@ -1,0 +1,9 @@
+name: stub_loyalty_features
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "stub_loyalty_program_id", type: "integer" }
+    - { name: "feature_type", type: "string" }
+    - { name: "percent", type: "integer" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "feature_name", type: "string(35)" }

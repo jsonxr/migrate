@@ -1,0 +1,8 @@
+name: stub_loyalty_programs
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "brand_id", type: "integer" }
+    - { name: "name", type: "string" }
+    - { name: "active", type: "boolean", default: "1" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

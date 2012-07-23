@@ -1,0 +1,11 @@
+name: phone_numbers
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "phonable_id", type: "integer", nullable: false }
+    - { name: "phonable_type", type: "string(50)", nullable: false }
+    - { name: "phone_type", type: "string(20)" }
+    - { name: "number", type: "string(21)", nullable: false }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "deleted_at", type: "datetime" }
+    - { name: "extension", type: "string" }

@@ -1,0 +1,17 @@
+name: purchased_vouchers
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "code", type: "string" }
+    - { name: "redeemed_at", type: "datetime" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "quantity", type: "integer" }
+    - { name: "total_amount", type: "decimal(8,2)", default: "0.00", nullable: false }
+    - { name: "getta_customer_id", type: "integer" }
+    - { name: "purchased_on", type: "datetime" }
+    - { name: "offer_incentive_id", type: "integer" }
+    - { name: "redeemed_bill_total", type: "decimal(8,2)" }
+    - { name: "is_customers_first_purchase", type: "boolean" }
+    - { name: "voided_at", type: "datetime" }
+    - { name: "redeemed_by_user_id", type: "integer" }
+    - { name: "redemption_status", type: "string" }

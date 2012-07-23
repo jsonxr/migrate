@@ -1,0 +1,10 @@
+name: profile_notifications
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "notificationable_id", type: "integer" }
+    - { name: "notificationable_type", type: "string" }
+    - { name: "email_purchases_immediately", type: "boolean" }
+    - { name: "email_unredeemed_nightly", type: "boolean", default: "1" }
+    - { name: "fax_nightly", type: "boolean" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

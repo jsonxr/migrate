@@ -1,0 +1,9 @@
+name: pos_systems
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "company", type: "string", nullable: false }
+    - { name: "name", type: "string", nullable: false }
+    - { name: "version", type: "string", nullable: false }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "source_system", type: "string" }

@@ -1,0 +1,11 @@
+name: event_definitions
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "name", type: "string" }
+    - { name: "queue", type: "string" }
+    - { name: "source_entity", type: "string" }
+    - { name: "action", type: "string" }
+    - { name: "event_string", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "variables", type: "text" }

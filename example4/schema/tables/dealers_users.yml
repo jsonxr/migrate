@@ -1,0 +1,4 @@
+name: dealers_users
+columns:
+    - { name: "dealer_id", type: "integer", nullable: false }
+    - { name: "user_id", type: "integer", nullable: false }

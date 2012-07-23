@@ -1,0 +1,27 @@
+name: posts
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_id", type: "integer", nullable: false }
+    - { name: "event_id", type: "integer" }
+    - { name: "scheduled_post", type: "boolean", default: "0", nullable: false }
+    - { name: "post", type: "text", nullable: false }
+    - { name: "post_date", type: "datetime" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "deleted_at", type: "datetime" }
+    - { name: "requested_at", type: "datetime" }
+    - { name: "networks", type: "text" }
+    - { name: "last_request_type", type: "string" }
+    - { name: "post_until_date", type: "datetime" }
+    - { name: "frequency", type: "string" }
+    - { name: "repeat_of", type: "integer" }
+    - { name: "revision", type: "integer" }
+    - { name: "twitter_post", type: "string" }
+    - { name: "bitly_url", type: "string" }
+    - { name: "facebook_post", type: "text" }
+    - { name: "to_networks", type: "string" }
+    - { name: "final_post_date_and_time", type: "datetime" }
+    - { name: "marketing_campaign_id", type: "integer" }
+    - { name: "facebook_bitly", type: "string" }
+    - { name: "twitter_bitly", type: "string" }
+    - { name: "unresolved_post", type: "string(400)" }

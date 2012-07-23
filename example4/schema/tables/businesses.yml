@@ -1,0 +1,43 @@
+name: businesses
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "name", type: "string", nullable: false }
+    - { name: "url", type: "string", default: "0" }
+    - { name: "uuid", type: "string(50)" }
+    - { name: "status", type: "string(50)" }
+    - { name: "timezone", type: "string" }
+    - { name: "operating_hours", type: "string(100)" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "deleted_at", type: "date" }
+    - { name: "email", type: "string" }
+    - { name: "pos_system_id", type: "integer" }
+    - { name: "api_key", type: "string(40)" }
+    - { name: "webpage_creator", type: "boolean", default: "1" }
+    - { name: "pos_integrated", type: "boolean", default: "1" }
+    - { name: "omo", type: "boolean", default: "0" }
+    - { name: "demo", type: "boolean", default: "0" }
+    - { name: "website_address", type: "string" }
+    - { name: "api_requested_at", type: "datetime" }
+    - { name: "customer_loyalty_id", type: "string" }
+    - { name: "analytics_username", type: "string" }
+    - { name: "analytics_password", type: "string" }
+    - { name: "sms_from_value", type: "string" }
+    - { name: "analytics_credential_status", type: "string" }
+    - { name: "owner_id", type: "integer" }
+    - { name: "owner_type", type: "string" }
+    - { name: "bill_this_branch", type: "boolean", default: "0" }
+    - { name: "average_price_per_plate", type: "integer" }
+    - { name: "syndication_message", type: "string" }
+    - { name: "gmt_offset", type: "integer" }
+    - { name: "pos_password", type: "string" }
+    - { name: "pos_token", type: "string" }
+    - { name: "zoura_account", type: "string" }
+    - { name: "name_and_address_same_as_parent", type: "boolean", default: "0" }
+    - { name: "egift_reporting_service", type: "string", default: "mps" }
+    - { name: "legacy_loyalty_program", type: "boolean", default: "0" }
+    - { name: "loyalty_disable_failed", type: "boolean", default: "0" }
+    - { name: "show_points_reward_offer", type: "boolean" }
+    - { name: "ipc_retailer_id", type: "string" }
+    - { name: "ipc_location_id", type: "string" }
+    - { name: "external_ref", type: "string(20)" }

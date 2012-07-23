@@ -1,0 +1,7 @@
+name: reservation_sources
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "reservation_source", type: "string", nullable: false }
+    - { name: "name", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

@@ -1,0 +1,11 @@
+name: menu_pdfs
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "website_id", type: "integer" }
+    - { name: "title", type: "string" }
+    - { name: "pdf_file_name", type: "string" }
+    - { name: "pdf_file_size", type: "integer" }
+    - { name: "pdf_updated_at", type: "datetime" }
+    - { name: "position", type: "integer" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

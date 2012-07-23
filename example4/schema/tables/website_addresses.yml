@@ -1,0 +1,14 @@
+name: website_addresses
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "website_id", type: "integer" }
+    - { name: "label", type: "string" }
+    - { name: "line1", type: "string" }
+    - { name: "line2", type: "string" }
+    - { name: "city", type: "string" }
+    - { name: "state", type: "string" }
+    - { name: "zip_code", type: "string" }
+    - { name: "longitude", type: "string" }
+    - { name: "latitude", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

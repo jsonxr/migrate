@@ -1,0 +1,4 @@
+name: instances_product_tiers
+columns:
+    - { name: "instance_id", type: "integer" }
+    - { name: "product_tier_id", type: "integer" }

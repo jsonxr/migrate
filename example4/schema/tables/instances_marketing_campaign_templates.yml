@@ -1,0 +1,4 @@
+name: instances_marketing_campaign_templates
+columns:
+    - { name: "instance_id", type: "integer" }
+    - { name: "marketing_campaign_template_id", type: "integer" }

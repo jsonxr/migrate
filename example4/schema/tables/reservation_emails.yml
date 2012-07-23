@@ -1,0 +1,11 @@
+name: reservation_emails
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_id", type: "integer" }
+    - { name: "details_text", type: "string" }
+    - { name: "thank_you", type: "boolean", default: "0" }
+    - { name: "thank_you_text", type: "string" }
+    - { name: "reminder", type: "boolean", default: "0" }
+    - { name: "reminder_text", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

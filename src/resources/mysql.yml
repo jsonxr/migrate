@@ -8,9 +8,22 @@ rails:
       replace: varchar(\g<limit>)
     - search: ^:boolean$
       replace: tinyint(1)
+    - search: integer
+      replace: int\(11\)
 
 
 sql_aliases:
+      #-----------------------------------------------------------------------
+      # Generic conversions
+      #-----------------------------------------------------------------------
+    - search: ^boolean$
+      replace: tinyint(1)
+    - search: string
+      replace: varchar
+      
+      #-----------------------------------------------------------------------
+      # MySQL Specific conversions
+      #-----------------------------------------------------------------------
       # MySQL has many aliases for the same types.  for example 
       #
       # Examples:
@@ -121,31 +134,56 @@ sql_aliases:
     
 
 sql_to_yml:
-    - search: ^blah$
-      replace: blah
-
-sql_to_yml_old:
-    - search: ^varchar\(255\)$
-      replace: string
-    - search: ^varchar\((?P<limit>\d*)\)$
-      replace: string(\g<limit>)
+      #-----------------------------------------------------------------------
+      # Generic Types
+      #-----------------------------------------------------------------------
     - search: ^tinyint\(1\)$
       replace: boolean
+    - search: varchar\(255\)
+      replace: string
+    - search: varchar
+      replace: string
     - search: ^int\(11\)$
       replace: integer
 
-    - search: ^bit\(1\)$
-      replace: bit
-    - search: ^tinyint\(4\)$
-      replace: tinyint
-    - search: ^bool$
-      replace: tinyint(1)
-    - search: ^boolean$
-      replace: tinyint(1)
-      
-    - search: ^decimal\(10,0\)$
-      replace: decimal
-    - search: ^int\(11\)$ # We will never reach this because of replace="integer"
-      replace: int
+      #-----------------------------------------------------------------------
+      # MySQL Specific conversions
+      #-----------------------------------------------------------------------
+    - search: ^bigint\(20\) unsigned$
+      replace: bigint unsigned
+    - search: ^smallint\(5\) unsigned$
+      replace: smallint unsigned
+    - search: ^int\(10\) unsigned$
+      replace: int unsigned
     - search: ^smallint\(6\)$
       replace: smallint
+    - search: ^tinyint\(4\)$
+      replace: tinyint
+    - search: ^tinyint\(3\) unsigned$
+      replace: tinyint unsigned
+    - search: ^mediumint\(9\)$
+      replace: mediumint
+    - search: ^mediumint\(8\) unsigned$
+      replace: mediumint unsigned
+    - search: ^bigint\(20\)$
+      replace: bigint
+      # Need to do further work to support serial as it is also an alias for
+      # key=true, nullable=false, autoincrement=true
+#    - search: ^serial$
+#      replace: bigint(20) unsigned
+#      attributes: { key: true, nullable: false, autoincrement: true }
+    - search: ^decimal\(10,0\)$
+      replace: decimal
+    - search: ^decimal\(10,0\) unsigned$
+      replace: decimal unsigned
+    - search: ^bit\(1\)$
+      replace: bit
+    - search: ^year\(4\)$
+      replace: year
+#    - search: ^timestamp$
+#      replace: timestamp
+#      attributes: { default: "CURRENT_TIMESTAMP", nullable: false }
+    - search: ^char\(1\)$
+      replace: char
+    - search: ^binary\(1\)$
+      replace: binary

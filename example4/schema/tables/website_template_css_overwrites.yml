@@ -1,0 +1,14 @@
+name: website_template_css_overwrites
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "website_id", type: "integer" }
+    - { name: "css_object_id", type: "integer" }
+    - { name: "css_object_type", type: "string" }
+    - { name: "field_name", type: "string" }
+    - { name: "value", type: "string" }
+    - { name: "image_file_name", type: "string" }
+    - { name: "image_content_type", type: "string" }
+    - { name: "image_file_size", type: "integer" }
+    - { name: "image_updated_at", type: "datetime" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

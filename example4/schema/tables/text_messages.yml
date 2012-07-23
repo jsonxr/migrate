@@ -1,0 +1,10 @@
+name: text_messages
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "owner_id", type: "integer" }
+    - { name: "keyword", type: "string" }
+    - { name: "code", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "default", type: "boolean", default: "0" }
+    - { name: "owner_type", type: "string", default: "Business" }

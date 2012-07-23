@@ -1,0 +1,30 @@
+name: marketing_campaign_templates
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "template_type", type: "string" }
+    - { name: "actionable_type", type: "string" }
+    - { name: "actionable_field", type: "string" }
+    - { name: "actionable_description", type: "text" }
+    - { name: "frequency", type: "string" }
+    - { name: "has_fixed_frequency", type: "boolean" }
+    - { name: "delivery_type", type: "string" }
+    - { name: "delivery_time_quantity", type: "string" }
+    - { name: "has_fixed_delivery_time_quantity", type: "boolean" }
+    - { name: "delivery_time_qualifier", type: "string" }
+    - { name: "has_fixed_delivery_time_qualifier", type: "boolean" }
+    - { name: "delivery_time_direction", type: "string" }
+    - { name: "has_fixed_delivery_time_direction", type: "boolean" }
+    - { name: "name", type: "string" }
+    - { name: "subject", type: "string" }
+    - { name: "body", type: "text" }
+    - { name: "owner_id", type: "integer" }
+    - { name: "owner_type", type: "string" }
+    - { name: "variables", type: "text" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "text_body", type: "string" }
+    - { name: "landing_page_body", type: "text" }
+    - { name: "report_parameters", type: "string" }
+    - { name: "post_body", type: "text" }
+    - { name: "report", type: "string(35)" }
+    - { name: "email_header", type: "text" }

@@ -7,4 +7,4 @@ environments:
         host: localhost
         database: migrate_prod
         user: root
-        password: j@s0n
+        password: secret

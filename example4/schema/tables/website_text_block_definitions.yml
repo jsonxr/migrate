@@ -1,0 +1,10 @@
+name: website_text_block_definitions
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "website_page_definition_id", type: "integer" }
+    - { name: "wpc_label", type: "string" }
+    - { name: "text_limit", type: "integer" }
+    - { name: "position", type: "integer", default: "0" }
+    - { name: "default_content", type: "text" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

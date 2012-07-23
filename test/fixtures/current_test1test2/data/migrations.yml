@@ -1,4 +1,0 @@
-- name: bootstrap
-  filename: project/versions/bootstrap.yml
-- name: current
-  filename: project/versions/current.yml

@@ -1,0 +1,11 @@
+name: social_networks_posts
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_social_network_id", type: "integer" }
+    - { name: "post_id", type: "integer" }
+    - { name: "post_tag", type: "string" }
+    - { name: "web_post_link", type: "string" }
+    - { name: "post_success", type: "boolean" }
+    - { name: "post_date", type: "datetime" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

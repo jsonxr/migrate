@@ -1,0 +1,11 @@
+name: reservation_exception_days
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_id", type: "integer" }
+    - { name: "start_date", type: "date" }
+    - { name: "end_date", type: "date" }
+    - { name: "name", type: "string(100)" }
+    - { name: "message", type: "string" }
+    - { name: "is_reservations_enabled", type: "boolean", default: "0" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

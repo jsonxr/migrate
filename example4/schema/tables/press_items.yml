@@ -1,0 +1,14 @@
+name: press_items
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "website_page_id", type: "integer" }
+    - { name: "headline", type: "string" }
+    - { name: "blurb", type: "text" }
+    - { name: "link_name", type: "string" }
+    - { name: "link_url", type: "string" }
+    - { name: "photo_file_name", type: "string" }
+    - { name: "photo_content_type", type: "string" }
+    - { name: "photo_file_size", type: "integer" }
+    - { name: "photo_updated_at", type: "datetime" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

@@ -1,0 +1,13 @@
+name: delayed_jobs
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "priority", type: "integer", default: "0" }
+    - { name: "attempts", type: "integer", default: "0" }
+    - { name: "handler", type: "text" }
+    - { name: "last_error", type: "string" }
+    - { name: "run_at", type: "datetime" }
+    - { name: "locked_at", type: "datetime" }
+    - { name: "failed_at", type: "datetime" }
+    - { name: "locked_by", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

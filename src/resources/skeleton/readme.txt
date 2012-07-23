@@ -3,7 +3,7 @@ these are instructions on how to use this tool.
 Database versioning:
 1)  undefined
 2)  bootstrap
-3)  current
+3)  head
 
 Commands
 1)  init

@@ -1,0 +1,8 @@
+name: zonal_loyalties
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "owner_type", type: "string" }
+    - { name: "owner_id", type: "integer" }
+    - { name: "opt_in", type: "boolean", default: "0" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

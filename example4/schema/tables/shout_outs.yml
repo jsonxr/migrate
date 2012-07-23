@@ -1,0 +1,17 @@
+name: shout_outs
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "post_id", type: "integer" }
+    - { name: "profile_social_network_id", type: "integer" }
+    - { name: "type", type: "string" }
+    - { name: "short_url", type: "string" }
+    - { name: "posted_at", type: "datetime" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "response", type: "text" }
+    - { name: "last_api_response_code", type: "integer" }
+    - { name: "scheduled_at", type: "datetime" }
+    - { name: "scheduled_for", type: "datetime" }
+    - { name: "social_network_name", type: "string" }
+    - { name: "natural_key", type: "string" }
+    - { name: "acknowledged", type: "boolean", default: "0" }

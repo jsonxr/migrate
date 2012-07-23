@@ -1,0 +1,10 @@
+name: twitter_metrics
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_id", type: "integer", nullable: false }
+    - { name: "date_for", type: "date", nullable: false }
+    - { name: "followers", type: "integer", default: "0", nullable: false }
+    - { name: "tweet_count", type: "integer", default: "0", nullable: false }
+    - { name: "retweet_count", type: "integer", default: "0", nullable: false }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

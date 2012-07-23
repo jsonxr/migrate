@@ -1,0 +1,11 @@
+name: abilities
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "key", type: "string" }
+    - { name: "category", type: "string" }
+    - { name: "action", type: "string" }
+    - { name: "applicability", type: "text" }
+    - { name: "number_of_values", type: "integer" }
+    - { name: "administration_expression", type: "string" }
+    - { name: "position", type: "integer" }
+    - { name: "default_values", type: "text" }

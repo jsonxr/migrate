@@ -1,0 +1,18 @@
+name: email_sms_templates
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "title", type: "string" }
+    - { name: "current_state", type: "string" }
+    - { name: "subject", type: "string" }
+    - { name: "from_address_id", type: "integer" }
+    - { name: "variables", type: "text" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "conditional", type: "text" }
+    - { name: "email_body", type: "text" }
+    - { name: "sms_body", type: "text" }
+    - { name: "text_body", type: "text" }
+    - { name: "instance_id", type: "integer" }
+    - { name: "notifier_method", type: "string" }
+    - { name: "domain", type: "string" }
+    - { name: "trigger_description", type: "string" }

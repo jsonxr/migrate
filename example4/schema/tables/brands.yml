@@ -1,0 +1,19 @@
+name: brands
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "deleted_at", type: "datetime" }
+    - { name: "name", type: "string" }
+    - { name: "corporation_id", type: "integer" }
+    - { name: "single_location", type: "boolean" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "zoura_account", type: "string" }
+    - { name: "pos_system_id", type: "integer" }
+    - { name: "legacy_loyalty_program", type: "boolean" }
+    - { name: "customer_loyalty_id", type: "string" }
+    - { name: "loyalty_disable_failed", type: "boolean" }
+    - { name: "email", type: "string" }
+    - { name: "website_address", type: "string" }
+    - { name: "timezone", type: "string" }
+    - { name: "show_points_reward_offer", type: "boolean", default: "0" }
+    - { name: "sms_from_value", type: "string" }

@@ -1,0 +1,10 @@
+name: customer_bases
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "name", type: "string" }
+    - { name: "owner_id", type: "integer" }
+    - { name: "owner_type", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "flex_parameters", type: "text" }
+    - { name: "report_url", type: "text" }

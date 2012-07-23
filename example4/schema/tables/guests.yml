@@ -1,0 +1,16 @@
+name: guests
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_id", type: "integer" }
+    - { name: "first_name", type: "string" }
+    - { name: "last_name", type: "string" }
+    - { name: "email", type: "string" }
+    - { name: "phone", type: "string(21)" }
+    - { name: "visits", type: "integer", default: "0" }
+    - { name: "reservations", type: "integer", default: "0" }
+    - { name: "source", type: "string" }
+    - { name: "total_ticket_total_in_cents", type: "integer", default: "0" }
+    - { name: "opt_in", type: "boolean", default: "0" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "opt_in_sms", type: "boolean", default: "0" }

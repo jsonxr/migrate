@@ -1,0 +1,11 @@
+name: optional_photos
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "restaurant_styles_id", type: "integer", nullable: false }
+    - { name: "photo_file_size", type: "integer" }
+    - { name: "photo_content_type", type: "string", nullable: false }
+    - { name: "photo_file_location", type: "string", nullable: false }
+    - { name: "photo_file_name", type: "string", nullable: false }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "deleted_at", type: "datetime" }

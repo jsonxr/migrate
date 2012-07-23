@@ -1,0 +1,4 @@
+name: brands_product_tiers
+columns:
+    - { name: "brand_id", type: "integer", nullable: false }
+    - { name: "product_tier_id", type: "integer", nullable: false }

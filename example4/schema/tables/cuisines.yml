@@ -1,0 +1,7 @@
+name: cuisines
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "cuisine", type: "string(50)", nullable: false }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "category", type: "string", default: "Cuisine" }

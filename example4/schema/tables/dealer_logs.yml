@@ -1,0 +1,8 @@
+name: dealer_logs
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "dealer_id", type: "integer", nullable: false }
+    - { name: "status", type: "string" }
+    - { name: "username", type: "string(200)", nullable: false }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

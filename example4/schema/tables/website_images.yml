@@ -1,0 +1,11 @@
+name: website_images
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "website_id", type: "integer" }
+    - { name: "photo_file_name", type: "string" }
+    - { name: "photo_content_type", type: "string" }
+    - { name: "photo_file_size", type: "integer" }
+    - { name: "photo_updated_at", type: "datetime" }
+    - { name: "datetime", type: "datetime" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

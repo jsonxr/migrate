@@ -1,0 +1,22 @@
+name: service_terms_and_conditions
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "owner_type", type: "string" }
+    - { name: "owner_id", type: "integer" }
+    - { name: "restrictions", type: "text" }
+    - { name: "exclusions", type: "text" }
+    - { name: "has_min_purchase", type: "boolean" }
+    - { name: "min_purchase", type: "string" }
+    - { name: "has_required_purchase_of", type: "boolean" }
+    - { name: "required_purchase_of", type: "string" }
+    - { name: "has_valid_only_at", type: "boolean" }
+    - { name: "has_one_per_visit", type: "boolean" }
+    - { name: "has_must_be_presented", type: "boolean" }
+    - { name: "has_not_valid_with_others", type: "boolean" }
+    - { name: "has_no_resale", type: "boolean" }
+    - { name: "has_not_refundable", type: "boolean" }
+    - { name: "has_custom", type: "boolean" }
+    - { name: "custom", type: "text" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "human_point_qualifier", type: "string" }

@@ -1,0 +1,13 @@
+name: dealers
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "name", type: "string", nullable: false }
+    - { name: "uuid", type: "string(50)" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "deleted_at", type: "datetime" }
+    - { name: "parent_id", type: "integer", default: "0", nullable: false }
+    - { name: "timezone", type: "string" }
+    - { name: "status", type: "string(50)" }
+    - { name: "pos_systems_count", type: "integer", default: "0", nullable: false }
+    - { name: "pos_developer_id", type: "string" }

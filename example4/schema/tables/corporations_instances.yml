@@ -1,0 +1,4 @@
+name: corporations_instances
+columns:
+    - { name: "instance_id", type: "integer" }
+    - { name: "corporation_id", type: "integer" }

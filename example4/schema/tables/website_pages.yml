@@ -1,0 +1,14 @@
+name: website_pages
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "header", type: "string" }
+    - { name: "publication_status", type: "string", default: "new" }
+    - { name: "website_page_definition_id", type: "integer" }
+    - { name: "menu_justification", type: "string", default: "left" }
+    - { name: "displays_price", type: "boolean", default: "1" }
+    - { name: "adds_currency_symbol", type: "boolean", default: "0" }
+    - { name: "price_prefix", type: "string" }
+    - { name: "menu_item_layout_id", type: "integer" }
+    - { name: "displays_map", type: "boolean", default: "1" }
+    - { name: "displays_directions", type: "boolean", default: "1" }
+    - { name: "displays_hours", type: "boolean", default: "1" }

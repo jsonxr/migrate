@@ -1,0 +1,21 @@
+name: landing_pages
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "owner_id", type: "integer" }
+    - { name: "parent_type", type: "string" }
+    - { name: "name", type: "string" }
+    - { name: "link", type: "string" }
+    - { name: "qr_code", type: "text" }
+    - { name: "header", type: "string" }
+    - { name: "content", type: "text" }
+    - { name: "actions", type: "text" }
+    - { name: "thank_you_message", type: "string" }
+    - { name: "thank_you_explanation", type: "text" }
+    - { name: "image_file_name", type: "string" }
+    - { name: "image_content_type", type: "string" }
+    - { name: "image_file_size", type: "integer" }
+    - { name: "image_updated_at", type: "datetime" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "offer_incentive_id", type: "integer" }
+    - { name: "owner_type", type: "string", default: "Business" }

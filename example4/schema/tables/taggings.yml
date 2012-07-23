@@ -1,0 +1,11 @@
+name: taggings
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "tag_id", type: "integer" }
+    - { name: "taggable_id", type: "integer" }
+    - { name: "tagger_id", type: "integer" }
+    - { name: "tagger_type", type: "string" }
+    - { name: "taggable_type", type: "string" }
+    - { name: "context", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "deleted_at", type: "datetime" }

@@ -5,7 +5,7 @@
 There are generic versions and vendor versions.
 
 A generic version uses types that are portable between vendors.
-int, double, string, blob, text, etc.
+integer, double, string, blob, text, etc.
 
 A vendor version contains the actual vendor types as returned from information_schema
 int(11), varchar(255), etc.
@@ -20,7 +20,7 @@ convert the schema into a database schema.
 
 
 
-jake diff <tablename>
+db diff <tablename>
 This will show all the differences of a table.  It shows previous, current, db.expected, db.actual
 
 #-----------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 # Bootstrap version
 # Auto generated
 version: bootstrap
+tables: ~
 migration:
     previous: ~
     commands: ~

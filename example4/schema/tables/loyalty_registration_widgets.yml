@@ -1,0 +1,14 @@
+name: loyalty_registration_widgets
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "owner_type", type: "string" }
+    - { name: "owner_id", type: "integer" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "active", type: "boolean" }
+    - { name: "state", type: "string" }
+    - { name: "header", type: "string" }
+    - { name: "content", type: "text" }
+    - { name: "thank_you_message", type: "string" }
+    - { name: "thank_you_explanation", type: "text" }
+    - { name: "form_fields", type: "text" }

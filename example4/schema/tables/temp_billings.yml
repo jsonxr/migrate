@@ -1,0 +1,16 @@
+name: temp_billings
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "business_id", type: "integer" }
+    - { name: "payment_type", type: "string(15)" }
+    - { name: "first_name", type: "string" }
+    - { name: "last_name", type: "string" }
+    - { name: "cc_type", type: "string" }
+    - { name: "cc_number", type: "string" }
+    - { name: "cc_expires_at", type: "datetime" }
+    - { name: "cc_verification", type: "string(4)" }
+    - { name: "bank_name", type: "string" }
+    - { name: "bank_routing_number", type: "integer" }
+    - { name: "bank_account_number", type: "integer" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

@@ -1,0 +1,30 @@
+name: website_template_supplemental_content_areas
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "website_template_id", type: "integer" }
+    - { name: "name", type: "string" }
+    - { name: "css_class", type: "string", default: "#theme-container1" }
+    - { name: "background_color", type: "string", default: "auto" }
+    - { name: "border_color", type: "string", default: "auto" }
+    - { name: "heading1_class", type: "string", default: "#theme-container1 h1" }
+    - { name: "heading1_color", type: "string", default: "#000000" }
+    - { name: "heading2_class", type: "string", default: "#content-secondary h2" }
+    - { name: "heading2_color", type: "string", default: "#000000" }
+    - { name: "heading3_class", type: "string", default: "#theme-container1 h3" }
+    - { name: "heading3_color", type: "string", default: "#3E2C1B" }
+    - { name: "heading4_class", type: "string", default: "#theme-container1 h4" }
+    - { name: "heading4_color", type: "string", default: "#999999" }
+    - { name: "heading5_class", type: "string", default: "#theme-container1 h5" }
+    - { name: "heading5_color", type: "string", default: "#000000" }
+    - { name: "heading6_class", type: "string", default: "#theme-container1 h6" }
+    - { name: "heading6_color", type: "string", default: "#000000" }
+    - { name: "text_class", type: "string", default: "#theme-container1 p, #theme-container1 li, #theme-container1 span, #theme-container1 div" }
+    - { name: "text_color", type: "string", default: "#7E6654" }
+    - { name: "link_class", type: "string", default: "#theme-container1 a" }
+    - { name: "link_color", type: "string", default: "#58869E" }
+    - { name: "link_hover_class", type: "string", default: "#theme-container1 a:hover" }
+    - { name: "link_hover_color", type: "string", default: "#58869E" }
+    - { name: "link_visited_class", type: "string", default: "#theme-container1 a:visited" }
+    - { name: "link_visited_color", type: "string", default: "#58869E" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

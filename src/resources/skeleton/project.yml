@@ -4,7 +4,7 @@
 # When the --env=test string is passed in, it will use the database settings
 #   specified in the "test" portion of the file. You can pass any environment
 #   string as long as there is a corresponding entry here or ".project.yaml" 
-#   file.  The ".jake" file should contain settings that should NOT 
+#   file.  The ".db" file should contain settings that should NOT 
 #   be checked into a version control system.  Typically, they should contain
 #   things like the production database credentials.
 
@@ -16,7 +16,7 @@ settings:
     indent: 4
     
     # This is the default environment to use if none is specified
-    # This should probably go in the ".jake" file
+    # This should probably go in the ".db" file
     environment: dev
 
 environments:

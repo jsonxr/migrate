@@ -1,0 +1,31 @@
+name: users
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "email", type: "string(200)" }
+    - { name: "admin", type: "boolean", default: "0", nullable: false }
+    - { name: "crypted_password", type: "string" }
+    - { name: "password_salt", type: "string" }
+    - { name: "persistence_token", type: "string(40)" }
+    - { name: "secret_question", type: "string" }
+    - { name: "secret_answer", type: "string(100)" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "deleted_at", type: "datetime" }
+    - { name: "first_name", type: "string(100)" }
+    - { name: "last_name", type: "string(100)" }
+    - { name: "userable_id", type: "integer" }
+    - { name: "userable_type", type: "string(50)" }
+    - { name: "title", type: "string" }
+    - { name: "contact", type: "boolean" }
+    - { name: "activation_key", type: "string(6)" }
+    - { name: "expires_at", type: "datetime" }
+    - { name: "active", type: "boolean", default: "0" }
+    - { name: "perishable_token", type: "string", nullable: false }
+    - { name: "ip_address", type: "string" }
+    - { name: "msa_effective_date", type: "string" }
+    - { name: "msa_submit", type: "integer" }
+    - { name: "activation_submit_date", type: "datetime" }
+    - { name: "product_tier_preferences", type: "text" }
+    - { name: "username", type: "string" }
+    - { name: "disabled", type: "boolean", default: "0" }
+    - { name: "last_request_at", type: "datetime" }

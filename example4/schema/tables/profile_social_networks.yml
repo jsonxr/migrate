@@ -1,0 +1,17 @@
+name: profile_social_networks
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_id", type: "integer" }
+    - { name: "social_network_id", type: "integer" }
+    - { name: "enabled", type: "boolean", default: "1" }
+    - { name: "username", type: "string" }
+    - { name: "password", type: "string" }
+    - { name: "pass_code", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "deleted_at", type: "datetime" }
+    - { name: "fb_user_id", type: "bigint" }
+    - { name: "fb_page_id", type: "bigint" }
+    - { name: "fb_session_key", type: "string" }
+    - { name: "default_network", type: "boolean", default: "1" }
+    - { name: "screen_name", type: "string" }

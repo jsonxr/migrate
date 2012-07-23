@@ -1,0 +1,4 @@
+name: parkings_restaurant_metadatas
+columns:
+    - { name: "parking_id", type: "integer" }
+    - { name: "restaurant_metadata_id", type: "integer" }

@@ -1,0 +1,13 @@
+name: corporations
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "deleted_at", type: "datetime" }
+    - { name: "name", type: "string" }
+    - { name: "dealer_id", type: "integer" }
+    - { name: "nickname", type: "string" }
+    - { name: "single_location", type: "boolean" }
+    - { name: "website", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "zoura_account", type: "string" }
+    - { name: "customer_loyalty_id", type: "integer" }

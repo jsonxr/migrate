@@ -1,0 +1,17 @@
+name: sales_tickets
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "ticket_id", type: "string" }
+    - { name: "profile_id", type: "integer" }
+    - { name: "pos_ticket_id", type: "integer" }
+    - { name: "business_date", type: "date" }
+    - { name: "transaction_id", type: "integer" }
+    - { name: "transaction_date", type: "date" }
+    - { name: "opened_at", type: "datetime" }
+    - { name: "closed_at", type: "datetime" }
+    - { name: "party_size", type: "integer" }
+    - { name: "ticket_total_amount", type: "float" }
+    - { name: "tax_total_amount", type: "float" }
+    - { name: "reservation_type", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

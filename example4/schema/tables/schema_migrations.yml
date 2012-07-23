@@ -1,0 +1,3 @@
+name: schema_migrations
+columns:
+    - { name: "version", type: "string", key: true, nullable: false }

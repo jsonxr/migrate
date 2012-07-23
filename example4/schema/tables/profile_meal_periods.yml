@@ -1,0 +1,13 @@
+name: profile_meal_periods
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "meal_service_id", type: "integer" }
+    - { name: "day_id", type: "integer" }
+    - { name: "recurring", type: "boolean" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "meal_periodable_id", type: "integer" }
+    - { name: "meal_periodable_type", type: "string" }
+    - { name: "open_at_in_minutes", type: "integer" }
+    - { name: "close_at_in_minutes", type: "integer" }
+    - { name: "deleted_at", type: "datetime" }

@@ -1,0 +1,4 @@
+name: restaurant_metadatas_spoken_languages
+columns:
+    - { name: "spoken_language_id", type: "integer" }
+    - { name: "restaurant_metadata_id", type: "integer" }

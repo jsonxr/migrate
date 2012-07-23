@@ -1,0 +1,2167 @@
+
+version: bootstrap
+tables:
+    - name: abilities
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "key", type: "string" }
+          - { name: "category", type: "string" }
+          - { name: "action", type: "string" }
+          - { name: "applicability", type: "text" }
+          - { name: "number_of_values", type: "integer" }
+          - { name: "administration_expression", type: "string" }
+          - { name: "position", type: "integer" }
+          - { name: "default_values", type: "text" }
+
+    - name: accepted_payments
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "accepted_payment", type: "string(50)", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: accepted_payments_restaurant_metadatas
+      columns:
+          - { name: "accepted_payment_id", type: "integer" }
+          - { name: "restaurant_metadata_id", type: "integer" }
+
+    - name: accepted_payments_websites
+      columns:
+          - { name: "accepted_payment_id", type: "integer", key: true, nullable: false }
+          - { name: "website_id", type: "integer", key: true, nullable: false }
+
+    - name: additional_emails
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "owner_id", type: "integer" }
+          - { name: "email", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "status", type: "string" }
+          - { name: "activation_key", type: "string(6)" }
+          - { name: "expires_at", type: "datetime" }
+          - { name: "ip_address", type: "string" }
+          - { name: "activated_date", type: "datetime" }
+          - { name: "browser_info", type: "string" }
+          - { name: "owner_type", type: "string", default: "Business" }
+
+    - name: addresses
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "addressable_id", type: "integer" }
+          - { name: "addressable_type", type: "string(50)" }
+          - { name: "address_type", type: "string(20)" }
+          - { name: "address", type: "string" }
+          - { name: "address_2", type: "string" }
+          - { name: "city", type: "string(50)" }
+          - { name: "region", type: "string(20)" }
+          - { name: "country", type: "string(13)", default: "USA" }
+          - { name: "postal_code", type: "string(13)" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+
+    - name: alcohols
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "alcohol", type: "string(100)", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: alcohols_restaurant_metadatas
+      columns:
+          - { name: "alcohol_id", type: "integer" }
+          - { name: "restaurant_metadata_id", type: "integer" }
+
+    - name: alcohols_websites
+      columns:
+          - { name: "alcohol_id", type: "integer", key: true, nullable: false }
+          - { name: "website_id", type: "integer", key: true, nullable: false }
+
+    - name: appian_configurations
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "config_key", type: "string" }
+          - { name: "config_value", type: "string" }
+
+    - name: billing_accounts
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "business_id", type: "integer", nullable: false }
+          - { name: "vendor_token", type: "string(20)", nullable: false }
+          - { name: "cc_type", type: "string(15)", nullable: false }
+          - { name: "cc_mask", type: "string(16)" }
+          - { name: "cc_expires_at", type: "datetime" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+
+    - name: brands
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "deleted_at", type: "datetime" }
+          - { name: "name", type: "string" }
+          - { name: "corporation_id", type: "integer" }
+          - { name: "single_location", type: "boolean" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "zoura_account", type: "string" }
+          - { name: "pos_system_id", type: "integer" }
+          - { name: "legacy_loyalty_program", type: "boolean" }
+          - { name: "customer_loyalty_id", type: "string" }
+          - { name: "loyalty_disable_failed", type: "boolean" }
+          - { name: "email", type: "string" }
+          - { name: "website_address", type: "string" }
+          - { name: "timezone", type: "string" }
+          - { name: "show_points_reward_offer", type: "boolean", default: "0" }
+          - { name: "sms_from_value", type: "string" }
+
+    - name: brands_product_tiers
+      columns:
+          - { name: "brand_id", type: "integer", nullable: false }
+          - { name: "product_tier_id", type: "integer", nullable: false }
+
+    - name: brands_users
+      columns:
+          - { name: "brand_id", type: "integer", nullable: false }
+          - { name: "user_id", type: "integer", nullable: false }
+
+    - name: business_logs
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "business_id", type: "integer", nullable: false }
+          - { name: "status", type: "string" }
+          - { name: "username", type: "string(200)", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: businesses
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "name", type: "string", nullable: false }
+          - { name: "url", type: "string", default: "0" }
+          - { name: "uuid", type: "string(50)" }
+          - { name: "status", type: "string(50)" }
+          - { name: "timezone", type: "string" }
+          - { name: "operating_hours", type: "string(100)" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "date" }
+          - { name: "email", type: "string" }
+          - { name: "pos_system_id", type: "integer" }
+          - { name: "api_key", type: "string(40)" }
+          - { name: "webpage_creator", type: "boolean", default: "1" }
+          - { name: "pos_integrated", type: "boolean", default: "1" }
+          - { name: "omo", type: "boolean", default: "0" }
+          - { name: "demo", type: "boolean", default: "0" }
+          - { name: "website_address", type: "string" }
+          - { name: "api_requested_at", type: "datetime" }
+          - { name: "customer_loyalty_id", type: "string" }
+          - { name: "analytics_username", type: "string" }
+          - { name: "analytics_password", type: "string" }
+          - { name: "sms_from_value", type: "string" }
+          - { name: "analytics_credential_status", type: "string" }
+          - { name: "owner_id", type: "integer" }
+          - { name: "owner_type", type: "string" }
+          - { name: "bill_this_branch", type: "boolean", default: "0" }
+          - { name: "average_price_per_plate", type: "integer" }
+          - { name: "syndication_message", type: "string" }
+          - { name: "gmt_offset", type: "integer" }
+          - { name: "pos_password", type: "string" }
+          - { name: "pos_token", type: "string" }
+          - { name: "zoura_account", type: "string" }
+          - { name: "name_and_address_same_as_parent", type: "boolean", default: "0" }
+          - { name: "egift_reporting_service", type: "string", default: "mps" }
+          - { name: "legacy_loyalty_program", type: "boolean", default: "0" }
+          - { name: "loyalty_disable_failed", type: "boolean", default: "0" }
+          - { name: "show_points_reward_offer", type: "boolean" }
+          - { name: "ipc_retailer_id", type: "string" }
+          - { name: "ipc_location_id", type: "string" }
+          - { name: "external_ref", type: "string(20)" }
+
+    - name: businesses_product_tiers
+      columns:
+          - { name: "business_id", type: "integer", nullable: false }
+          - { name: "product_tier_id", type: "integer", nullable: false }
+
+    - name: businesses_users
+      columns:
+          - { name: "business_id", type: "integer", nullable: false }
+          - { name: "user_id", type: "integer", nullable: false }
+
+    - name: configuration_settings
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "key", type: "string", nullable: false }
+          - { name: "value", type: "text" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: connections
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer", nullable: false }
+          - { name: "url", type: "string" }
+          - { name: "pass_code", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+
+    - name: corporations
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "deleted_at", type: "datetime" }
+          - { name: "name", type: "string" }
+          - { name: "dealer_id", type: "integer" }
+          - { name: "nickname", type: "string" }
+          - { name: "single_location", type: "boolean" }
+          - { name: "website", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "zoura_account", type: "string" }
+          - { name: "customer_loyalty_id", type: "integer" }
+
+    - name: corporations_instances
+      columns:
+          - { name: "instance_id", type: "integer" }
+          - { name: "corporation_id", type: "integer" }
+
+    - name: corporations_product_tiers
+      columns:
+          - { name: "corporation_id", type: "integer", nullable: false }
+          - { name: "product_tier_id", type: "integer", nullable: false }
+
+    - name: corporations_users
+      columns:
+          - { name: "corporation_id", type: "integer", nullable: false }
+          - { name: "user_id", type: "integer", nullable: false }
+
+    - name: cuisine_types_restaurant_metadatas
+      columns:
+          - { name: "cuisine_id", type: "integer" }
+          - { name: "restaurant_metadata_id", type: "integer" }
+
+    - name: cuisines
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "cuisine", type: "string(50)", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "category", type: "string", default: "Cuisine" }
+
+    - name: cuisines_websites
+      columns:
+          - { name: "website_id", type: "integer", key: true, nullable: false }
+          - { name: "cuisine_id", type: "integer", key: true, nullable: false }
+
+    - name: customer_bases
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "name", type: "string" }
+          - { name: "owner_id", type: "integer" }
+          - { name: "owner_type", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "flex_parameters", type: "text" }
+          - { name: "report_url", type: "text" }
+
+    - name: customer_imports
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "owner_id", type: "integer" }
+          - { name: "upload_v1_file_name", type: "string" }
+          - { name: "upload_v1_content_type", type: "string" }
+          - { name: "upload_v1_file_size", type: "integer" }
+          - { name: "upload_v1_updated_at", type: "datetime" }
+          - { name: "current_state", type: "string" }
+          - { name: "mappings", type: "text" }
+          - { name: "import_errors", type: "text" }
+          - { name: "ignore_first_row", type: "boolean" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "owner_type", type: "string", default: "Business" }
+          - { name: "temp_uploaded_file_location", type: "string" }
+          - { name: "timestamp", type: "string" }
+          - { name: "filename_for_processing", type: "string" }
+          - { name: "customer_mappings", type: "text" }
+          - { name: "rails_import_errors", type: "text" }
+          - { name: "upload_v2_file_name", type: "string" }
+          - { name: "upload_v2_content_type", type: "string" }
+          - { name: "upload_v2_file_size", type: "integer" }
+          - { name: "upload_v2_updated_at", type: "datetime" }
+          - { name: "source_system", type: "string" }
+          - { name: "user_inputted_mappings", type: "text" }
+          - { name: "remap_flag", type: "string", default: "not_requested" }
+
+    - name: customized_guests
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "widget_type", type: "string" }
+          - { name: "widget_id", type: "integer" }
+          - { name: "loyalty_number", type: "string" }
+          - { name: "title", type: "string" }
+          - { name: "first_name", type: "string" }
+          - { name: "last_name", type: "string" }
+          - { name: "occupation", type: "string" }
+          - { name: "date_of_birth", type: "string" }
+          - { name: "gender", type: "string" }
+          - { name: "address1", type: "string" }
+          - { name: "address2", type: "string" }
+          - { name: "address3", type: "string" }
+          - { name: "city", type: "string" }
+          - { name: "county", type: "string" }
+          - { name: "postal_code", type: "string" }
+          - { name: "country", type: "string" }
+          - { name: "mobile_phone", type: "string" }
+          - { name: "email", type: "string" }
+          - { name: "custom1", type: "string" }
+          - { name: "custom2", type: "string" }
+          - { name: "custom3", type: "string" }
+          - { name: "custom4", type: "string" }
+          - { name: "custom5", type: "string" }
+          - { name: "email_opt_in", type: "boolean" }
+          - { name: "mobile_opt_in", type: "boolean" }
+          - { name: "third_party_opt_in", type: "boolean" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "success", type: "boolean" }
+          - { name: "loyalty_error", type: "text" }
+          - { name: "state", type: "string" }
+
+    - name: days
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "day", type: "string(50)", nullable: false }
+          - { name: "description", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "sun", type: "boolean" }
+          - { name: "mon", type: "boolean" }
+          - { name: "tue", type: "boolean" }
+          - { name: "wed", type: "boolean" }
+          - { name: "thu", type: "boolean" }
+          - { name: "fri", type: "boolean" }
+          - { name: "sat", type: "boolean" }
+
+    - name: dealer_logs
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "dealer_id", type: "integer", nullable: false }
+          - { name: "status", type: "string" }
+          - { name: "username", type: "string(200)", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: dealers
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "name", type: "string", nullable: false }
+          - { name: "uuid", type: "string(50)" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+          - { name: "parent_id", type: "integer", default: "0", nullable: false }
+          - { name: "timezone", type: "string" }
+          - { name: "status", type: "string(50)" }
+          - { name: "pos_systems_count", type: "integer", default: "0", nullable: false }
+          - { name: "pos_developer_id", type: "string" }
+
+    - name: dealers_instances
+      columns:
+          - { name: "instance_id", type: "integer" }
+          - { name: "dealer_id", type: "integer" }
+
+    - name: dealers_pos_systems
+      columns:
+          - { name: "dealer_id", type: "integer", key: true, nullable: false }
+          - { name: "pos_system_id", type: "integer", key: true, nullable: false }
+
+    - name: dealers_users
+      columns:
+          - { name: "dealer_id", type: "integer", nullable: false }
+          - { name: "user_id", type: "integer", nullable: false }
+
+    - name: delayed_jobs
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "priority", type: "integer", default: "0" }
+          - { name: "attempts", type: "integer", default: "0" }
+          - { name: "handler", type: "text" }
+          - { name: "last_error", type: "string" }
+          - { name: "run_at", type: "datetime" }
+          - { name: "locked_at", type: "datetime" }
+          - { name: "failed_at", type: "datetime" }
+          - { name: "locked_by", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: depots
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "business_id", type: "integer" }
+          - { name: "depotable_id", type: "integer" }
+          - { name: "depotable_type", type: "string" }
+          - { name: "status", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: displayed_addresses
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_page_id", type: "integer" }
+          - { name: "website_address_id", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: displayed_emails
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_page_id", type: "integer" }
+          - { name: "website_email_id", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: displayed_phone_numbers
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_page_id", type: "integer" }
+          - { name: "website_phone_number_id", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: dns_records
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "domain_id", type: "integer" }
+          - { name: "name", type: "string" }
+          - { name: "ttl", type: "integer" }
+          - { name: "cls", type: "string" }
+          - { name: "record_type", type: "string" }
+          - { name: "address", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: domains
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "domainable_id", type: "integer", nullable: false }
+          - { name: "domainable_type", type: "string", nullable: false }
+          - { name: "domain", type: "string" }
+          - { name: "subdomain", type: "string", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+
+    - name: dress_codes
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "dress_code", type: "string(100)", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: egift_widgets
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "active", type: "boolean" }
+          - { name: "state", type: "string" }
+          - { name: "text", type: "string" }
+          - { name: "has_notes", type: "boolean" }
+          - { name: "notes", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: email_sms_event_triggers
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "email_sms_template_id", type: "integer" }
+          - { name: "event_definition_id", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: email_sms_templates
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "title", type: "string" }
+          - { name: "current_state", type: "string" }
+          - { name: "subject", type: "string" }
+          - { name: "from_address_id", type: "integer" }
+          - { name: "variables", type: "text" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "conditional", type: "text" }
+          - { name: "email_body", type: "text" }
+          - { name: "sms_body", type: "text" }
+          - { name: "text_body", type: "text" }
+          - { name: "instance_id", type: "integer" }
+          - { name: "notifier_method", type: "string" }
+          - { name: "domain", type: "string" }
+          - { name: "trigger_description", type: "string" }
+
+    - name: event_definitions
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "name", type: "string" }
+          - { name: "queue", type: "string" }
+          - { name: "source_entity", type: "string" }
+          - { name: "action", type: "string" }
+          - { name: "event_string", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "variables", type: "text" }
+
+    - name: events
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer", nullable: false }
+          - { name: "starts_at", type: "datetime" }
+          - { name: "ends_at", type: "datetime" }
+          - { name: "event", type: "string", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+
+    - name: exception_days
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer" }
+          - { name: "date", type: "date" }
+          - { name: "enabled", type: "boolean", default: "1" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: facebook_metrics
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer", nullable: false }
+          - { name: "date_for", type: "date", nullable: false }
+          - { name: "fan_count", type: "integer", default: "0" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: from_addresses
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "name", type: "string" }
+          - { name: "userid", type: "string" }
+          - { name: "domain", type: "string" }
+          - { name: "email", type: "string" }
+          - { name: "owner_type", type: "string" }
+          - { name: "owner_id", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: from_addresses_instances
+      columns:
+          - { name: "from_address_id", type: "integer" }
+          - { name: "instance_id", type: "integer" }
+
+    - name: getta_customers
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "first_name", type: "string" }
+          - { name: "last_name", type: "string" }
+          - { name: "facebook_id", type: "string" }
+          - { name: "email_address", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: guest_histories
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "guest_id", type: "integer" }
+          - { name: "reservation_id", type: "integer" }
+          - { name: "at", type: "datetime" }
+          - { name: "ticket_total_in_cents", type: "integer", default: "0" }
+          - { name: "source", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: guests
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer" }
+          - { name: "first_name", type: "string" }
+          - { name: "last_name", type: "string" }
+          - { name: "email", type: "string" }
+          - { name: "phone", type: "string(21)" }
+          - { name: "visits", type: "integer", default: "0" }
+          - { name: "reservations", type: "integer", default: "0" }
+          - { name: "source", type: "string" }
+          - { name: "total_ticket_total_in_cents", type: "integer", default: "0" }
+          - { name: "opt_in", type: "boolean", default: "0" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "opt_in_sms", type: "boolean", default: "0" }
+
+    - name: instances
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "name", type: "string" }
+          - { name: "locale", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: instances_marketing_campaign_templates
+      columns:
+          - { name: "instance_id", type: "integer" }
+          - { name: "marketing_campaign_template_id", type: "integer" }
+
+    - name: instances_product_tiers
+      columns:
+          - { name: "instance_id", type: "integer" }
+          - { name: "product_tier_id", type: "integer" }
+
+    - name: instances_user_roles
+      columns:
+          - { name: "instance_id", type: "integer" }
+          - { name: "user_role_id", type: "integer" }
+
+    - name: instances_users
+      columns:
+          - { name: "instance_id", type: "integer" }
+          - { name: "user_id", type: "integer" }
+
+    - name: invited_guests
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "reservation_id", type: "integer" }
+          - { name: "first_name", type: "string(100)" }
+          - { name: "last_name", type: "string(100)" }
+          - { name: "email", type: "string(100)" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+
+    - name: ipc_redemptions
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "business_id", type: "integer" }
+          - { name: "offer_incentive_id", type: "integer" }
+          - { name: "landing_page_id", type: "integer" }
+          - { name: "marketing_campaign_id", type: "integer" }
+          - { name: "marketing_campaign_history_id", type: "integer" }
+          - { name: "firstname", type: "string" }
+          - { name: "lastname", type: "string" }
+          - { name: "email", type: "string" }
+          - { name: "o2o_status", type: "string" }
+          - { name: "o2o_redemption_id", type: "string" }
+          - { name: "code", type: "string" }
+          - { name: "qr_code", type: "text" }
+          - { name: "state", type: "string" }
+          - { name: "published_expiration", type: "datetime" }
+          - { name: "unredeemable_reason", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "phone", type: "string" }
+
+    - name: keywords
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer", nullable: false }
+          - { name: "date_for", type: "date", nullable: false }
+          - { name: "keyword", type: "string", nullable: false }
+          - { name: "visits", type: "integer", nullable: false }
+          - { name: "new_visits", type: "integer", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: landing_pages
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "owner_id", type: "integer" }
+          - { name: "parent_type", type: "string" }
+          - { name: "name", type: "string" }
+          - { name: "link", type: "string" }
+          - { name: "qr_code", type: "text" }
+          - { name: "header", type: "string" }
+          - { name: "content", type: "text" }
+          - { name: "actions", type: "text" }
+          - { name: "thank_you_message", type: "string" }
+          - { name: "thank_you_explanation", type: "text" }
+          - { name: "image_file_name", type: "string" }
+          - { name: "image_content_type", type: "string" }
+          - { name: "image_file_size", type: "integer" }
+          - { name: "image_updated_at", type: "datetime" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "offer_incentive_id", type: "integer" }
+          - { name: "owner_type", type: "string", default: "Business" }
+
+    - name: loyalty_balances
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "label", type: "string" }
+          - { name: "summary", type: "text" }
+          - { name: "text", type: "string" }
+          - { name: "style", type: "string" }
+          - { name: "active", type: "boolean" }
+          - { name: "has_notes", type: "boolean" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: loyalty_program_feature_shadows
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "loyalty_program_shadow_id", type: "integer" }
+          - { name: "feature_type", type: "string" }
+          - { name: "earned_amount", type: "integer" }
+          - { name: "earned_type", type: "string" }
+          - { name: "for_every_amount", type: "integer" }
+          - { name: "for_every_type", type: "string" }
+          - { name: "promo_pos_discount_code", type: "string" }
+          - { name: "promo_pos_description", type: "string" }
+          - { name: "promo_bonus_type", type: "string" }
+          - { name: "promo_discounted_price", type: "decimal(8,2)" }
+          - { name: "promo_discounted_percent", type: "integer" }
+          - { name: "promo_start_date", type: "date" }
+          - { name: "promo_end_date", type: "date" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "feature_name", type: "string(35)" }
+          - { name: "feature_id", type: "integer" }
+          - { name: "priority", type: "integer" }
+
+    - name: loyalty_program_shadows
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "owner_id", type: "integer" }
+          - { name: "program_id", type: "string" }
+          - { name: "active", type: "boolean", default: "0" }
+          - { name: "name", type: "string" }
+          - { name: "points_for_cash_dollars_spent", type: "integer", default: "1" }
+          - { name: "points_for_cash_earned", type: "integer", default: "1" }
+          - { name: "points_for_cash_award_level", type: "integer", default: "100" }
+          - { name: "points_for_cash_award_level_dollars", type: "integer", default: "5" }
+          - { name: "percent_cash_back", type: "integer", default: "1" }
+          - { name: "punch_award_count", type: "integer", default: "1" }
+          - { name: "punch_award", type: "string", default: "item" }
+          - { name: "punch_award_punches", type: "integer", default: "10" }
+          - { name: "punch_min_dollars", type: "integer", default: "10" }
+          - { name: "points_for_prize_earned", type: "integer", default: "1" }
+          - { name: "points_for_prize_dollars_spent", type: "integer", default: "1" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "owner_type", type: "string", default: "Business" }
+          - { name: "program_name", type: "string" }
+
+    - name: loyalty_programs
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "business_id", type: "integer" }
+          - { name: "name", type: "string" }
+          - { name: "active", type: "boolean", default: "0" }
+          - { name: "points_for_cash_dollars_spent", type: "integer", default: "1" }
+          - { name: "points_for_cash_earned", type: "integer", default: "1" }
+          - { name: "points_for_cash_award_level", type: "integer", default: "100" }
+          - { name: "points_for_cash_award_level_dollars", type: "integer", default: "5" }
+          - { name: "points_for_prize_dollars_spent", type: "integer", default: "1" }
+          - { name: "points_for_prize_earned", type: "integer", default: "1" }
+          - { name: "percent_cash_back", type: "integer", default: "1" }
+          - { name: "punch_award_count", type: "integer", default: "1" }
+          - { name: "punch_award", type: "string", default: "item" }
+          - { name: "punch_award_punches", type: "integer", default: "10" }
+          - { name: "punch_min_dollars", type: "integer", default: "10" }
+
+    - name: loyalty_registration_prepends
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "owner_id", type: "integer" }
+          - { name: "owner_type", type: "string" }
+          - { name: "prepend_value", type: "string" }
+          - { name: "if_initial_length_is", type: "integer" }
+
+    - name: loyalty_registration_widgets
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "owner_type", type: "string" }
+          - { name: "owner_id", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "active", type: "boolean" }
+          - { name: "state", type: "string" }
+          - { name: "header", type: "string" }
+          - { name: "content", type: "text" }
+          - { name: "thank_you_message", type: "string" }
+          - { name: "thank_you_explanation", type: "text" }
+          - { name: "form_fields", type: "text" }
+
+    - name: loyalty_widgets
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "active", type: "boolean" }
+          - { name: "state", type: "string" }
+          - { name: "text", type: "string" }
+          - { name: "has_notes", type: "boolean" }
+          - { name: "notes", type: "string" }
+          - { name: "header", type: "string" }
+          - { name: "content", type: "text" }
+          - { name: "thank_you_message", type: "string" }
+          - { name: "thank_you_explanation", type: "text" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: marketing_campaign_histories
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "marketing_campaign_id", type: "integer" }
+          - { name: "from", type: "string" }
+          - { name: "subject", type: "string" }
+          - { name: "body", type: "text" }
+          - { name: "delivery_type", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "send_count", type: "integer" }
+
+    - name: marketing_campaign_landing_page_associations
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "landing_page_id", type: "integer" }
+          - { name: "marketing_campaign_id", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: marketing_campaign_templates
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "template_type", type: "string" }
+          - { name: "actionable_type", type: "string" }
+          - { name: "actionable_field", type: "string" }
+          - { name: "actionable_description", type: "text" }
+          - { name: "frequency", type: "string" }
+          - { name: "has_fixed_frequency", type: "boolean" }
+          - { name: "delivery_type", type: "string" }
+          - { name: "delivery_time_quantity", type: "string" }
+          - { name: "has_fixed_delivery_time_quantity", type: "boolean" }
+          - { name: "delivery_time_qualifier", type: "string" }
+          - { name: "has_fixed_delivery_time_qualifier", type: "boolean" }
+          - { name: "delivery_time_direction", type: "string" }
+          - { name: "has_fixed_delivery_time_direction", type: "boolean" }
+          - { name: "name", type: "string" }
+          - { name: "subject", type: "string" }
+          - { name: "body", type: "text" }
+          - { name: "owner_id", type: "integer" }
+          - { name: "owner_type", type: "string" }
+          - { name: "variables", type: "text" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "text_body", type: "string" }
+          - { name: "landing_page_body", type: "text" }
+          - { name: "report_parameters", type: "string" }
+          - { name: "post_body", type: "text" }
+          - { name: "report", type: "string(35)" }
+          - { name: "email_header", type: "text" }
+
+    - name: marketing_campaign_triggers
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "actionable_field", type: "string" }
+          - { name: "actionable_object", type: "string" }
+          - { name: "actionable_type", type: "string" }
+          - { name: "event_definition_id", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: marketing_campaigns
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "current_state", type: "string" }
+          - { name: "customer_base_id", type: "integer" }
+          - { name: "delivery_type", type: "string" }
+          - { name: "name", type: "string" }
+          - { name: "marketing_campaign_template_id", type: "integer" }
+          - { name: "email_start_date", type: "datetime" }
+          - { name: "frequency", type: "string" }
+          - { name: "delivery_time_qualifier", type: "string" }
+          - { name: "delivery_time_direction", type: "string" }
+          - { name: "email_delivery_time", type: "string" }
+          - { name: "subject", type: "string" }
+          - { name: "email_body", type: "longtext" }
+          - { name: "variables", type: "text" }
+          - { name: "owner_id", type: "integer" }
+          - { name: "owner_type", type: "string" }
+          - { name: "template_type", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "text_message_id", type: "integer" }
+          - { name: "delivery_time_quantity", type: "integer" }
+          - { name: "from_address", type: "text" }
+          - { name: "report_url", type: "text" }
+          - { name: "email_end_date", type: "date" }
+          - { name: "text_message_body", type: "string" }
+          - { name: "send_email", type: "boolean", default: "0" }
+          - { name: "send_text_message", type: "boolean", default: "0" }
+          - { name: "text_message_delivery_time", type: "string" }
+          - { name: "post_delivery_time", type: "string" }
+          - { name: "offer_incentive_id", type: "integer" }
+          - { name: "landing_page_id", type: "integer" }
+          - { name: "landing_page_body", type: "longtext" }
+          - { name: "email_bitly", type: "string" }
+          - { name: "unresolved_email_body", type: "longtext" }
+          - { name: "loyalty_program_reward_trigger_amount", type: "integer" }
+          - { name: "period_days", type: "string" }
+          - { name: "period_start_time", type: "string" }
+          - { name: "period_end_time", type: "string" }
+          - { name: "text_message_start_date", type: "datetime" }
+          - { name: "post_start_date", type: "datetime" }
+          - { name: "text_message_end_date", type: "date" }
+          - { name: "post_end_date", type: "date" }
+          - { name: "period_days_and_times", type: "string" }
+          - { name: "resolved_landing_page_body", type: "longtext" }
+          - { name: "canceled_at", type: "datetime" }
+          - { name: "unresolved_text_message_body", type: "string" }
+          - { name: "landing_page_resource", type: "string" }
+          - { name: "text_message_bitly", type: "string(25)" }
+          - { name: "landing_page_link", type: "string" }
+          - { name: "full_sms_body", type: "string" }
+
+    - name: meal_services
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "meal_service", type: "string(20)" }
+          - { name: "description", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: menu_pdfs
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "title", type: "string" }
+          - { name: "pdf_file_name", type: "string" }
+          - { name: "pdf_file_size", type: "integer" }
+          - { name: "pdf_updated_at", type: "datetime" }
+          - { name: "position", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: menu_sections
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "menu_id", type: "integer", nullable: false }
+          - { name: "name", type: "string", nullable: false }
+          - { name: "descriptions", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: menus
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer", nullable: false }
+          - { name: "name", type: "string(50)", nullable: false }
+          - { name: "description", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: message_types
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "message_type", type: "string(20)", nullable: false }
+          - { name: "message_description", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: messages
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "start_at", type: "datetime" }
+          - { name: "end_at", type: "datetime" }
+          - { name: "message", type: "string", nullable: false }
+          - { name: "active", type: "boolean", default: "0", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "delete_at", type: "datetime" }
+          - { name: "message_type_id", type: "integer" }
+          - { name: "position", type: "integer" }
+          - { name: "is_for_dealer", type: "boolean", default: "0" }
+          - { name: "is_for_restaurant", type: "boolean", default: "0" }
+
+    - name: multiple_location_lite_businesses
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "business_id", type: "integer" }
+
+    - name: nutritional_informations_restaurant_metadatas
+      columns:
+          - { name: "cuisine_id", type: "integer" }
+          - { name: "restaurant_metadata_id", type: "integer" }
+
+    - name: offer_change_requests
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "user_id", type: "integer" }
+          - { name: "offer_incentive_id", type: "integer" }
+          - { name: "change", type: "text" }
+          - { name: "needs_mob_processing", type: "boolean" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "merchant_name", type: "string" }
+          - { name: "offer_name", type: "string" }
+          - { name: "state", type: "string" }
+          - { name: "owner_id", type: "integer" }
+          - { name: "owner_type", type: "string" }
+          - { name: "start_date", type: "date" }
+
+    - name: offer_incentives
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "business_id", type: "integer" }
+          - { name: "name", type: "string" }
+          - { name: "start_date", type: "date" }
+          - { name: "end_date", type: "date" }
+          - { name: "code", type: "string" }
+          - { name: "restrictions", type: "text" }
+          - { name: "terms_and_conditions", type: "text" }
+          - { name: "exclusions", type: "text" }
+          - { name: "parent_type", type: "string" }
+          - { name: "percent_off", type: "string" }
+          - { name: "cash_off", type: "string" }
+          - { name: "cash_spent", type: "string" }
+          - { name: "point_quantity", type: "string" }
+          - { name: "point_qualifier", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "state", type: "string" }
+          - { name: "cash_value", type: "string" }
+          - { name: "offer_body", type: "text" }
+          - { name: "comments", type: "text" }
+          - { name: "preview_link", type: "text" }
+          - { name: "tag_line", type: "text" }
+          - { name: "getta_offer_id", type: "string" }
+          - { name: "max_quantity", type: "integer" }
+          - { name: "parent_sub_type", type: "string" }
+          - { name: "valid_sunday", type: "boolean" }
+          - { name: "valid_monday", type: "boolean" }
+          - { name: "valid_tuesday", type: "boolean" }
+          - { name: "valid_wednesday", type: "boolean" }
+          - { name: "valid_thursday", type: "boolean" }
+          - { name: "valid_friday", type: "boolean" }
+          - { name: "valid_saturday", type: "boolean" }
+          - { name: "valid_time_of_day", type: "boolean" }
+          - { name: "additional_details", type: "text" }
+          - { name: "optional_conditions", type: "text" }
+          - { name: "merchant_just_approved_copy", type: "boolean" }
+          - { name: "valid_start_time", type: "time" }
+          - { name: "valid_end_time", type: "time" }
+          - { name: "image_url", type: "text" }
+          - { name: "end_valid_date", type: "date" }
+          - { name: "image_url_2", type: "text" }
+          - { name: "image_url_3", type: "text" }
+          - { name: "image_url_4", type: "text" }
+          - { name: "event_date", type: "date" }
+          - { name: "start_valid_date", type: "date" }
+          - { name: "offer_sub_name", type: "string" }
+          - { name: "facebook_url", type: "text" }
+          - { name: "facebook_id", type: "string" }
+          - { name: "event_date_2", type: "date" }
+          - { name: "event_date_3", type: "date" }
+          - { name: "event_date_4", type: "date" }
+          - { name: "event_date_5", type: "date" }
+          - { name: "has_alcohol", type: "boolean" }
+          - { name: "buy_one_item", type: "string" }
+          - { name: "get_one_item", type: "string" }
+          - { name: "get_one_item_qualifier", type: "string" }
+          - { name: "definition", type: "string" }
+          - { name: "pos_code", type: "string" }
+
+    - name: offer_redemptions
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "offer_incentive_id", type: "string" }
+          - { name: "customer_id", type: "string" }
+          - { name: "ticket_number", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: online_ordering_widgets
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "text", type: "string" }
+          - { name: "style", type: "string" }
+          - { name: "active", type: "boolean" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: optional_photos
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "restaurant_styles_id", type: "integer", nullable: false }
+          - { name: "photo_file_size", type: "integer" }
+          - { name: "photo_content_type", type: "string", nullable: false }
+          - { name: "photo_file_location", type: "string", nullable: false }
+          - { name: "photo_file_name", type: "string", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+
+    - name: page_content_options
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "restaurant_page_id", type: "integer", nullable: false }
+          - { name: "option_type", type: "string" }
+          - { name: "option_value", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: parkings
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "parking", type: "string(100)", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: parkings_restaurant_metadatas
+      columns:
+          - { name: "parking_id", type: "integer" }
+          - { name: "restaurant_metadata_id", type: "integer" }
+
+    - name: parkings_websites
+      columns:
+          - { name: "parking_id", type: "integer", key: true, nullable: false }
+          - { name: "website_id", type: "integer", key: true, nullable: false }
+
+    - name: phone_numbers
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "phonable_id", type: "integer", nullable: false }
+          - { name: "phonable_type", type: "string(50)", nullable: false }
+          - { name: "phone_type", type: "string(20)" }
+          - { name: "number", type: "string(21)", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+          - { name: "extension", type: "string" }
+
+    - name: pos_systems
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "company", type: "string", nullable: false }
+          - { name: "name", type: "string", nullable: false }
+          - { name: "version", type: "string", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "source_system", type: "string" }
+
+    - name: posts
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer", nullable: false }
+          - { name: "event_id", type: "integer" }
+          - { name: "scheduled_post", type: "boolean", default: "0", nullable: false }
+          - { name: "post", type: "text", nullable: false }
+          - { name: "post_date", type: "datetime" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+          - { name: "requested_at", type: "datetime" }
+          - { name: "networks", type: "text" }
+          - { name: "last_request_type", type: "string" }
+          - { name: "post_until_date", type: "datetime" }
+          - { name: "frequency", type: "string" }
+          - { name: "repeat_of", type: "integer" }
+          - { name: "revision", type: "integer" }
+          - { name: "twitter_post", type: "string" }
+          - { name: "bitly_url", type: "string" }
+          - { name: "facebook_post", type: "text" }
+          - { name: "to_networks", type: "string" }
+          - { name: "final_post_date_and_time", type: "datetime" }
+          - { name: "marketing_campaign_id", type: "integer" }
+          - { name: "facebook_bitly", type: "string" }
+          - { name: "twitter_bitly", type: "string" }
+          - { name: "unresolved_post", type: "string(400)" }
+
+    - name: press_items
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_page_id", type: "integer" }
+          - { name: "headline", type: "string" }
+          - { name: "blurb", type: "text" }
+          - { name: "link_name", type: "string" }
+          - { name: "link_url", type: "string" }
+          - { name: "photo_file_name", type: "string" }
+          - { name: "photo_content_type", type: "string" }
+          - { name: "photo_file_size", type: "integer" }
+          - { name: "photo_updated_at", type: "datetime" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: price_ranges
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "price_range", type: "string(20)", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "avg_per_plate_cost_in_cents", type: "integer" }
+
+    - name: product_loyalty_enrollments
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "owner_id", type: "integer" }
+          - { name: "owner_type", type: "string" }
+          - { name: "program_id", type: "string" }
+          - { name: "egift", type: "boolean" }
+          - { name: "online_ordering", type: "boolean" }
+          - { name: "gm_customer_widget", type: "boolean" }
+          - { name: "gm_host_app", type: "boolean" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "update_flag", type: "boolean", default: "0" }
+
+    - name: product_tiers
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "name", type: "string" }
+          - { name: "description", type: "text" }
+          - { name: "permissions", type: "text" }
+          - { name: "deleted_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: profile_brandings
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer" }
+          - { name: "style", type: "string", default: "none" }
+          - { name: "tagline", type: "string" }
+          - { name: "external_image_url", type: "string" }
+          - { name: "uploaded_image_file_name", type: "string" }
+          - { name: "uploaded_image_content_type", type: "string" }
+          - { name: "uploaded_image_file_size", type: "integer" }
+          - { name: "uploaded_image_updated_at", type: "datetime" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "owner_id", type: "integer" }
+          - { name: "owner_type", type: "string", default: "Business" }
+
+    - name: profile_images
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer", nullable: false }
+          - { name: "photo_file_name", type: "string", nullable: false }
+          - { name: "photo_content_type", type: "string", nullable: false }
+          - { name: "photo_file_size", type: "integer", nullable: false }
+          - { name: "photo_updated_at", type: "datetime" }
+          - { name: "logo", type: "boolean", default: "0", nullable: false }
+          - { name: "deleted_at", type: "datetime" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: profile_listings
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer" }
+          - { name: "active", type: "boolean" }
+          - { name: "status", type: "string", default: "new" }
+          - { name: "languages", type: "text" }
+          - { name: "categories", type: "text" }
+          - { name: "credit_cards", type: "text" }
+          - { name: "custom_keywords", type: "text" }
+          - { name: "hours", type: "text" }
+          - { name: "year_founded", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: profile_meal_periods
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "meal_service_id", type: "integer" }
+          - { name: "day_id", type: "integer" }
+          - { name: "recurring", type: "boolean" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "meal_periodable_id", type: "integer" }
+          - { name: "meal_periodable_type", type: "string" }
+          - { name: "open_at_in_minutes", type: "integer" }
+          - { name: "close_at_in_minutes", type: "integer" }
+          - { name: "deleted_at", type: "datetime" }
+
+    - name: profile_notifications
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "notificationable_id", type: "integer" }
+          - { name: "notificationable_type", type: "string" }
+          - { name: "email_purchases_immediately", type: "boolean" }
+          - { name: "email_unredeemed_nightly", type: "boolean", default: "1" }
+          - { name: "fax_nightly", type: "boolean" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: profile_social_networks
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer" }
+          - { name: "social_network_id", type: "integer" }
+          - { name: "enabled", type: "boolean", default: "1" }
+          - { name: "username", type: "string" }
+          - { name: "password", type: "string" }
+          - { name: "pass_code", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+          - { name: "fb_user_id", type: "bigint" }
+          - { name: "fb_page_id", type: "bigint" }
+          - { name: "fb_session_key", type: "string" }
+          - { name: "default_network", type: "boolean", default: "1" }
+          - { name: "screen_name", type: "string" }
+
+    - name: profiles
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "business_id", type: "integer", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+
+    - name: purchased_vouchers
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "code", type: "string" }
+          - { name: "redeemed_at", type: "datetime" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "quantity", type: "integer" }
+          - { name: "total_amount", type: "decimal(8,2)", default: "0.00", nullable: false }
+          - { name: "getta_customer_id", type: "integer" }
+          - { name: "purchased_on", type: "datetime" }
+          - { name: "offer_incentive_id", type: "integer" }
+          - { name: "redeemed_bill_total", type: "decimal(8,2)" }
+          - { name: "is_customers_first_purchase", type: "boolean" }
+          - { name: "voided_at", type: "datetime" }
+          - { name: "redeemed_by_user_id", type: "integer" }
+          - { name: "redemption_status", type: "string" }
+
+    - name: referrers
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "date_for", type: "date", nullable: false }
+          - { name: "source", type: "string", nullable: false }
+          - { name: "referral_path", type: "string" }
+          - { name: "visits", type: "integer" }
+          - { name: "new_visits", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: registration_widgets
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "label", type: "string" }
+          - { name: "summary", type: "text" }
+          - { name: "text", type: "string" }
+          - { name: "style", type: "string" }
+          - { name: "active", type: "boolean" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: reservation_availabilities
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer" }
+          - { name: "at", type: "datetime" }
+          - { name: "covers", type: "integer", default: "0", nullable: false }
+          - { name: "tables", type: "integer", default: "0", nullable: false }
+          - { name: "available", type: "boolean", default: "1" }
+          - { name: "cancelled", type: "integer", default: "0", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "disabled", type: "boolean", default: "0" }
+
+    - name: reservation_emails
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer" }
+          - { name: "details_text", type: "string" }
+          - { name: "thank_you", type: "boolean", default: "0" }
+          - { name: "thank_you_text", type: "string" }
+          - { name: "reminder", type: "boolean", default: "0" }
+          - { name: "reminder_text", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: reservation_exception_days
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer" }
+          - { name: "start_date", type: "date" }
+          - { name: "end_date", type: "date" }
+          - { name: "name", type: "string(100)" }
+          - { name: "message", type: "string" }
+          - { name: "is_reservations_enabled", type: "boolean", default: "0" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: reservation_metrics
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer", nullable: false }
+          - { name: "date_for", type: "date", nullable: false }
+          - { name: "covers_online", type: "integer", default: "0", nullable: false }
+          - { name: "covers_offline", type: "integer", default: "0", nullable: false }
+          - { name: "tables_offline", type: "integer", default: "0", nullable: false }
+          - { name: "tables_online", type: "integer", default: "0", nullable: false }
+          - { name: "reservations_online", type: "integer", default: "0", nullable: false }
+          - { name: "reservations_offline", type: "integer", default: "0", nullable: false }
+          - { name: "reservations_cancelled", type: "integer", default: "0", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: reservation_options
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "reservation_option", type: "string(50)", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: reservation_settings
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "reservation_settable_id", type: "integer", nullable: false }
+          - { name: "num_available", type: "integer", default: "10", nullable: false }
+          - { name: "num_available_type", type: "string(10)" }
+          - { name: "advance_notice", type: "integer", default: "60", nullable: false }
+          - { name: "scheduling_time", type: "integer", default: "30", nullable: false }
+          - { name: "guests_min", type: "integer", default: "2", nullable: false }
+          - { name: "guests_max", type: "integer", default: "8", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "email", type: "string" }
+          - { name: "fax", type: "string(13)" }
+          - { name: "reservation_settable_type", type: "string" }
+          - { name: "price_per_plate", type: "integer" }
+
+    - name: reservation_sources
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "reservation_source", type: "string", nullable: false }
+          - { name: "name", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: reservations
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer" }
+          - { name: "pos_reservation_id", type: "string" }
+          - { name: "reservation_availability_id", type: "integer" }
+          - { name: "at", type: "datetime" }
+          - { name: "first_name", type: "string(100)" }
+          - { name: "last_name", type: "string(100)" }
+          - { name: "email", type: "string(200)" }
+          - { name: "phone", type: "string(21)" }
+          - { name: "party_size", type: "integer", nullable: false }
+          - { name: "confirmation", type: "string" }
+          - { name: "note", type: "string" }
+          - { name: "deleted_at", type: "datetime" }
+          - { name: "status", type: "string(50)" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "source", type: "string(10)" }
+          - { name: "guest_id", type: "integer" }
+          - { name: "reminder_delayed_job_id", type: "integer" }
+          - { name: "thankyou_delayed_job_id", type: "integer" }
+          - { name: "version", type: "integer", default: "1" }
+          - { name: "syndication_message", type: "string" }
+
+    - name: restaurant_metadatas
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "owner_id", type: "integer" }
+          - { name: "owner_type", type: "string" }
+          - { name: "reservation_option_id", type: "integer" }
+          - { name: "price_range_id", type: "integer" }
+          - { name: "dress_code_id", type: "integer" }
+          - { name: "chef_name", type: "string" }
+          - { name: "year_founded", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "about_us", type: "text" }
+
+    - name: restaurant_metadatas_services
+      columns:
+          - { name: "service_id", type: "integer" }
+          - { name: "restaurant_metadata_id", type: "integer" }
+
+    - name: restaurant_metadatas_special_features
+      columns:
+          - { name: "special_feature_id", type: "integer" }
+          - { name: "restaurant_metadata_id", type: "integer" }
+
+    - name: restaurant_metadatas_spoken_languages
+      columns:
+          - { name: "spoken_language_id", type: "integer" }
+          - { name: "restaurant_metadata_id", type: "integer" }
+
+    - name: sales_ticket_reservations
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "sales_ticket_id", type: "string" }
+          - { name: "profile_id", type: "integer" }
+          - { name: "pos_ticket_id", type: "integer" }
+          - { name: "business_date", type: "date" }
+          - { name: "confirmation_number", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: sales_tickets
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "ticket_id", type: "string" }
+          - { name: "profile_id", type: "integer" }
+          - { name: "pos_ticket_id", type: "integer" }
+          - { name: "business_date", type: "date" }
+          - { name: "transaction_id", type: "integer" }
+          - { name: "transaction_date", type: "date" }
+          - { name: "opened_at", type: "datetime" }
+          - { name: "closed_at", type: "datetime" }
+          - { name: "party_size", type: "integer" }
+          - { name: "ticket_total_amount", type: "float" }
+          - { name: "tax_total_amount", type: "float" }
+          - { name: "reservation_type", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: schema_migrations
+      columns:
+          - { name: "version", type: "string", key: true, nullable: false }
+
+    - name: section_item_notes
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "section_item_id", type: "integer", nullable: false }
+          - { name: "notation", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: section_items
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "menu_section_id", type: "integer", nullable: false }
+          - { name: "name", type: "string", nullable: false }
+          - { name: "description", type: "string" }
+          - { name: "price_in_cents", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "position", type: "integer" }
+
+    - name: service_terms_and_conditions
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "owner_type", type: "string" }
+          - { name: "owner_id", type: "integer" }
+          - { name: "restrictions", type: "text" }
+          - { name: "exclusions", type: "text" }
+          - { name: "has_min_purchase", type: "boolean" }
+          - { name: "min_purchase", type: "string" }
+          - { name: "has_required_purchase_of", type: "boolean" }
+          - { name: "required_purchase_of", type: "string" }
+          - { name: "has_valid_only_at", type: "boolean" }
+          - { name: "has_one_per_visit", type: "boolean" }
+          - { name: "has_must_be_presented", type: "boolean" }
+          - { name: "has_not_valid_with_others", type: "boolean" }
+          - { name: "has_no_resale", type: "boolean" }
+          - { name: "has_not_refundable", type: "boolean" }
+          - { name: "has_custom", type: "boolean" }
+          - { name: "custom", type: "text" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "human_point_qualifier", type: "string" }
+
+    - name: services
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "service", type: "string(50)", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+
+    - name: services_websites
+      columns:
+          - { name: "website_id", type: "integer" }
+          - { name: "service_id", type: "integer" }
+
+    - name: sessions
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "session_id", type: "string", nullable: false }
+          - { name: "data", type: "text" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: shout_outs
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "post_id", type: "integer" }
+          - { name: "profile_social_network_id", type: "integer" }
+          - { name: "type", type: "string" }
+          - { name: "short_url", type: "string" }
+          - { name: "posted_at", type: "datetime" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "response", type: "text" }
+          - { name: "last_api_response_code", type: "integer" }
+          - { name: "scheduled_at", type: "datetime" }
+          - { name: "scheduled_for", type: "datetime" }
+          - { name: "social_network_name", type: "string" }
+          - { name: "natural_key", type: "string" }
+          - { name: "acknowledged", type: "boolean", default: "0" }
+
+    - name: sites
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "date_for", type: "date" }
+          - { name: "visitors", type: "integer" }
+          - { name: "pageviews", type: "integer" }
+          - { name: "visits", type: "integer" }
+          - { name: "new_visits", type: "integer" }
+          - { name: "time_on_site", type: "integer" }
+          - { name: "bounces", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: smtp_settings
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "instance_id", type: "integer" }
+          - { name: "settings", type: "text" }
+
+    - name: social_networks
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "name", type: "string", nullable: false }
+          - { name: "post_max_length", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "position", type: "integer" }
+
+    - name: social_networks_posts
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_social_network_id", type: "integer" }
+          - { name: "post_id", type: "integer" }
+          - { name: "post_tag", type: "string" }
+          - { name: "web_post_link", type: "string" }
+          - { name: "post_success", type: "boolean" }
+          - { name: "post_date", type: "datetime" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: special_features
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "special_feature", type: "string", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+
+    - name: special_features_websites
+      columns:
+          - { name: "website_id", type: "integer", key: true, nullable: false }
+          - { name: "special_feature_id", type: "integer", key: true, nullable: false }
+
+    - name: spoken_languages
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "spoken_language", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: stub_loyalty_features
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "stub_loyalty_program_id", type: "integer" }
+          - { name: "feature_type", type: "string" }
+          - { name: "percent", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "feature_name", type: "string(35)" }
+
+    - name: stub_loyalty_programs
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "brand_id", type: "integer" }
+          - { name: "name", type: "string" }
+          - { name: "active", type: "boolean", default: "1" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: taggings
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "tag_id", type: "integer" }
+          - { name: "taggable_id", type: "integer" }
+          - { name: "tagger_id", type: "integer" }
+          - { name: "tagger_type", type: "string" }
+          - { name: "taggable_type", type: "string" }
+          - { name: "context", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+
+    - name: tags
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "name", type: "string" }
+          - { name: "location_code", type: "string" }
+
+    - name: temp_billings
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "business_id", type: "integer" }
+          - { name: "payment_type", type: "string(15)" }
+          - { name: "first_name", type: "string" }
+          - { name: "last_name", type: "string" }
+          - { name: "cc_type", type: "string" }
+          - { name: "cc_number", type: "string" }
+          - { name: "cc_expires_at", type: "datetime" }
+          - { name: "cc_verification", type: "string(4)" }
+          - { name: "bank_name", type: "string" }
+          - { name: "bank_routing_number", type: "integer" }
+          - { name: "bank_account_number", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: testauth
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "user_id", type: "integer", nullable: false }
+          - { name: "IBUser", type: "string", nullable: false }
+          - { name: "IBToken", type: "string", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "merchantId", type: "integer" }
+
+    - name: text_messages
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "owner_id", type: "integer" }
+          - { name: "keyword", type: "string" }
+          - { name: "code", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "default", type: "boolean", default: "0" }
+          - { name: "owner_type", type: "string", default: "Business" }
+
+    - name: ticket_metrics
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer" }
+          - { name: "date_for", type: "date" }
+          - { name: "ticket_count", type: "integer", default: "0" }
+          - { name: "online_reservation_count", type: "integer", default: "0" }
+          - { name: "inhouse_reservation_count", type: "integer", default: "0" }
+          - { name: "ticket_revenue_in_cents", type: "integer", default: "0" }
+          - { name: "online_reservation_revenue_in_cents", type: "integer", default: "0" }
+          - { name: "inhouse_reservation_revenue_in_cents", type: "integer", default: "0" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "online_ticket_count", type: "integer", default: "0" }
+          - { name: "walkin_count", type: "integer", default: "0" }
+          - { name: "inhouse_ticket_count", type: "integer", default: "0" }
+          - { name: "inhouse_revenue_in_cents", type: "integer", default: "0" }
+          - { name: "walkin_revenue_in_cents", type: "integer", default: "0" }
+
+    - name: tracking_impressions
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "uuid", type: "string", nullable: false }
+          - { name: "short_link", type: "string", nullable: false }
+          - { name: "click_through_session", type: "string" }
+          - { name: "application", type: "string", nullable: false }
+          - { name: "url", type: "string", nullable: false }
+          - { name: "action", type: "string", nullable: false }
+          - { name: "marketing_campaign_id", type: "integer" }
+          - { name: "customer_id", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: twitter_metrics
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer", nullable: false }
+          - { name: "date_for", type: "date", nullable: false }
+          - { name: "followers", type: "integer", default: "0", nullable: false }
+          - { name: "tweet_count", type: "integer", default: "0", nullable: false }
+          - { name: "retweet_count", type: "integer", default: "0", nullable: false }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: user_roles
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "name", type: "string" }
+          - { name: "description", type: "text" }
+          - { name: "permissions", type: "text" }
+          - { name: "domain_type", type: "string" }
+          - { name: "can_create_and_modify_users_with_roles", type: "text" }
+          - { name: "deleted_at", type: "datetime" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: user_roles_users
+      columns:
+          - { name: "user_role_id", type: "integer", nullable: false }
+          - { name: "user_id", type: "integer", nullable: false }
+
+    - name: users
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "email", type: "string(200)" }
+          - { name: "admin", type: "boolean", default: "0", nullable: false }
+          - { name: "crypted_password", type: "string" }
+          - { name: "password_salt", type: "string" }
+          - { name: "persistence_token", type: "string(40)" }
+          - { name: "secret_question", type: "string" }
+          - { name: "secret_answer", type: "string(100)" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "deleted_at", type: "datetime" }
+          - { name: "first_name", type: "string(100)" }
+          - { name: "last_name", type: "string(100)" }
+          - { name: "userable_id", type: "integer" }
+          - { name: "userable_type", type: "string(50)" }
+          - { name: "title", type: "string" }
+          - { name: "contact", type: "boolean" }
+          - { name: "activation_key", type: "string(6)" }
+          - { name: "expires_at", type: "datetime" }
+          - { name: "active", type: "boolean", default: "0" }
+          - { name: "perishable_token", type: "string", nullable: false }
+          - { name: "ip_address", type: "string" }
+          - { name: "msa_effective_date", type: "string" }
+          - { name: "msa_submit", type: "integer" }
+          - { name: "activation_submit_date", type: "datetime" }
+          - { name: "product_tier_preferences", type: "text" }
+          - { name: "username", type: "string" }
+          - { name: "disabled", type: "boolean", default: "0" }
+          - { name: "last_request_at", type: "datetime" }
+
+    - name: website_addresses
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "label", type: "string" }
+          - { name: "line1", type: "string" }
+          - { name: "line2", type: "string" }
+          - { name: "city", type: "string" }
+          - { name: "state", type: "string" }
+          - { name: "zip_code", type: "string" }
+          - { name: "longitude", type: "string" }
+          - { name: "latitude", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: website_emails
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "label", type: "string" }
+          - { name: "email", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: website_images
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "photo_file_name", type: "string" }
+          - { name: "photo_content_type", type: "string" }
+          - { name: "photo_file_size", type: "integer" }
+          - { name: "photo_updated_at", type: "datetime" }
+          - { name: "datetime", type: "datetime" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: website_page_definitions
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: website_pages
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "header", type: "string" }
+          - { name: "publication_status", type: "string", default: "new" }
+          - { name: "website_page_definition_id", type: "integer" }
+          - { name: "menu_justification", type: "string", default: "left" }
+          - { name: "displays_price", type: "boolean", default: "1" }
+          - { name: "adds_currency_symbol", type: "boolean", default: "0" }
+          - { name: "price_prefix", type: "string" }
+          - { name: "menu_item_layout_id", type: "integer" }
+          - { name: "displays_map", type: "boolean", default: "1" }
+          - { name: "displays_directions", type: "boolean", default: "1" }
+          - { name: "displays_hours", type: "boolean", default: "1" }
+
+    - name: website_phone_numbers
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "label", type: "string" }
+          - { name: "number", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: website_photos
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "image_file_name", type: "string" }
+          - { name: "image_content_type", type: "string" }
+          - { name: "image_file_size", type: "integer" }
+          - { name: "image_updated_at", type: "datetime" }
+          - { name: "caption", type: "string" }
+          - { name: "shown_in_gallery", type: "boolean" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: website_styles
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer", nullable: false }
+          - { name: "background_color", type: "string(6)" }
+          - { name: "title_color", type: "string(6)" }
+          - { name: "link_color", type: "string(6)" }
+          - { name: "sidebar_color", type: "string(6)" }
+          - { name: "tbgphoto_file_size", type: "integer" }
+          - { name: "tbgphoto_file_name", type: "string" }
+          - { name: "tbgphoto_content_type", type: "string" }
+          - { name: "tbgphoto_file_location", type: "string" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "bgphoto_file_name", type: "string" }
+          - { name: "bgphoto_file_size", type: "integer" }
+          - { name: "bgphoto_content_type", type: "string" }
+
+    - name: website_template_css_overwrites
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_id", type: "integer" }
+          - { name: "css_object_id", type: "integer" }
+          - { name: "css_object_type", type: "string" }
+          - { name: "field_name", type: "string" }
+          - { name: "value", type: "string" }
+          - { name: "image_file_name", type: "string" }
+          - { name: "image_content_type", type: "string" }
+          - { name: "image_file_size", type: "integer" }
+          - { name: "image_updated_at", type: "datetime" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: website_template_supplemental_content_areas
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_template_id", type: "integer" }
+          - { name: "name", type: "string" }
+          - { name: "css_class", type: "string", default: "#theme-container1" }
+          - { name: "background_color", type: "string", default: "auto" }
+          - { name: "border_color", type: "string", default: "auto" }
+          - { name: "heading1_class", type: "string", default: "#theme-container1 h1" }
+          - { name: "heading1_color", type: "string", default: "#000000" }
+          - { name: "heading2_class", type: "string", default: "#content-secondary h2" }
+          - { name: "heading2_color", type: "string", default: "#000000" }
+          - { name: "heading3_class", type: "string", default: "#theme-container1 h3" }
+          - { name: "heading3_color", type: "string", default: "#3E2C1B" }
+          - { name: "heading4_class", type: "string", default: "#theme-container1 h4" }
+          - { name: "heading4_color", type: "string", default: "#999999" }
+          - { name: "heading5_class", type: "string", default: "#theme-container1 h5" }
+          - { name: "heading5_color", type: "string", default: "#000000" }
+          - { name: "heading6_class", type: "string", default: "#theme-container1 h6" }
+          - { name: "heading6_color", type: "string", default: "#000000" }
+          - { name: "text_class", type: "string", default: "#theme-container1 p, #theme-container1 li, #theme-container1 span, #theme-container1 div" }
+          - { name: "text_color", type: "string", default: "#7E6654" }
+          - { name: "link_class", type: "string", default: "#theme-container1 a" }
+          - { name: "link_color", type: "string", default: "#58869E" }
+          - { name: "link_hover_class", type: "string", default: "#theme-container1 a:hover" }
+          - { name: "link_hover_color", type: "string", default: "#58869E" }
+          - { name: "link_visited_class", type: "string", default: "#theme-container1 a:visited" }
+          - { name: "link_visited_color", type: "string", default: "#58869E" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: website_templates
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "name", type: "string" }
+          - { name: "description", type: "text" }
+          - { name: "snapshot_file_name", type: "string" }
+          - { name: "snapshot_content_type", type: "string" }
+          - { name: "snapshot_file_size", type: "integer" }
+          - { name: "snapshot_updated_at", type: "datetime" }
+          - { name: "home_website_page_definition_id", type: "integer" }
+          - { name: "menu_website_page_definition_id", type: "integer" }
+          - { name: "whats_new_website_page_definition_id", type: "integer" }
+          - { name: "contact_us_website_page_definition_id", type: "integer" }
+          - { name: "press_website_page_definition_id", type: "integer" }
+          - { name: "base_css_file_name", type: "string" }
+          - { name: "base_css_content_type", type: "string" }
+          - { name: "base_css_file_size", type: "integer" }
+          - { name: "base_css_updated_at", type: "datetime" }
+          - { name: "header_class", type: "string", default: "#header" }
+          - { name: "header_background_color", type: "string", default: "#363331" }
+          - { name: "header_has_image", type: "boolean", default: "0" }
+          - { name: "header_image_file_name", type: "string" }
+          - { name: "header_image_content_type", type: "string" }
+          - { name: "header_image_file_size", type: "integer" }
+          - { name: "header_image_updated_at", type: "datetime" }
+          - { name: "header_image_repeat_style", type: "string", default: "no-repeat" }
+          - { name: "header_image_position", type: "string", default: "left top" }
+          - { name: "header_image_height", type: "string", default: "926" }
+          - { name: "header_image_width", type: "string", default: "224" }
+          - { name: "header_displays_business_name", type: "boolean", default: "1" }
+          - { name: "header_text_class", type: "string", default: "#branding" }
+          - { name: "header_text_color", type: "string", default: "#CCCCCC" }
+          - { name: "background_class", type: "string", default: "html, body" }
+          - { name: "background_background_color", type: "string", default: "#F1F1F1" }
+          - { name: "background_has_image", type: "boolean", default: "0" }
+          - { name: "background_image_file_name", type: "string" }
+          - { name: "background_image_content_type", type: "string" }
+          - { name: "background_image_file_size", type: "integer" }
+          - { name: "background_image_updated_at", type: "datetime" }
+          - { name: "background_image_repeat_style", type: "string", default: "no-repeat" }
+          - { name: "background_image_position", type: "string", default: "left top" }
+          - { name: "navigation_title", type: "string", default: "Navigation/Site Menu" }
+          - { name: "navigation_tab_class", type: "string", default: "#nav li" }
+          - { name: "navigation_has_background_image", type: "boolean", default: "0" }
+          - { name: "navigation_background_image_file_name", type: "string" }
+          - { name: "navigation_background_image_content_type", type: "string" }
+          - { name: "navigation_background_image_file_size", type: "string" }
+          - { name: "navigation_background_image_updated_at", type: "string" }
+          - { name: "navigation_current_class", type: "string", default: "#nav span, #nav a" }
+          - { name: "navigation_current_color", type: "string", default: "#222222" }
+          - { name: "navigation_link_class", type: "string", default: "#nav a, #nav a:visited, #nav a:link" }
+          - { name: "navigation_link_color", type: "string", default: "#A35B06" }
+          - { name: "navigation_rollover_class", type: "string", default: "#nav a:hover" }
+          - { name: "navigation_rollover_color", type: "string", default: "#DA7600" }
+          - { name: "heading1_class", type: "string", default: "#content-primary h1" }
+          - { name: "heading1_title", type: "string", default: "Page Title" }
+          - { name: "heading1_color", type: "string", default: "#222222" }
+          - { name: "heading2_class", type: "string", default: "#content-primary h2" }
+          - { name: "heading2_title", type: "string", default: "Headings [h2]" }
+          - { name: "heading2_color", type: "string", default: "#222222" }
+          - { name: "heading3_class", type: "string", default: ".mainH3" }
+          - { name: "heading3_title", type: "string", default: "Headings [h3]" }
+          - { name: "heading3_color", type: "string", default: "#222222" }
+          - { name: "heading4_class", type: "string", default: "#content-primary h4" }
+          - { name: "heading4_title", type: "string", default: "Headings [h4]" }
+          - { name: "heading4_color", type: "string", default: "#222222" }
+          - { name: "heading5_class", type: "string", default: "#content-primary h5" }
+          - { name: "heading5_title", type: "string", default: "Heading [h5]" }
+          - { name: "heading5_color", type: "string", default: "#222222" }
+          - { name: "heading6_class", type: "string", default: "#content-primary h6" }
+          - { name: "heading6_title", type: "string", default: "Heading [h6]" }
+          - { name: "heading6_color", type: "string", default: "#222222" }
+          - { name: "text_class", type: "string", default: "#content-primary p, #content-primary li, #content-primary span, #content-primary div" }
+          - { name: "text_title", type: "string", default: "Body Text [p, li, etc]" }
+          - { name: "text_color", type: "string", default: "#222222" }
+          - { name: "link_class", type: "string", default: "#content-primary a" }
+          - { name: "link_title", type: "string", default: "Link color" }
+          - { name: "link_color", type: "string", default: "#2491C4" }
+          - { name: "link_hover_class", type: "string", default: "#content-primary a:hover" }
+          - { name: "link_hover_title", type: "string", default: "Link :hover" }
+          - { name: "link_hover_color", type: "string", default: "#2491C4" }
+          - { name: "link_visited_class", type: "string", default: "#content-primary a:visited, #content-primary a:link" }
+          - { name: "link_visited_title", type: "string", default: "Link :visited" }
+          - { name: "link_visited_color", type: "string", default: "#2491C4" }
+          - { name: "button_title", type: "string", default: "Buttons/Call to actions" }
+          - { name: "button_class", type: "string", default: ".btn" }
+          - { name: "button_has_background_image", type: "boolean", default: "0" }
+          - { name: "button_background_image_file_name", type: "string" }
+          - { name: "button_background_image_content_type", type: "string" }
+          - { name: "button_background_image_file_size", type: "string" }
+          - { name: "button_background_image_updated_at", type: "string" }
+          - { name: "button_normal_class", type: "string", default: ".btn, a.btn, input.btn" }
+          - { name: "button_normal_color", type: "string", default: "#025D87" }
+          - { name: "button_rollover_class", type: "string", default: ".btn:hover, a.btn:hover, input.btn:hover" }
+          - { name: "button_rollover_color", type: "string", default: "#2491C4" }
+          - { name: "button_visited_class", type: "string", default: ".btn:visited, a.btn:visited, input.btn:visited, .btn:link, a.btn:link, input.btn:link" }
+          - { name: "button_visited_color", type: "string", default: "#025D87" }
+          - { name: "home_page_template", type: "text" }
+          - { name: "menu_page_template", type: "text" }
+          - { name: "whats_new_page_template", type: "text" }
+          - { name: "contact_us_page_template", type: "text" }
+          - { name: "press_page_template", type: "text" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: website_text_block_definitions
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_page_definition_id", type: "integer" }
+          - { name: "wpc_label", type: "string" }
+          - { name: "text_limit", type: "integer" }
+          - { name: "position", type: "integer", default: "0" }
+          - { name: "default_content", type: "text" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: website_text_blocks
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "website_page_id", type: "integer" }
+          - { name: "website_text_block_definition_id", type: "integer" }
+          - { name: "content", type: "text" }
+          - { name: "position", type: "integer", default: "0" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: websites
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "profile_id", type: "integer" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+          - { name: "meta_keywords", type: "string" }
+          - { name: "meta_description", type: "string" }
+          - { name: "analytics_key", type: "string" }
+          - { name: "css", type: "text" }
+          - { name: "publication_status", type: "string(100)", default: "new" }
+          - { name: "generated_keywords", type: "text" }
+          - { name: "restaurant_name", type: "string" }
+          - { name: "tagline", type: "string" }
+          - { name: "hours", type: "text" }
+          - { name: "website_template_id", type: "integer" }
+          - { name: "website_home_page_id", type: "integer" }
+          - { name: "website_menu_page_id", type: "integer" }
+          - { name: "website_whats_new_page_id", type: "integer" }
+          - { name: "website_contact_us_page_id", type: "integer" }
+          - { name: "website_press_page_id", type: "integer" }
+          - { name: "displays_cuisines", type: "boolean" }
+          - { name: "cuisine_label", type: "string" }
+          - { name: "displays_accepted_payments", type: "boolean" }
+          - { name: "displays_special_features", type: "boolean" }
+          - { name: "displays_parking", type: "boolean" }
+          - { name: "displays_alcohols", type: "boolean" }
+          - { name: "displays_services", type: "boolean" }
+          - { name: "displays_dress_code", type: "boolean" }
+          - { name: "dress_code_id", type: "integer" }
+          - { name: "displays_price_range", type: "boolean" }
+          - { name: "price_range_id", type: "integer" }
+          - { name: "url", type: "string" }
+          - { name: "displays_chef_name", type: "boolean" }
+          - { name: "chef_name", type: "string" }
+          - { name: "displays_reservation_option", type: "boolean" }
+          - { name: "reservation_option_id", type: "integer" }
+          - { name: "is_previewable", type: "boolean", default: "0" }
+
+    - name: zonal_customer_imports
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "owner_type", type: "string" }
+          - { name: "owner_id", type: "integer" }
+          - { name: "opt_in", type: "boolean", default: "0" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+
+    - name: zonal_loyalties
+      columns:
+          - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+          - { name: "owner_type", type: "string" }
+          - { name: "owner_id", type: "integer" }
+          - { name: "opt_in", type: "boolean", default: "0" }
+          - { name: "created_at", type: "datetime" }
+          - { name: "updated_at", type: "datetime" }
+migration:
+    previous: ~
+    commands: ~

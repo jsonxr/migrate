@@ -1,0 +1,21 @@
+# head_version
+version: head
+tables:
+    - name: migrations
+      columns:
+          - { name: "version", type: "string", key: true, default: ~, nullable: false, autoincrement: false }
+          - { name: "yml", type: "longtext", key: false, default: ~, nullable: false, autoincrement: false }
+          - { name: "applied_by", type: "string", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "applied_on", type: "datetime", key: false, default: ~, nullable: false, autoincrement: false }
+    - name: test1
+      columns:
+          - { name: "col1", type: "varchar(5)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "col2", type: "int(11)", key: false, default: ~, nullable: true, autoincrement: false }
+    - name: test2
+      columns:
+          - { name: "col1", type: "float", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "col2", type: "char(2)", key: false, default: ~, nullable: true, autoincrement: false }
+migration:
+    previous: bootstrap
+    commands:
+        - { table: "migrations", name: "create_table", column: ~, old: ~ }

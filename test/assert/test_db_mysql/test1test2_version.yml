@@ -1,0 +1,20 @@
+version: head
+tables:
+    - name: migrations
+      columns:
+          - { name: "version", type: "varchar(255)", key: true, nullable: false }
+          - { name: "yml", type: "longtext", nullable: false }
+          - { name: "applied_by", type: "varchar(255)" }
+          - { name: "applied_on", type: "datetime", nullable: false }
+    - name: test1
+      columns:
+          - { name: "col1", type: "varchar(5)" }
+          - { name: "col2", type: "int(11)" }
+    - name: test2
+      columns:
+          - { name: "col1", type: "float" }
+          - { name: "col2", type: "char(2)" }
+migration:
+    previous: bootstrap
+    commands:
+        - { table: "migrations", name: "create_table" }

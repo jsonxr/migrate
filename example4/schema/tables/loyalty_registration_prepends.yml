@@ -1,0 +1,7 @@
+name: loyalty_registration_prepends
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "owner_id", type: "integer" }
+    - { name: "owner_type", type: "string" }
+    - { name: "prepend_value", type: "string" }
+    - { name: "if_initial_length_is", type: "integer" }

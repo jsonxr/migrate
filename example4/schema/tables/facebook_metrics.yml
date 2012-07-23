@@ -1,0 +1,8 @@
+name: facebook_metrics
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_id", type: "integer", nullable: false }
+    - { name: "date_for", type: "date", nullable: false }
+    - { name: "fan_count", type: "integer", default: "0" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

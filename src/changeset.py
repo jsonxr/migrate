@@ -22,15 +22,15 @@ class Command(object):
 
     def display(self, schema, db_schema):
         """
-        None = db.schema == current.schema
-            The database table matches the current schema so nothing to do
+        None = db.schema == head.schema
+            The database table matches the head schema so nothing to do
 
-        sync = db.schema != current.schema && db.schema == migration.schema
-            The database table does not match the current schema
+        sync = db.schema != head.schema && db.schema == migration.schema
+            The database table does not match the head schema
             The database table matches what the migration_table is reporting
 
-        force = db.schema != current.schema && db.schema != migration.schema
-            The database table does not match the current schema
+        force = db.schema != head.schema && db.schema != migration.schema
+            The database table does not match the head schema
             The database table does not match what the changelog table is
             reporting
         """

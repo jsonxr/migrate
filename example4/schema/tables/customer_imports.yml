@@ -1,0 +1,27 @@
+name: customer_imports
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "owner_id", type: "integer" }
+    - { name: "upload_v1_file_name", type: "string" }
+    - { name: "upload_v1_content_type", type: "string" }
+    - { name: "upload_v1_file_size", type: "integer" }
+    - { name: "upload_v1_updated_at", type: "datetime" }
+    - { name: "current_state", type: "string" }
+    - { name: "mappings", type: "text" }
+    - { name: "import_errors", type: "text" }
+    - { name: "ignore_first_row", type: "boolean" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "owner_type", type: "string", default: "Business" }
+    - { name: "temp_uploaded_file_location", type: "string" }
+    - { name: "timestamp", type: "string" }
+    - { name: "filename_for_processing", type: "string" }
+    - { name: "customer_mappings", type: "text" }
+    - { name: "rails_import_errors", type: "text" }
+    - { name: "upload_v2_file_name", type: "string" }
+    - { name: "upload_v2_content_type", type: "string" }
+    - { name: "upload_v2_file_size", type: "integer" }
+    - { name: "upload_v2_updated_at", type: "datetime" }
+    - { name: "source_system", type: "string" }
+    - { name: "user_inputted_mappings", type: "text" }
+    - { name: "remap_flag", type: "string", default: "not_requested" }

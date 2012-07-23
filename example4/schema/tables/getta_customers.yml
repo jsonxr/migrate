@@ -1,0 +1,9 @@
+name: getta_customers
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "first_name", type: "string" }
+    - { name: "last_name", type: "string" }
+    - { name: "facebook_id", type: "string" }
+    - { name: "email_address", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

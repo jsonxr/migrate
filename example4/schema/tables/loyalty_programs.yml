@@ -1,0 +1,17 @@
+name: loyalty_programs
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "business_id", type: "integer" }
+    - { name: "name", type: "string" }
+    - { name: "active", type: "boolean", default: "0" }
+    - { name: "points_for_cash_dollars_spent", type: "integer", default: "1" }
+    - { name: "points_for_cash_earned", type: "integer", default: "1" }
+    - { name: "points_for_cash_award_level", type: "integer", default: "100" }
+    - { name: "points_for_cash_award_level_dollars", type: "integer", default: "5" }
+    - { name: "points_for_prize_dollars_spent", type: "integer", default: "1" }
+    - { name: "points_for_prize_earned", type: "integer", default: "1" }
+    - { name: "percent_cash_back", type: "integer", default: "1" }
+    - { name: "punch_award_count", type: "integer", default: "1" }
+    - { name: "punch_award", type: "string", default: "item" }
+    - { name: "punch_award_punches", type: "integer", default: "10" }
+    - { name: "punch_min_dollars", type: "integer", default: "10" }

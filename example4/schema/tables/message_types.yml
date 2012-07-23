@@ -1,0 +1,7 @@
+name: message_types
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "message_type", type: "string(20)", nullable: false }
+    - { name: "message_description", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

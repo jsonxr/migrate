@@ -1,0 +1,5 @@
+name: appian_configurations
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "config_key", type: "string" }
+    - { name: "config_value", type: "string" }

@@ -18,35 +18,35 @@ class TestYml(unittest.TestCase):
             m = schema.Migration()
             m.load_from_dict(data)
             yml = m.get_yml()
-            fixtures.assert_yml_equal(yml, expected)
+            tf.assert_yml_equal_str(yml, expected)
 
     def test_migration_get_yml(self):
         with fixtures.TestFixture() as tf:
             expected = tf.get_assert_file('/test_yaml/migration.yml')
             m = _create_yml_migration()
             yml = m.get_yml()
-            fixtures.assert_yml_equal(yml, expected)
+            tf.assert_yml_equal_str(yml, expected)
 
     def test_version_load_from_dict(self):
         with fixtures.TestFixture() as tf:
-            expected = tf.get_assert_file('/test_yaml/current.yml')
+            expected = tf.get_assert_file('/test_yaml/head.yml')
             data = yaml.load(expected)
             v = schema.Version()
             v.load_from_dict(data)
             yml = v.get_yml(verbose=True)
-            tf.assert_yml_equal(yml, '/test_yaml/current.yml')
+            tf.assert_yml_equal_str(yml, expected)
 
     def test_version_get_yml(self):
         with fixtures.TestFixture() as tf:
             # Create the version
             v = schema.Version()
             v.migration.previous = "bootstrap"
-            v.name = "current"
+            v.name = "head"
             t = _create_yml_table()
             v.create_table(t)
             # Compare the version
             yml = v.get_yml(True)
-            tf.assert_yml_equal(yml, '/test_yaml/current.yml')
+            tf.assert_yml_equal_file(yml, '/test_yaml/head.yml')
 
     def test_table_load_from_file(self):
         with fixtures.TestFixture() as tf:
@@ -54,7 +54,7 @@ class TestYml(unittest.TestCase):
             filename = tf.get_assert_filename('/test_yaml/test1.yml')
             t.load_from_file(filename)
             yml = t.get_yml(verbose=True)
-            tf.assert_yml_equal(yml, '/test_yaml/test1_verbose.yml')
+            tf.assert_yml_equal_file(yml, '/test_yaml/test1_verbose.yml')
 
     def test_schema_save_to_path(self):
         with fixtures.TestFixture() as tf:
@@ -69,14 +69,14 @@ class TestYml(unittest.TestCase):
             s = schema.Schema()
             s.load_from_dict(data)
             yml = s.get_yml(verbose=True)
-            fixtures.assert_yml_equal(yml, expected)
+            tf.assert_yml_equal_str(yml, expected)
 
     def test_schema_get_yml(self):
         with fixtures.TestFixture() as tf:
-            expected = tf.get_assert_file('/test_yaml/current123.yml')
+            expected = tf.get_assert_file('/test_yaml/head123.yml')
             s = _create_yml_schema()
             yml = s.get_yml(verbose=True)
-            fixtures.assert_yml_equal(yml, expected)
+            tf.assert_yml_equal_str(yml, expected)
 
     def test_table_save_to_file(self):
         with fixtures.TestFixture() as tf:
@@ -85,7 +85,7 @@ class TestYml(unittest.TestCase):
             t = _create_yml_table()
             t.save_to_file(filename, False)
             yml = fixtures.read_from_file(filename)
-            fixtures.assert_yml_equal(yml, expected)
+            tf.assert_yml_equal_str(yml, expected)
 
     def test_table_save_to_file_verbose(self):
         with fixtures.TestFixture() as tf:
@@ -94,7 +94,7 @@ class TestYml(unittest.TestCase):
             t = _create_yml_table()
             t.save_to_file(filename, True)
             yml = fixtures.read_from_file(filename)
-            fixtures.assert_yml_equal(yml, expected)
+            tf.assert_yml_equal_str(yml, expected)
 
     def test_table_load_from_dict(self):
         with fixtures.TestFixture() as tf:
@@ -103,14 +103,14 @@ class TestYml(unittest.TestCase):
             t = schema.Table()
             t.load_from_dict(data)
             yml = t.get_yml()
-            fixtures.assert_yml_equal(yml, expected)
+            tf.assert_yml_equal_str(yml, expected)
 
     def test_table_get_yml(self):
         with fixtures.TestFixture() as tf:
             expected = tf.get_assert_file('/test_yaml/test1.yml')
             t = _create_yml_table()
             yml = t.get_yml()
-            fixtures.assert_yml_equal(yml, expected)
+            tf.assert_yml_equal_str(yml, expected)
 
     def test_indent(self):
         original = """name"""
@@ -178,7 +178,7 @@ def _create_yml_migration():
 def _create_yml_version():
     v = schema.Version()
     v.migration.previous = "bootstrap"
-    v.name = "current"
+    v.name = "head"
     t = _create_yml_table()
     v.create_table(t)
     return v

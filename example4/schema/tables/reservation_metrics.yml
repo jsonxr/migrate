@@ -1,0 +1,14 @@
+name: reservation_metrics
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "profile_id", type: "integer", nullable: false }
+    - { name: "date_for", type: "date", nullable: false }
+    - { name: "covers_online", type: "integer", default: "0", nullable: false }
+    - { name: "covers_offline", type: "integer", default: "0", nullable: false }
+    - { name: "tables_offline", type: "integer", default: "0", nullable: false }
+    - { name: "tables_online", type: "integer", default: "0", nullable: false }
+    - { name: "reservations_online", type: "integer", default: "0", nullable: false }
+    - { name: "reservations_offline", type: "integer", default: "0", nullable: false }
+    - { name: "reservations_cancelled", type: "integer", default: "0", nullable: false }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

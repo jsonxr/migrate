@@ -1,0 +1,21 @@
+name: loyalty_program_feature_shadows
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "loyalty_program_shadow_id", type: "integer" }
+    - { name: "feature_type", type: "string" }
+    - { name: "earned_amount", type: "integer" }
+    - { name: "earned_type", type: "string" }
+    - { name: "for_every_amount", type: "integer" }
+    - { name: "for_every_type", type: "string" }
+    - { name: "promo_pos_discount_code", type: "string" }
+    - { name: "promo_pos_description", type: "string" }
+    - { name: "promo_bonus_type", type: "string" }
+    - { name: "promo_discounted_price", type: "decimal(8,2)" }
+    - { name: "promo_discounted_percent", type: "integer" }
+    - { name: "promo_start_date", type: "date" }
+    - { name: "promo_end_date", type: "date" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "feature_name", type: "string(35)" }
+    - { name: "feature_id", type: "integer" }
+    - { name: "priority", type: "integer" }

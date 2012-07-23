@@ -1,0 +1,4 @@
+name: alcohols_websites
+columns:
+    - { name: "alcohol_id", type: "integer", key: true, nullable: false }
+    - { name: "website_id", type: "integer", key: true, nullable: false }

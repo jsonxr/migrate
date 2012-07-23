@@ -1,0 +1,15 @@
+name: addresses
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "addressable_id", type: "integer" }
+    - { name: "addressable_type", type: "string(50)" }
+    - { name: "address_type", type: "string(20)" }
+    - { name: "address", type: "string" }
+    - { name: "address_2", type: "string" }
+    - { name: "city", type: "string(50)" }
+    - { name: "region", type: "string(20)" }
+    - { name: "country", type: "string(13)", default: "USA" }
+    - { name: "postal_code", type: "string(13)" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "deleted_at", type: "datetime" }

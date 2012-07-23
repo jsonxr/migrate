@@ -1,0 +1,4 @@
+name: dealers_pos_systems
+columns:
+    - { name: "dealer_id", type: "integer", key: true, nullable: false }
+    - { name: "pos_system_id", type: "integer", key: true, nullable: false }

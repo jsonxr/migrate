@@ -1,0 +1,10 @@
+name: sales_ticket_reservations
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "sales_ticket_id", type: "string" }
+    - { name: "profile_id", type: "integer" }
+    - { name: "pos_ticket_id", type: "integer" }
+    - { name: "business_date", type: "date" }
+    - { name: "confirmation_number", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

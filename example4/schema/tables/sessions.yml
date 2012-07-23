@@ -1,0 +1,7 @@
+name: sessions
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "session_id", type: "string", nullable: false }
+    - { name: "data", type: "text" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

@@ -1,0 +1,14 @@
+name: additional_emails
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "owner_id", type: "integer" }
+    - { name: "email", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "status", type: "string" }
+    - { name: "activation_key", type: "string(6)" }
+    - { name: "expires_at", type: "datetime" }
+    - { name: "ip_address", type: "string" }
+    - { name: "activated_date", type: "datetime" }
+    - { name: "browser_info", type: "string" }
+    - { name: "owner_type", type: "string", default: "Business" }

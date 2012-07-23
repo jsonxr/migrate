@@ -1,0 +1,15 @@
+name: offer_change_requests
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "user_id", type: "integer" }
+    - { name: "offer_incentive_id", type: "integer" }
+    - { name: "change", type: "text" }
+    - { name: "needs_mob_processing", type: "boolean" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "merchant_name", type: "string" }
+    - { name: "offer_name", type: "string" }
+    - { name: "state", type: "string" }
+    - { name: "owner_id", type: "integer" }
+    - { name: "owner_type", type: "string" }
+    - { name: "start_date", type: "date" }

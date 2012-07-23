@@ -7,6 +7,7 @@ import schema
 # Schema Yml Tests
 #=============================================================================
 class TestColumns(unittest.TestCase):
+    @unittest.skip("Not supporting the getattr/setattr until can figure out pickle problem")
     def test_columns_getattr_setattr(self):
         columns = schema.Columns()
         c = schema.Column("col1", "string")
@@ -14,6 +15,7 @@ class TestColumns(unittest.TestCase):
         c = columns.col1
         assert c
 
+    @unittest.skip("Not supporting the getattr/setattr until can figure out pickle problem")
     def test_columns_getattr_setattr_keyerror(self):
         columns = schema.Columns()
         c = schema.Column("col1", "string")

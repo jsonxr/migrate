@@ -1,0 +1,9 @@
+name: depots
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "business_id", type: "integer" }
+    - { name: "depotable_id", type: "integer" }
+    - { name: "depotable_type", type: "string" }
+    - { name: "status", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }

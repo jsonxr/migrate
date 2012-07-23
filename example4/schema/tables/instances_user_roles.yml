@@ -1,0 +1,4 @@
+name: instances_user_roles
+columns:
+    - { name: "instance_id", type: "integer" }
+    - { name: "user_role_id", type: "integer" }

@@ -1,0 +1,11 @@
+name: marketing_campaign_histories
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "marketing_campaign_id", type: "integer" }
+    - { name: "from", type: "string" }
+    - { name: "subject", type: "string" }
+    - { name: "body", type: "text" }
+    - { name: "delivery_type", type: "string" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
+    - { name: "send_count", type: "integer" }

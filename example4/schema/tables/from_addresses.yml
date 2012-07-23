@@ -1,0 +1,11 @@
+name: from_addresses
+columns:
+    - { name: "id", type: "integer", key: true, nullable: false, autoincrement: true }
+    - { name: "name", type: "string" }
+    - { name: "userid", type: "string" }
+    - { name: "domain", type: "string" }
+    - { name: "email", type: "string" }
+    - { name: "owner_type", type: "string" }
+    - { name: "owner_id", type: "integer" }
+    - { name: "created_at", type: "datetime" }
+    - { name: "updated_at", type: "datetime" }
