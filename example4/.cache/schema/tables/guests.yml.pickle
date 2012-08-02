@@ -1,0 +1,16 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUguestsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hU
+profile_idhàhNhâhâhUintegerubh)Åq}q(hU
+first_namehàhNhâhâhUstringubh)Åq}q(hU	last_namehàhNhâhâhUstringubh)Åq}q(hUemailhàhNhâhâhUstringubh)Åq}q(hUphonehàhNhâhâhU
+string(21)ubh)Åq}q(hUvisitshàhU0hâhâhUintegerubh)Åq }q!(hUreservationshàhU0hâhâhUintegerubh)Åq"}q#(hUsourcehàhNhâhâhUstringubh)Åq$}q%(hUtotal_ticket_total_in_centshàhU0hâhâhUintegerubh)Åq&}q'(hUopt_inhàhU0hâhâhUbooleanubh)Åq(}q)(hU
+created_athàhNhâhâhUdatetimeubh)Åq*}q+(hU
+updated_athàhNhâhâhUdatetimeubh)Åq,}q-(hU
+opt_in_smshàhU0hâhâhUbooleanube}q.bubUfilehashq/U(63367181480154a501429fa4d86c92a400142875q0ub.

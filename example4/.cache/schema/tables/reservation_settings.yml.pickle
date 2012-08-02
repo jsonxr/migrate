@@ -1,0 +1,16 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUreservation_settingsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUreservation_settable_idhâhNhâhâhUintegerubh)Åq}q(hUnum_availablehâhU10hâhâhUintegerubh)Åq}q(hUnum_available_typehàhNhâhâhU
+string(10)ubh)Åq}q(hUadvance_noticehâhU60hâhâhUintegerubh)Åq}q(hUscheduling_timehâhU30hâhâhUintegerubh)Åq}q(hU
+guests_minhâhU2hâhâhUintegerubh)Åq }q!(hU
+guests_maxhâhU8hâhâhUintegerubh)Åq"}q#(hU
+created_athàhNhâhâhUdatetimeubh)Åq$}q%(hU
+updated_athàhNhâhâhUdatetimeubh)Åq&}q'(hUemailhàhNhâhâhUstringubh)Åq(}q)(hUfaxhàhNhâhâhU
+string(13)ubh)Åq*}q+(hUreservation_settable_typehàhNhâhâhUstringubh)Åq,}q-(hUprice_per_platehàhNhâhâhUintegerube}q.bubUfilehashq/U(b08d45c91cf38f2cc508f5400d96bf750968b210q0ub.

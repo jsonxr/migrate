@@ -1,0 +1,14 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUmarketing_campaign_templatesUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUtemplate_typehàhNhâhâhUstringubh)Åq}q(hUactionable_typehàhNhâhâhUstringubh)Åq}q(hUactionable_fieldhàhNhâhâhUstringubh)Åq}q(hUactionable_descriptionhàhNhâhâhUtextubh)Åq}q(hU	frequencyhàhNhâhâhUstringubh)Åq}q(hUhas_fixed_frequencyhàhNhâhâhUbooleanubh)Åq }q!(hUdelivery_typehàhNhâhâhUstringubh)Åq"}q#(hUdelivery_time_quantityhàhNhâhâhUstringubh)Åq$}q%(hU has_fixed_delivery_time_quantityhàhNhâhâhUbooleanubh)Åq&}q'(hUdelivery_time_qualifierhàhNhâhâhUstringubh)Åq(}q)(hU!has_fixed_delivery_time_qualifierhàhNhâhâhUbooleanubh)Åq*}q+(hUdelivery_time_directionhàhNhâhâhUstringubh)Åq,}q-(hU!has_fixed_delivery_time_directionhàhNhâhâhUbooleanubh)Åq.}q/(hUnamehàhNhâhâhUstringubh)Åq0}q1(hUsubjecthàhNhâhâhUstringubh)Åq2}q3(hUbodyhàhNhâhâhUtextubh)Åq4}q5(hUowner_idhàhNhâhâhUintegerubh)Åq6}q7(hU
+owner_typehàhNhâhâhUstringubh)Åq8}q9(hU	variableshàhNhâhâhUtextubh)Åq:}q;(hU
+created_athàhNhâhâhUdatetimeubh)Åq<}q=(hU
+updated_athàhNhâhâhUdatetimeubh)Åq>}q?(hU	text_bodyhàhNhâhâhUstringubh)Åq@}qA(hUlanding_page_bodyhàhNhâhâhUtextubh)ÅqB}qC(hUreport_parametershàhNhâhâhUstringubh)ÅqD}qE(hU	post_bodyhàhNhâhâhUtextubh)ÅqF}qG(hUreporthàhNhâhâhU
+string(35)ubh)ÅqH}qI(hUemail_headerhàhNhâhâhUtextube}qJbubUfilehashqKU(57a86953af30b074aae744e1a5f48f5c3aa7fd7fqLub.

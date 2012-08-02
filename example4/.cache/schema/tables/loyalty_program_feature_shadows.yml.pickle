@@ -1,0 +1,14 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUloyalty_program_feature_shadowsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUloyalty_program_shadow_idhàhNhâhâhUintegerubh)Åq}q(hUfeature_typehàhNhâhâhUstringubh)Åq}q(hUearned_amounthàhNhâhâhUintegerubh)Åq}q(hUearned_typehàhNhâhâhUstringubh)Åq}q(hUfor_every_amounthàhNhâhâhUintegerubh)Åq}q(hUfor_every_typehàhNhâhâhUstringubh)Åq }q!(hUpromo_pos_discount_codehàhNhâhâhUstringubh)Åq"}q#(hUpromo_pos_descriptionhàhNhâhâhUstringubh)Åq$}q%(hUpromo_bonus_typehàhNhâhâhUstringubh)Åq&}q'(hUpromo_discounted_pricehàhNhâhâhUdecimal(8,2)ubh)Åq(}q)(hUpromo_discounted_percenthàhNhâhâhUintegerubh)Åq*}q+(hUpromo_start_datehàhNhâhâhUdateubh)Åq,}q-(hUpromo_end_datehàhNhâhâhUdateubh)Åq.}q/(hU
+created_athàhNhâhâhUdatetimeubh)Åq0}q1(hU
+updated_athàhNhâhâhUdatetimeubh)Åq2}q3(hUfeature_namehàhNhâhâhU
+string(35)ubh)Åq4}q5(hU
+feature_idhàhNhâhâhUintegerubh)Åq6}q7(hUpriorityhàhNhâhâhUintegerube}q8bubUfilehashq9U(149805cd4aeeb1abafa43733ed9225f2d834c9a3q:ub.

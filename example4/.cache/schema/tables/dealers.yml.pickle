@@ -1,0 +1,15 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUdealersUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUnamehâhNhâhâhUstringubh)Åq}q(hUuuidhàhNhâhâhU
+string(50)ubh)Åq}q(hU
+created_athàhNhâhâhUdatetimeubh)Åq}q(hU
+updated_athàhNhâhâhUdatetimeubh)Åq}q(hU
+deleted_athàhNhâhâhUdatetimeubh)Åq}q(hU	parent_idhâhU0hâhâhUintegerubh)Åq }q!(hUtimezonehàhNhâhâhUstringubh)Åq"}q#(hUstatushàhNhâhâhU
+string(50)ubh)Åq$}q%(hUpos_systems_counthâhU0hâhâhUintegerubh)Åq&}q'(hUpos_developer_idhàhNhâhâhUstringube}q(bubUfilehashq)U(7efa6f6bff7d76b9dcf514d73d3225c3b9dff162q*ub.

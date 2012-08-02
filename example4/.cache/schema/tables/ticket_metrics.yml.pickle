@@ -1,0 +1,13 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUticket_metricsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hU
+profile_idhàhNhâhâhUintegerubh)Åq}q(hUdate_forhàhNhâhâhUdateubh)Åq}q(hUticket_counthàhU0hâhâhUintegerubh)Åq}q(hUonline_reservation_counthàhU0hâhâhUintegerubh)Åq}q(hUinhouse_reservation_counthàhU0hâhâhUintegerubh)Åq}q(hUticket_revenue_in_centshàhU0hâhâhUintegerubh)Åq }q!(hU#online_reservation_revenue_in_centshàhU0hâhâhUintegerubh)Åq"}q#(hU$inhouse_reservation_revenue_in_centshàhU0hâhâhUintegerubh)Åq$}q%(hU
+created_athàhNhâhâhUdatetimeubh)Åq&}q'(hU
+updated_athàhNhâhâhUdatetimeubh)Åq(}q)(hUonline_ticket_counthàhU0hâhâhUintegerubh)Åq*}q+(hUwalkin_counthàhU0hâhâhUintegerubh)Åq,}q-(hUinhouse_ticket_counthàhU0hâhâhUintegerubh)Åq.}q/(hUinhouse_revenue_in_centshàhU0hâhâhUintegerubh)Åq0}q1(hUwalkin_revenue_in_centshàhU0hâhâhUintegerube}q2bubUfilehashq3U(393512897cc6c2b8b67b8e47339e5ef308252ce1q4ub.

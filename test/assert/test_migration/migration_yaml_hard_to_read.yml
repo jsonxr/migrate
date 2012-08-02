@@ -1,0 +1,61 @@
+previous: ~
+tables:
+    old_table:
+        drop_table: ~
+
+    changelog_mybatis:
+        alter_table:
+            columns:
+                old_col:
+                    rename_column: { new: renamed_col }
+                    create_column: ~
+                renamed_col:
+                    change_column: ~
+                col1:
+                    add_column: ~
+                col2:
+                    remove_column: ~
+                col3:
+                    change_column: ~
+
+    changelog:
+        rename_table: { new: old_changelog }
+        create_table: ~
+
+# Status
+#
+#   rename table:    changelog -> old_changelog
+#   create table:    changelog
+#   alter table:     old_changelog
+
+
+#-----------------------------------------------------------------------------
+# From
+#-----------------------------------------------------------------------------
+# 
+#   changelog
+#   -----------------
+#   old_col varchar(1)
+#   col2 varchar(1)
+#   col3 varchar(1)
+#
+#   old_table
+#   -----------------
+#   who_cares varchar(1)
+#
+#
+#-----------------------------------------------------------------------------
+# To
+#-----------------------------------------------------------------------------
+#
+#   changelog_mybatis
+#   -----------------
+#   old_col varchar(2)
+#   renamed_col varchar(2)
+#   col1 varchar(1)
+#   col3 varchar(2)
+#
+#   changelog
+#   -----------------
+#   whocares varchar(1)
+#

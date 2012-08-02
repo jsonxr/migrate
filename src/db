@@ -124,7 +124,7 @@ class Migrate():
         print(p.status())
 
     def add(self, p, args):
-        pass
+        print(args)
 
     def dump(self, p, args):
         name = args.name

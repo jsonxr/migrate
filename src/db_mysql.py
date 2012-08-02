@@ -133,7 +133,6 @@ class Database(database.Database):
         return s
 
     def __get_version_list(self, sql, values=None):
-        print("__get_version_list %s" % sql)
         with closing(self.connection.cursor()) as cursor:
             versions = []
             try:
@@ -188,7 +187,6 @@ class Database(database.Database):
 
     @connection
     def __get_actual_tables(self):
-        print("__get_actual_tables")
         tables = schema.Tables()
 
         # Tables

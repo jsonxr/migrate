@@ -1,0 +1,13 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUtwitter_metricsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hU
+profile_idhâhNhâhâhUintegerubh)Åq}q(hUdate_forhâhNhâhâhUdateubh)Åq}q(hU	followershâhU0hâhâhUintegerubh)Åq}q(hUtweet_counthâhU0hâhâhUintegerubh)Åq}q(hUretweet_counthâhU0hâhâhUintegerubh)Åq}q(hU
+created_athàhNhâhâhUdatetimeubh)Åq }q!(hU
+updated_athàhNhâhâhUdatetimeube}q"bubUfilehashq#U(86f9c5e1f2ffff418eb35d2ef9448b0921b5aebbq$ub.

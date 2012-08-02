@@ -1,0 +1,16 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUprofile_social_networksUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hU
+profile_idhàhNhâhâhUintegerubh)Åq}q(hUsocial_network_idhàhNhâhâhUintegerubh)Åq}q(hUenabledhàhU1hâhâhUbooleanubh)Åq}q(hUusernamehàhNhâhâhUstringubh)Åq}q(hUpasswordhàhNhâhâhUstringubh)Åq}q(hU	pass_codehàhNhâhâhUstringubh)Åq }q!(hU
+created_athàhNhâhâhUdatetimeubh)Åq"}q#(hU
+updated_athàhNhâhâhUdatetimeubh)Åq$}q%(hU
+deleted_athàhNhâhâhUdatetimeubh)Åq&}q'(hU
+fb_user_idhàhNhâhâhUbigintubh)Åq(}q)(hU
+fb_page_idhàhNhâhâhUbigintubh)Åq*}q+(hUfb_session_keyhàhNhâhâhUstringubh)Åq,}q-(hUdefault_networkhàhU1hâhâhUbooleanubh)Åq.}q/(hUscreen_namehàhNhâhâhUstringube}q0bubUfilehashq1U(8ad7ded163757b8e17f7a4844bc568bbb926016eq2ub.

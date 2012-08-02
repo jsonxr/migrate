@@ -1,0 +1,102 @@
+previous: bootstrap
+tables:
+    changelog: 
+        create_table: ~
+    changelog_old:
+        alter_table:
+            - old_col: add
+            - renamed_col: { renamefrom: old_col }
+            - col1: add
+            - col3: change
+            - col4: ~
+            - col2: remove
+        rename_table: changelog
+    old_table: 
+        drop_table: ~
+    contacts:
+        alter_table:
+            col1: add_column
+
+tables:
+    changelog: 
+        create_table: ~
+    changelog_old:
+        alter_table:
+            - add old_col
+            - rename old_col renamed_col
+            - add col1
+            - nochange col3
+            - change col4
+            - remove col2
+        rename_table: changelog
+    old_table: 
+        drop_table: ~
+    contacts:
+        alter_table:
+            col1: add_column
+
+
+#commands:
+#    changelog: 
+#        renameto: changelog_old
+#        create_table: ~
+#    changelog_old:
+#        alter_table:
+#            old_col: add_column
+#            renamed_col: { renamefrom: old_col }
+#            col1: add_column
+#            col3: ~
+#            col4: change_column
+#            col2: remove_column
+#    old_table: 
+#        drop_table: ~
+  
+  
+# changelog.rename_table.renameto
+# changelog_old.alter_table.columns.old_col.rename_column.renameto
+
+# Status
+#
+#   rename:  changelog -> changelog_old
+#   create:  changelog
+#   alter:   changelog_old
+#                + old_col varchar(2)
+#                  old_col -> renamed_col, varchar(2) -> varchar(255)
+#                + col1 varchar(1)
+#                  col3 varchar(2)
+#                  col4 varchar(255) -> varchar(2)
+#                - col2
+#   drop:    old_table
+#
+#
+#-----------------------------------------------------------------------------
+# From
+#-----------------------------------------------------------------------------
+# 
+#   changelog
+#   -----------------
+#   old_col varchar(1)
+#   col2 varchar(1)
+#   col3 varchar(1)
+#
+#   old_table
+#   -----------------
+#   who_cares varchar(1)
+#
+#
+#-----------------------------------------------------------------------------
+# To
+#-----------------------------------------------------------------------------
+#
+#   changelog_old
+#   -----------------
+#   old_col varchar(2)
+#   renamed_col varchar(2)
+#   col1 varchar(1)
+#   col3 varchar(2)
+#
+#   changelog
+#   -----------------
+#   whocares varchar(1)
+#
+#

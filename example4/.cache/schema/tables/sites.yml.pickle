@@ -1,0 +1,14 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUsitesUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hU
+website_idhàhNhâhâhUintegerubh)Åq}q(hUdate_forhàhNhâhâhUdateubh)Åq}q(hUvisitorshàhNhâhâhUintegerubh)Åq}q(hU	pageviewshàhNhâhâhUintegerubh)Åq}q(hUvisitshàhNhâhâhUintegerubh)Åq}q(hU
+new_visitshàhNhâhâhUintegerubh)Åq }q!(hUtime_on_sitehàhNhâhâhUintegerubh)Åq"}q#(hUbounceshàhNhâhâhUintegerubh)Åq$}q%(hU
+created_athàhNhâhâhUdatetimeubh)Åq&}q'(hU
+updated_athàhNhâhâhUdatetimeube}q(bubUfilehashq)U(6e9436a1dd48b402b54f9bcb090e3d0b1a27d7ceq*ub.

@@ -1,0 +1,12 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUpurchased_vouchersUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUcodehàhNhâhâhUstringubh)Åq}q(hUredeemed_athàhNhâhâhUdatetimeubh)Åq}q(hU
+created_athàhNhâhâhUdatetimeubh)Åq}q(hU
+updated_athàhNhâhâhUdatetimeubh)Åq}q(hUquantityhàhNhâhâhUintegerubh)Åq}q(hUtotal_amounthâhU0.00hâhâhUdecimal(8,2)ubh)Åq }q!(hUgetta_customer_idhàhNhâhâhUintegerubh)Åq"}q#(hUpurchased_onhàhNhâhâhUdatetimeubh)Åq$}q%(hUoffer_incentive_idhàhNhâhâhUintegerubh)Åq&}q'(hUredeemed_bill_totalhàhNhâhâhUdecimal(8,2)ubh)Åq(}q)(hUis_customers_first_purchasehàhNhâhâhUbooleanubh)Åq*}q+(hU	voided_athàhNhâhâhUdatetimeubh)Åq,}q-(hUredeemed_by_user_idhàhNhâhâhUintegerubh)Åq.}q/(hUredemption_statushàhNhâhâhUstringube}q0bubUfilehashq1U(e2785ae3fd11f382c3ae434f4eb1dc3fa955231bq2ub.

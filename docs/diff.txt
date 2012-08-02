@@ -18,6 +18,11 @@ The only time we need to convert a database version to a generic version is
 when we are reverse engineering the database.  In all other cases, we need to
 convert the schema into a database schema.
 
+OR!!!!!!
+Perhaps we store everything in the generic version, then the only thing we
+have to convert is the actual_schema.  I think this will involve less 
+processing
+
 
 
 db diff <tablename>

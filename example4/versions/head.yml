@@ -2172,4 +2172,6 @@ tables:
 migration:
     previous: bootstrap
     commands:
-        - { table: "migrations", name: "create_table" }
+        - action: create_table
+          params:
+              table: migrations

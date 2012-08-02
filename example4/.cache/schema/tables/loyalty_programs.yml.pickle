@@ -1,0 +1,10 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUloyalty_programsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUbusiness_idhàhNhâhâhUintegerubh)Åq}q(hUnamehàhNhâhâhUstringubh)Åq}q(hUactivehàhU0hâhâhUbooleanubh)Åq}q(hUpoints_for_cash_dollars_spenthàhU1hâhâhUintegerubh)Åq}q(hUpoints_for_cash_earnedhàhU1hâhâhUintegerubh)Åq}q(hUpoints_for_cash_award_levelhàhU100hâhâhUintegerubh)Åq }q!(hU#points_for_cash_award_level_dollarshàhU5hâhâhUintegerubh)Åq"}q#(hUpoints_for_prize_dollars_spenthàhU1hâhâhUintegerubh)Åq$}q%(hUpoints_for_prize_earnedhàhU1hâhâhUintegerubh)Åq&}q'(hUpercent_cash_backhàhU1hâhâhUintegerubh)Åq(}q)(hUpunch_award_counthàhU1hâhâhUintegerubh)Åq*}q+(hUpunch_awardhàhUitemhâhâhUstringubh)Åq,}q-(hUpunch_award_puncheshàhU10hâhâhUintegerubh)Åq.}q/(hUpunch_min_dollarshàhU10hâhâhUintegerube}q0bubUfilehashq1U(30322b4bbb2e7c4f126ae957e977e0c99c22a079q2ub.

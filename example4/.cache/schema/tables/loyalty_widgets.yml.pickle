@@ -1,0 +1,13 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUloyalty_widgetsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hU
+website_idhàhNhâhâhUintegerubh)Åq}q(hUactivehàhNhâhâhUbooleanubh)Åq}q(hUstatehàhNhâhâhUstringubh)Åq}q(hUtexthàhNhâhâhUstringubh)Åq}q(hU	has_noteshàhNhâhâhUbooleanubh)Åq}q(hUnoteshàhNhâhâhUstringubh)Åq }q!(hUheaderhàhNhâhâhUstringubh)Åq"}q#(hUcontenthàhNhâhâhUtextubh)Åq$}q%(hUthank_you_messagehàhNhâhâhUstringubh)Åq&}q'(hUthank_you_explanationhàhNhâhâhUtextubh)Åq(}q)(hU
+created_athàhNhâhâhUdatetimeubh)Åq*}q+(hU
+updated_athàhNhâhâhUdatetimeube}q,bubUfilehashq-U(52dab0ad8df7c19a8868568405d392bae456dbdcq.ub.

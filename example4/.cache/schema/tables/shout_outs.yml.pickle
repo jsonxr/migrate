@@ -1,0 +1,13 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqU
+shout_outsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUpost_idhàhNhâhâhUintegerubh)Åq}q(hUprofile_social_network_idhàhNhâhâhUintegerubh)Åq}q(hUtypehàhNhâhâhUstringubh)Åq}q(hU	short_urlhàhNhâhâhUstringubh)Åq}q(hU	posted_athàhNhâhâhUdatetimeubh)Åq}q(hU
+created_athàhNhâhâhUdatetimeubh)Åq }q!(hU
+updated_athàhNhâhâhUdatetimeubh)Åq"}q#(hUresponsehàhNhâhâhUtextubh)Åq$}q%(hUlast_api_response_codehàhNhâhâhUintegerubh)Åq&}q'(hUscheduled_athàhNhâhâhUdatetimeubh)Åq(}q)(hUscheduled_forhàhNhâhâhUdatetimeubh)Åq*}q+(hUsocial_network_namehàhNhâhâhUstringubh)Åq,}q-(hUnatural_keyhàhNhâhâhUstringubh)Åq.}q/(hUacknowledgedhàhU0hâhâhUbooleanube}q0bubUfilehashq1U(6f0f0be94ce2c62eb7dde379e523b4a0f6657b34q2ub.

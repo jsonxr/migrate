@@ -1,0 +1,19 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUusersUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUemailhàhNhâhâhUstring(200)ubh)Åq}q(hUadminhâhU0hâhâhUbooleanubh)Åq}q(hUcrypted_passwordhàhNhâhâhUstringubh)Åq}q(hUpassword_salthàhNhâhâhUstringubh)Åq}q(hUpersistence_tokenhàhNhâhâhU
+string(40)ubh)Åq}q(hUsecret_questionhàhNhâhâhUstringubh)Åq }q!(hUsecret_answerhàhNhâhâhUstring(100)ubh)Åq"}q#(hU
+created_athàhNhâhâhUdatetimeubh)Åq$}q%(hU
+updated_athàhNhâhâhUdatetimeubh)Åq&}q'(hU
+deleted_athàhNhâhâhUdatetimeubh)Åq(}q)(hU
+first_namehàhNhâhâhUstring(100)ubh)Åq*}q+(hU	last_namehàhNhâhâhUstring(100)ubh)Åq,}q-(hUuserable_idhàhNhâhâhUintegerubh)Åq.}q/(hUuserable_typehàhNhâhâhU
+string(50)ubh)Åq0}q1(hUtitlehàhNhâhâhUstringubh)Åq2}q3(hUcontacthàhNhâhâhUbooleanubh)Åq4}q5(hUactivation_keyhàhNhâhâhU	string(6)ubh)Åq6}q7(hU
+expires_athàhNhâhâhUdatetimeubh)Åq8}q9(hUactivehàhU0hâhâhUbooleanubh)Åq:}q;(hUperishable_tokenhâhNhâhâhUstringubh)Åq<}q=(hU
+ip_addresshàhNhâhâhUstringubh)Åq>}q?(hUmsa_effective_datehàhNhâhâhUstringubh)Åq@}qA(hU
+msa_submithàhNhâhâhUintegerubh)ÅqB}qC(hUactivation_submit_datehàhNhâhâhUdatetimeubh)ÅqD}qE(hUproduct_tier_preferenceshàhNhâhâhUtextubh)ÅqF}qG(hUusernamehàhNhâhâhUstringubh)ÅqH}qI(hUdisabledhàhU0hâhâhUbooleanubh)ÅqJ}qK(hUlast_request_athàhNhâhâhUdatetimeube}qLbubUfilehashqMU(85fa68830488ffe4a22ccb0529004b98765b74baqNub.

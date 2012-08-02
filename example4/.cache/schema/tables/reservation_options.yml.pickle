@@ -1,0 +1,13 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUreservation_optionsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUreservation_optionhâhNhâhâhU
+string(50)ubh)Åq}q(hU
+created_athàhNhâhâhUdatetimeubh)Åq}q(hU
+updated_athàhNhâhâhUdatetimeube}qbubUfilehashqU(44dd75d83d6d4c863b862cf55928353f2c6a4902qub.

@@ -1,0 +1,14 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUloyalty_program_shadowsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUowner_idhàhNhâhâhUintegerubh)Åq}q(hU
+program_idhàhNhâhâhUstringubh)Åq}q(hUactivehàhU0hâhâhUbooleanubh)Åq}q(hUnamehàhNhâhâhUstringubh)Åq}q(hUpoints_for_cash_dollars_spenthàhU1hâhâhUintegerubh)Åq}q(hUpoints_for_cash_earnedhàhU1hâhâhUintegerubh)Åq }q!(hUpoints_for_cash_award_levelhàhU100hâhâhUintegerubh)Åq"}q#(hU#points_for_cash_award_level_dollarshàhU5hâhâhUintegerubh)Åq$}q%(hUpercent_cash_backhàhU1hâhâhUintegerubh)Åq&}q'(hUpunch_award_counthàhU1hâhâhUintegerubh)Åq(}q)(hUpunch_awardhàhUitemhâhâhUstringubh)Åq*}q+(hUpunch_award_puncheshàhU10hâhâhUintegerubh)Åq,}q-(hUpunch_min_dollarshàhU10hâhâhUintegerubh)Åq.}q/(hUpoints_for_prize_earnedhàhU1hâhâhUintegerubh)Åq0}q1(hUpoints_for_prize_dollars_spenthàhU1hâhâhUintegerubh)Åq2}q3(hU
+created_athàhNhâhâhUdatetimeubh)Åq4}q5(hU
+updated_athàhNhâhâhUdatetimeubh)Åq6}q7(hU
+owner_typehàhUBusinesshâhâhUstringubh)Åq8}q9(hUprogram_namehàhNhâhâhUstringube}q:bubUfilehashq;U(39b90e0594ced98eeebff2dc859c345691e37a1cq<ub.

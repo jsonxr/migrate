@@ -1,0 +1,13 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUprofile_meal_periodsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUmeal_service_idhàhNhâhâhUintegerubh)Åq}q(hUday_idhàhNhâhâhUintegerubh)Åq}q(hU	recurringhàhNhâhâhUbooleanubh)Åq}q(hU
+created_athàhNhâhâhUdatetimeubh)Åq}q(hU
+updated_athàhNhâhâhUdatetimeubh)Åq}q(hUmeal_periodable_idhàhNhâhâhUintegerubh)Åq }q!(hUmeal_periodable_typehàhNhâhâhUstringubh)Åq"}q#(hUopen_at_in_minuteshàhNhâhâhUintegerubh)Åq$}q%(hUclose_at_in_minuteshàhNhâhâhUintegerubh)Åq&}q'(hU
+deleted_athàhNhâhâhUdatetimeube}q(bubUfilehashq)U(56892a3b3ba5934a42c12e9e6c1a7473ae582756q*ub.

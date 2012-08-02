@@ -1,0 +1,12 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUsocial_networks_postsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUprofile_social_network_idhàhNhâhâhUintegerubh)Åq}q(hUpost_idhàhNhâhâhUintegerubh)Åq}q(hUpost_taghàhNhâhâhUstringubh)Åq}q(hUweb_post_linkhàhNhâhâhUstringubh)Åq}q(hUpost_successhàhNhâhâhUbooleanubh)Åq}q(hU	post_datehàhNhâhâhUdatetimeubh)Åq }q!(hU
+created_athàhNhâhâhUdatetimeubh)Åq"}q#(hU
+updated_athàhNhâhâhUdatetimeube}q$bubUfilehashq%U(2cdf202fdc5a8b99a5a484a5f4a4cacb9bffa8baq&ub.

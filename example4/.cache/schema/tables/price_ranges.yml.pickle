@@ -1,0 +1,13 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUprice_rangesUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUprice_rangehâhNhâhâhU
+string(20)ubh)Åq}q(hU
+created_athàhNhâhâhUdatetimeubh)Åq}q(hU
+updated_athàhNhâhâhUdatetimeubh)Åq}q(hUavg_per_plate_cost_in_centshàhNhâhâhUintegerube}qbubUfilehashqU(b0377c9264badd8b3f499c5c63f1206412623b65qub.

@@ -1,0 +1,12 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUbusiness_logsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUbusiness_idhâhNhâhâhUintegerubh)Åq}q(hUstatushàhNhâhâhUstringubh)Åq}q(hUusernamehâhNhâhâhUstring(200)ubh)Åq}q(hU
+created_athàhNhâhâhUdatetimeubh)Åq}q(hU
+updated_athàhNhâhâhUdatetimeube}qbubUfilehashqU(a0953d237496795b82192460e6447892bad7c00eq ub.

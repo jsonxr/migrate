@@ -1,0 +1,17 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUphone_numbersUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUphonable_idhâhNhâhâhUintegerubh)Åq}q(hUphonable_typehâhNhâhâhU
+string(50)ubh)Åq}q(hU
+phone_typehàhNhâhâhU
+string(20)ubh)Åq}q(hUnumberhâhNhâhâhU
+string(21)ubh)Åq}q(hU
+created_athàhNhâhâhUdatetimeubh)Åq}q(hU
+updated_athàhNhâhâhUdatetimeubh)Åq }q!(hU
+deleted_athàhNhâhâhUdatetimeubh)Åq"}q#(hU	extensionhàhNhâhâhUstringube}q$bubUfilehashq%U(6b70f20314998c691b1c37a5ccf5fcb3522026d4q&ub.

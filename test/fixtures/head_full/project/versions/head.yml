@@ -1,0 +1,39 @@
+# head_version
+version: head
+tables:
+    - name: migrations
+      columns:
+          - { name: "version", type: "varchar(255)", key: true, default: ~, nullable: false, autoincrement: false }
+          - { name: "yml", type: "longtext", key: false, default: ~, nullable: false, autoincrement: false }
+          - { name: "applied_by", type: "varchar(255)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "applied_on", type: "datetime", key: false, default: ~, nullable: false, autoincrement: false }
+    - name: test1
+      columns:
+          - { name: "col1", type: "varchar(5)", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "col2", type: "int(11)", key: false, default: ~, nullable: true, autoincrement: false }
+    - name: test2
+      columns:
+          - { name: "col1", type: "float", key: false, default: ~, nullable: true, autoincrement: false }
+          - { name: "col2", type: "char(2)", key: false, default: ~, nullable: true, autoincrement: false }
+migration:
+    previous: bootstrap
+    commands:
+        - action: rename_table 
+          params: 
+              table: changelog
+              renameto: changelog_old
+        - action: create_table
+          params:
+              table: changelog
+        - action: alter_table
+          params:
+              table: changelog_old
+              columns:
+                  - add_column: col1
+                  - rename_column: old_col renamed_col
+                  - add_column: old_col
+                  - remove_column: col2
+                  - change_column: col3
+        - action: drop_table
+          params:
+              table: old_table

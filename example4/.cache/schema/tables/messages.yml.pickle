@@ -1,0 +1,12 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUmessagesUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUstart_athàhNhâhâhUdatetimeubh)Åq}q(hUend_athàhNhâhâhUdatetimeubh)Åq}q(hUmessagehâhNhâhâhUstringubh)Åq}q(hUactivehâhU0hâhâhUbooleanubh)Åq}q(hU
+created_athàhNhâhâhUdatetimeubh)Åq}q(hU
+updated_athàhNhâhâhUdatetimeubh)Åq }q!(hU	delete_athàhNhâhâhUdatetimeubh)Åq"}q#(hUmessage_type_idhàhNhâhâhUintegerubh)Åq$}q%(hUpositionhàhNhâhâhUintegerubh)Åq&}q'(hUis_for_dealerhàhU0hâhâhUbooleanubh)Åq(}q)(hUis_for_restauranthàhU0hâhâhUbooleanube}q*bubUfilehashq+U(99dfc06d03f33c737e8a234f39a42245d5bbfcccq,ub.

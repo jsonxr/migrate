@@ -1,0 +1,14 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUreservation_exception_daysUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hU
+profile_idhàhNhâhâhUintegerubh)Åq}q(hU
+start_datehàhNhâhâhUdateubh)Åq}q(hUend_datehàhNhâhâhUdateubh)Åq}q(hUnamehàhNhâhâhUstring(100)ubh)Åq}q(hUmessagehàhNhâhâhUstringubh)Åq}q(hUis_reservations_enabledhàhU0hâhâhUbooleanubh)Åq }q!(hU
+created_athàhNhâhâhUdatetimeubh)Åq"}q#(hU
+updated_athàhNhâhâhUdatetimeube}q$bubUfilehashq%U(b0c566ec9db341ec8417fd6210d1be92d0a07542q&ub.

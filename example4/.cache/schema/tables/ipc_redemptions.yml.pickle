@@ -1,0 +1,13 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUipc_redemptionsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUbusiness_idhàhNhâhâhUintegerubh)Åq}q(hUoffer_incentive_idhàhNhâhâhUintegerubh)Åq}q(hUlanding_page_idhàhNhâhâhUintegerubh)Åq}q(hUmarketing_campaign_idhàhNhâhâhUintegerubh)Åq}q(hUmarketing_campaign_history_idhàhNhâhâhUintegerubh)Åq}q(hU	firstnamehàhNhâhâhUstringubh)Åq }q!(hUlastnamehàhNhâhâhUstringubh)Åq"}q#(hUemailhàhNhâhâhUstringubh)Åq$}q%(hU
+o2o_statushàhNhâhâhUstringubh)Åq&}q'(hUo2o_redemption_idhàhNhâhâhUstringubh)Åq(}q)(hUcodehàhNhâhâhUstringubh)Åq*}q+(hUqr_codehàhNhâhâhUtextubh)Åq,}q-(hUstatehàhNhâhâhUstringubh)Åq.}q/(hUpublished_expirationhàhNhâhâhUdatetimeubh)Åq0}q1(hUunredeemable_reasonhàhNhâhâhUstringubh)Åq2}q3(hU
+created_athàhNhâhâhUdatetimeubh)Åq4}q5(hU
+updated_athàhNhâhâhUdatetimeubh)Åq6}q7(hUphonehàhNhâhâhUstringube}q8bubUfilehashq9U(096fbcdccd81231cf7a08eec5720e2342bfe5263q:ub.

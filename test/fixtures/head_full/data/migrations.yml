@@ -1,0 +1,7 @@
+sql: INSERT INTO migrations (version, content, content_type, applied_by, applied_on) values (%s,%s,%s,%s,%s)
+python: |
+    def now():
+        return datetime.datetime.now()
+values:
+    - [ 'bootstrap', { filename: '/project/versions/bootstrap.yml' }, 'application/x-yaml', 'migration_unittest', { eval: 'datetime.datetime.now()' } ]
+    - ['head', { filename: '/project/versions/head.yml' }, 'application/x-yaml', 'migration_unittest', { eval: 'datetime.datetime.now()' } ]

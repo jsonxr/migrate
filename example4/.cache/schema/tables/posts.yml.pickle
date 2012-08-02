@@ -1,0 +1,14 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUpostsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hU
+profile_idhâhNhâhâhUintegerubh)Åq}q(hUevent_idhàhNhâhâhUintegerubh)Åq}q(hUscheduled_posthâhU0hâhâhUbooleanubh)Åq}q(hUposthâhNhâhâhUtextubh)Åq}q(hU	post_datehàhNhâhâhUdatetimeubh)Åq}q(hU
+created_athàhNhâhâhUdatetimeubh)Åq }q!(hU
+updated_athàhNhâhâhUdatetimeubh)Åq"}q#(hU
+deleted_athàhNhâhâhUdatetimeubh)Åq$}q%(hUrequested_athàhNhâhâhUdatetimeubh)Åq&}q'(hUnetworkshàhNhâhâhUtextubh)Åq(}q)(hUlast_request_typehàhNhâhâhUstringubh)Åq*}q+(hUpost_until_datehàhNhâhâhUdatetimeubh)Åq,}q-(hU	frequencyhàhNhâhâhUstringubh)Åq.}q/(hU	repeat_ofhàhNhâhâhUintegerubh)Åq0}q1(hUrevisionhàhNhâhâhUintegerubh)Åq2}q3(hUtwitter_posthàhNhâhâhUstringubh)Åq4}q5(hU	bitly_urlhàhNhâhâhUstringubh)Åq6}q7(hUfacebook_posthàhNhâhâhUtextubh)Åq8}q9(hUto_networkshàhNhâhâhUstringubh)Åq:}q;(hUfinal_post_date_and_timehàhNhâhâhUdatetimeubh)Åq<}q=(hUmarketing_campaign_idhàhNhâhâhUintegerubh)Åq>}q?(hUfacebook_bitlyhàhNhâhâhUstringubh)Åq@}qA(hUtwitter_bitlyhàhNhâhâhUstringubh)ÅqB}qC(hUunresolved_posthàhNhâhâhUstring(400)ube}qDbubUfilehashqEU(6a5c10adcf7a309d7c51b5295b12697ab2444d00qFub.

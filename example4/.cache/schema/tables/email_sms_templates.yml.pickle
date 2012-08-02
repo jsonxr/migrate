@@ -1,0 +1,13 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUemail_sms_templatesUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUtitlehàhNhâhâhUstringubh)Åq}q(hUcurrent_statehàhNhâhâhUstringubh)Åq}q(hUsubjecthàhNhâhâhUstringubh)Åq}q(hUfrom_address_idhàhNhâhâhUintegerubh)Åq}q(hU	variableshàhNhâhâhUtextubh)Åq}q(hU
+created_athàhNhâhâhUdatetimeubh)Åq }q!(hU
+updated_athàhNhâhâhUdatetimeubh)Åq"}q#(hUconditionalhàhNhâhâhUtextubh)Åq$}q%(hU
+email_bodyhàhNhâhâhUtextubh)Åq&}q'(hUsms_bodyhàhNhâhâhUtextubh)Åq(}q)(hU	text_bodyhàhNhâhâhUtextubh)Åq*}q+(hUinstance_idhàhNhâhâhUintegerubh)Åq,}q-(hUnotifier_methodhàhNhâhâhUstringubh)Åq.}q/(hUdomainhàhNhâhâhUstringubh)Åq0}q1(hUtrigger_descriptionhàhNhâhâhUstringube}q2bubUfilehashq3U(5f5742b4ff73728cf75b99416382ff05b722094cq4ub.

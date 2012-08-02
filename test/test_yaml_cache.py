@@ -5,7 +5,7 @@ Copyright (c) 2012 Jason Rowland. All rights reserved.
 import fixtures
 import unittest
 import os
-import yaml_cache
+import cache
 
 import schema
 
@@ -16,14 +16,16 @@ import schema
 
 class TestYamlCache(unittest.TestCase):
     def test_save_cache(self):
-        with fixtures.TestFixture("head_test1test2") as tf:
+        with fixtures.TestFixture("head_test1test2", clean=True) as tf:
             project_path = tf.temp_path
             filename = "/versions/head.yml"
             expected = schema.Version()
-            expected.load_from_file(project_path + filename)
-            cached = yaml_cache.load(project_path, filename, schema.Version)
+            content = fixtures.read_from_file(project_path + filename)
+            expected.load_from_str(content)
+            cached = cache.load(project_path, filename, schema.Version)
             assert cached == expected
-            assert os.path.exists(project_path + "/.cache" + filename)
+            print(project_path + "/.cache" + filename)
+            assert os.path.exists(project_path + "/.cache" + filename + ".pickle")
 
 
 #=============================================================================

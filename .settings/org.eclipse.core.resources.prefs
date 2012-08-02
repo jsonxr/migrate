@@ -5,5 +5,7 @@ encoding//src/database.py=utf-8
 encoding//src/dataset.py=utf-8
 encoding//src/db=utf-8
 encoding//src/db_mysql.py=utf-8
+encoding//src/migration.py=utf-8
 encoding//src/project.py=utf-8
+encoding//src/project_status.py=utf-8
 encoding//src/schema.py=utf-8

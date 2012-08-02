@@ -1,0 +1,15 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUservice_terms_and_conditionsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hU
+owner_typehàhNhâhâhUstringubh)Åq}q(hUowner_idhàhNhâhâhUintegerubh)Åq}q(hUrestrictionshàhNhâhâhUtextubh)Åq}q(hU
+exclusionshàhNhâhâhUtextubh)Åq}q(hUhas_min_purchasehàhNhâhâhUbooleanubh)Åq}q(hUmin_purchasehàhNhâhâhUstringubh)Åq }q!(hUhas_required_purchase_ofhàhNhâhâhUbooleanubh)Åq"}q#(hUrequired_purchase_ofhàhNhâhâhUstringubh)Åq$}q%(hUhas_valid_only_athàhNhâhâhUbooleanubh)Åq&}q'(hUhas_one_per_visithàhNhâhâhUbooleanubh)Åq(}q)(hUhas_must_be_presentedhàhNhâhâhUbooleanubh)Åq*}q+(hUhas_not_valid_with_othershàhNhâhâhUbooleanubh)Åq,}q-(hUhas_no_resalehàhNhâhâhUbooleanubh)Åq.}q/(hUhas_not_refundablehàhNhâhâhUbooleanubh)Åq0}q1(hU
+has_customhàhNhâhâhUbooleanubh)Åq2}q3(hUcustomhàhNhâhâhUtextubh)Åq4}q5(hU
+created_athàhNhâhâhUdatetimeubh)Åq6}q7(hU
+updated_athàhNhâhâhUdatetimeubh)Åq8}q9(hUhuman_point_qualifierhàhNhâhâhUstringube}q:bubUfilehashq;U(60445cf1f83b70ac06037a9633fcb4b1f42a7415q<ub.

@@ -1,6 +1,14 @@
 import os
-import pickle
+import cPickle
 import hashlib
+
+'''
+load(root, filename, create)
+
+Object passed in as "create" must implement the
+load_from_str(self, content)
+method.
+'''
 
 
 class _PickledFile(object):
@@ -16,12 +24,19 @@ def _githash(data):
     return s.hexdigest()
 
 
-def load(root, filename, create):
-    pickle_root = root + "/.cache"
-    pickle_file = pickle_root + filename
+def load(project_root, filename, create):
+    filename = filename.replace(project_root, '')
+    pickle_root = project_root + "/.cache"
+    pickle_file = pickle_root + filename + ".pickle"
+    actual_file = project_root + filename
+#    print("cache.load-------------------")
+#    print("filename=%s" % filename)
+#    print("pickle_root=%s" % pickle_root)
+#    print("pickle_file=%s" % pickle_file)
+#    print("actual_file=%s" % actual_file)
+
     if not os.path.exists(os.path.dirname(pickle_file)):
         os.makedirs(os.path.dirname(pickle_file))
-    actual_file = root + filename
     # Get the file contents
     with file(actual_file, 'r') as stream:
         string = stream.read()
@@ -29,17 +44,24 @@ def load(root, filename, create):
     # Get the pickled cache file if the hash is the same
     if os.path.exists(pickle_file):
         with open(pickle_file, 'r') as stream:
-            pickledFile = pickle.load(stream)
-            if pickledFile.filehash == filehash:
-                return pickledFile.obj
+            try:
+                pickledFile = cPickle.load(stream)
+                if pickledFile.filehash == filehash:
+                    #print("return from cache")
+                    return pickledFile.obj
+            except:
+                #print("error trying to retrieve pickle")
+                # If there are any errors, we will just create normally
+                pass
     # Save the object in the cache
+    #print("create()")
     obj = create()
     obj.load_from_str(string)
     with open(pickle_file, 'w') as stream:
         pickledFile = _PickledFile()
         pickledFile.filehash = filehash
         pickledFile.obj = obj
-        pickle.dump(obj, stream, pickle.HIGHEST_PROTOCOL)
+        cPickle.dump(pickledFile, stream, cPickle.HIGHEST_PROTOCOL)
     return obj
 
 #

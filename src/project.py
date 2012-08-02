@@ -48,7 +48,7 @@ class Project(object):
         self._path_version = None
         self._head_version = None
         self._expected_version = None
-        self._actual_version = None
+        self._actual_schema = None
         self.__load_project_file()
 
     @property
@@ -74,21 +74,18 @@ class Project(object):
     def versions(self):
         if self._versions is None:
             self._versions = schema.Versions(self.path)
-        print (self._versions)
         return self._versions
 
     @property
     def head_version(self):
         if self._head_version is None:
             self._head_version = self.versions.get_head()
-        print(self._head_version)
         return self._head_version
 
     @property
     def bootstrap_version(self):
         if self._bootstrap_version is None:
             self._bootstrap_version = self.versions.get_bootstrap()
-        print(self._bootstrap_version)
         return self._bootstrap_version
 
     @property
@@ -97,8 +94,19 @@ class Project(object):
             self._expected_version = self.db.get_expected_version()
             if self._expected_version is None:
                 self._expected_version = self.bootstrap_version
-        print(self._expected_version)
         return self._expected_version
+
+    @property
+    def path_version(self):
+        if self._path_version is None:
+            self._path_version = self.versions.load_from_path()
+        return self._path_version
+
+    @property
+    def actual_schema(self):
+        if self._actual_schema is None:
+            self._actual_schema = self.db.get_actual_schema()
+        return self._actual_schema
 
     @property
     def is_valid(self):
@@ -135,77 +143,9 @@ class Project(object):
             raise AppError('Not a valid repository.  Run "db init" first.')
 
     def status(self):
-        print("Project.status:1")
         self.__ensure_valid()
-
-        # Get all the versions
-        #previous = self.versions.get_previous(self.head_version)
-        #dbversion = self.db.get_version(previous)
-        # Write the output
-        print("Project.status:2")
-        with closing(StringIO()) as s:
-            print("Project.status:3")
-            if self.expected_version:
-                print("Project.status:4")
-                s.write('# On env={environment}, db={database}, version={version}\n'.format(environment=self.environment, database=self.connection_info["database"], version=self.expected_version.name))
-            else:
-                print("Project.status:5")
-                s.write('# On env={environment}, db={database}, version=None\n'.format(environment=self.environment, database=self.connection_info["database"]))
-            if self.head_version is None:
-                print("Project.status:6")
-                s.write('#\n')
-                if (self.db.exists()):
-                    print("Project.status:7")
-                    s.write('#  (use "db bootstrap" to initialize project with database schema)\n')
-                else:
-                    s.write('#  (use "db db-create" to create empty database)\n')
-            else:
-                print("Project.status:8")
-                self._status_changes_to_sync(s)
-                self._status_changes_not_added(s)
-                self._status_changes_in_database(s)
-                print("Project.status:9")
-            return s.getvalue()
-
-    def _status_changes_to_sync(self, s):
-        # These are the changes that are in the commands list
-        # print(dbversion.is_syncable)
-        s.write('# Changes to sync to database:\n')
-        s.write('#   (use "db undo <table>..." to undo change to database)\n')
-        s.write('#   (use "db sync [--force]" to sync database to schema)\n')
-        s.write('#\n')
-#        for table_name in head_version.migration.tables:
-#            commands = head_version.migration.tables[table_name]
-#            for command in commands:
-#                if command.name == "create_table":
-#                    if dbversion.actual_schema.tables[table_name] is None:
-#                        s.write('#   {}\n'.format(command.display(sync=True)))
-#                    else:
-#                        if not head_version.schema.tables[table_name] == dbversion.actual_schema.tables[table_name]:
-#                            s.write('#   {}\n'.format(command.display(force=True)))
-#                        else:
-#                            # They are the same, so it doesn't need to be synced at all
-#                            pass
-#                elif command.name == "drop_table":
-#                    pass
-        s.write('#\n')
-
-    def _status_changes_not_added(self, s):
-        # These are the changes that are in the path, but are NOT in the head.yml file
-        # This includes changes to the path migration.yml file (for example a rename intead of drop/create
-        s.write('# Changed in directory but not added to sync:\n')
-        s.write('#   (use "db add/drop/rename <table>..." to update what will sync)\n')
-        s.write('#   (use "db undo <table>..." to undo change in directory)\n')
-        s.write('#\n')
-        s.write('# \033[31m{}\033[0m\n'.format('          new table:    test2'))
-        s.write('#\n')
-
-    def _status_changes_in_database(self, s):
-        s.write('# Changed in database but not in project:\n')
-        s.write('#   (use "db reverse <table>..." to save changes to directory)\n')
-        s.write('#\n')
-        s.write('# \033[31m{}\033[0m\n'.format('          new table:    test1'))
-        s.write('#\n')
+        import project_status
+        return project_status.get_status(self)
 
     def init(self):
         if self.is_valid:

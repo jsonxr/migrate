@@ -154,9 +154,12 @@ class TestFixture(object):
     def assert_yml_equal_str(self, yml, exp):
         # Convert to yml because this allows us to write yml of different styles
         # But still allow them to compare true
-        yml_dict = yaml.load(yml)
-        exp_dict = yaml.load(exp)
-        assert yml_dict == exp_dict, "yml != expected\n\n[%s]\n%s\n\n[%s]\n%s\n" % (yml_dict, yml, exp_dict, exp)
+        try:
+            yml_dict = yaml.load(yml)
+            exp_dict = yaml.load(exp)
+            assert yml_dict == exp_dict, "yml != expected\n\n[%s]\n%s\n\n[%s]\n%s\n" % (yml_dict, yml, exp_dict, exp)
+        except yaml.scanner.ScannerError as e:
+            assert False, 'invalid yml \n\n[%s]\n\n%s' % (yml, str(e))
 
     def assert_yml_equal_file(self, yml, filename):
         expected = self.get_assert_file(filename)

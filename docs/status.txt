@@ -1,1 +1,68 @@
 rename test/{test_Column.py => test_Column2.py} 
+
+#-----------------------------------------------------------------------------
+# Changes to sync to database:
+#-----------------------------------------------------------------------------
+iterate over head.migrations 
+    and (head.table != actual.table for create/change
+    and actual.table == expected.table
+    
+    if cmd.change
+        assert exists in head, (exists in head if no rename before)
+    if cmd.rename_table
+        assert=renameto exists in head
+        sync=renameto doesn't exist in actual, renamefrom exists in actual
+    if cmd.create_table
+        assert=exists in head, sync=!exist in actual
+    if cmd.drop_table
+        assert=doesn't exist in head, sync=exists in actual.
+
+    if cmd.add_column
+        assert=exists in head, sync=doesn't exist in acutal
+    if cmd.remove_column
+        assert=not in head, sync=exists in actual
+    if cmd.rename_column
+        assert=renameto exists in head 
+        sync=renameto not in head, renamefrom in head
+    if cmd.change_column
+        assert=column exists in head, column exists in actual
+        sync=column in head not match column in actual
+    
+# Don't show [force] here, they will show up in the database section
+
+
+    valid_commands = ['create_table', 'drop_table', 'rename_table',  # table commands
+                      'add_column', 'remove_column', 'change_column', 'rename_column',  # column commands
+                      
+                      'add_index', 'remove_index',
+                      
+                      'sql']
+
+
+
+
+
+
+#-----------------------------------------------------------------------------
+# Changed in directory but not added to sync:
+#-----------------------------------------------------------------------------
+path.table != head.table
+if path.table in previous.tables
+    path.migrations.table.action = rename_table or alter_table
+if ! path.table in previous.tables
+    path.migraitons.table.action = create_table
+for table in pre
+if ! previous.table in path.tables
+    path.migrations.table.action = drop_table
+
+    
+    
+#-----------------------------------------------------------------------------
+# Changed in database but not reflected in project:
+#-----------------------------------------------------------------------------
+These will be all the [force] tables
+actual.table != expected.table 
+    or actual.table not in expected.tables (added/renamed table)
+    or expected.table not in actual.tables (dropped/renamed table)
+
+    [force] if actual.table != expected.table (will try to do what's right, but renamed columns are lost potentially)

@@ -1,0 +1,14 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUsales_ticketsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hU	ticket_idhàhNhâhâhUstringubh)Åq}q(hU
+profile_idhàhNhâhâhUintegerubh)Åq}q(hUpos_ticket_idhàhNhâhâhUintegerubh)Åq}q(hUbusiness_datehàhNhâhâhUdateubh)Åq}q(hUtransaction_idhàhNhâhâhUintegerubh)Åq}q(hUtransaction_datehàhNhâhâhUdateubh)Åq }q!(hU	opened_athàhNhâhâhUdatetimeubh)Åq"}q#(hU	closed_athàhNhâhâhUdatetimeubh)Åq$}q%(hU
+party_sizehàhNhâhâhUintegerubh)Åq&}q'(hUticket_total_amounthàhNhâhâhUfloatubh)Åq(}q)(hUtax_total_amounthàhNhâhâhUfloatubh)Åq*}q+(hUreservation_typehàhNhâhâhUstringubh)Åq,}q-(hU
+created_athàhNhâhâhUdatetimeubh)Åq.}q/(hU
+updated_athàhNhâhâhUdatetimeube}q0bubUfilehashq1U(4abce412d1d71961a1e39a84f8ac7f7fb98728ecq2ub.

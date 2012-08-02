@@ -1,0 +1,19 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqU	addressesUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUaddressable_idhàhNhâhâhUintegerubh)Åq}q(hUaddressable_typehàhNhâhâhU
+string(50)ubh)Åq}q(hUaddress_typehàhNhâhâhU
+string(20)ubh)Åq}q(hUaddresshàhNhâhâhUstringubh)Åq}q(hU	address_2hàhNhâhâhUstringubh)Åq}q(hUcityhàhNhâhâhU
+string(50)ubh)Åq }q!(hUregionhàhNhâhâhU
+string(20)ubh)Åq"}q#(hUcountryhàhUUSAhâhâhU
+string(13)ubh)Åq$}q%(hUpostal_codehàhNhâhâhU
+string(13)ubh)Åq&}q'(hU
+created_athàhNhâhâhUdatetimeubh)Åq(}q)(hU
+updated_athàhNhâhâhUdatetimeubh)Åq*}q+(hU
+deleted_athàhNhâhâhUdatetimeube}q,bubUfilehashq-U(5d74a9098331751a40f3b73071c9ff19cdf54216q.ub.

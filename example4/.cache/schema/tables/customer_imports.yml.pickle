@@ -1,0 +1,14 @@
+Äccache
+_PickledFile
+q)Åq}q(Uobjqcschema
+Table
+q)Åq}q(UnameqUcustomer_importsUcolumnsq	cschema
+Columns
+q
+)Åq(cschema
+Column
+q)Åq}q(hUidUnullableqâUdefaultqNUautoincrementqàUkeyqàUtypeqUintegerubh)Åq}q(hUowner_idhàhNhâhâhUintegerubh)Åq}q(hUupload_v1_file_namehàhNhâhâhUstringubh)Åq}q(hUupload_v1_content_typehàhNhâhâhUstringubh)Åq}q(hUupload_v1_file_sizehàhNhâhâhUintegerubh)Åq}q(hUupload_v1_updated_athàhNhâhâhUdatetimeubh)Åq}q(hUcurrent_statehàhNhâhâhUstringubh)Åq }q!(hUmappingshàhNhâhâhUtextubh)Åq"}q#(hUimport_errorshàhNhâhâhUtextubh)Åq$}q%(hUignore_first_rowhàhNhâhâhUbooleanubh)Åq&}q'(hU
+created_athàhNhâhâhUdatetimeubh)Åq(}q)(hU
+updated_athàhNhâhâhUdatetimeubh)Åq*}q+(hU
+owner_typehàhUBusinesshâhâhUstringubh)Åq,}q-(hUtemp_uploaded_file_locationhàhNhâhâhUstringubh)Åq.}q/(hU	timestamphàhNhâhâhUstringubh)Åq0}q1(hUfilename_for_processinghàhNhâhâhUstringubh)Åq2}q3(hUcustomer_mappingshàhNhâhâhUtextubh)Åq4}q5(hUrails_import_errorshàhNhâhâhUtextubh)Åq6}q7(hUupload_v2_file_namehàhNhâhâhUstringubh)Åq8}q9(hUupload_v2_content_typehàhNhâhâhUstringubh)Åq:}q;(hUupload_v2_file_sizehàhNhâhâhUintegerubh)Åq<}q=(hUupload_v2_updated_athàhNhâhâhUdatetimeubh)Åq>}q?(hUsource_systemhàhNhâhâhUstringubh)Åq@}qA(hUuser_inputted_mappingshàhNhâhâhUtextubh)ÅqB}qC(hU
+remap_flaghàhUnot_requestedhâhâhUstringube}qDbubUfilehashqEU(94bfe6e2ea369bf5bd8730941cdd97176f75bd9dqFub.

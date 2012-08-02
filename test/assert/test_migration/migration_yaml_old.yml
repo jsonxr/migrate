@@ -1,0 +1,70 @@
+previous: bootstrap
+commands:
+    - action: rename_table 
+      params: 
+          table: changelog
+          renameto: changelog_old
+    - action: create_table
+      params:
+          table: changelog
+    - action: alter_table
+      params:
+          table: changelog_old
+          columns:
+              - add_column: col1
+              - rename_column: old_col renamed_col
+              - add_column: old_col
+              - remove_column: col2
+              - change_column: col3
+    - action: drop_table
+      params:
+          table: old_table
+  
+  
+# changelog.rename_table.renameto
+# changelog_old.alter_table.columns.old_col.rename_column.renameto
+
+# Status
+#
+#   rename:  changelog -> changelog_old
+#   create:  changelog
+#   alter:   changelog_old
+#                + old_col varchar(2)
+#                  old_col -> renamed_col varchar(2)
+#                + col1 varchar(1)
+#                  col3 varchar(2)
+#                - col2
+#   drop:    old_table
+#
+#
+#-----------------------------------------------------------------------------
+# From
+#-----------------------------------------------------------------------------
+# 
+#   changelog
+#   -----------------
+#   old_col varchar(1)
+#   col2 varchar(1)
+#   col3 varchar(1)
+#
+#   old_table
+#   -----------------
+#   who_cares varchar(1)
+#
+#
+#-----------------------------------------------------------------------------
+# To
+#-----------------------------------------------------------------------------
+#
+#   changelog_old
+#   -----------------
+#   old_col varchar(2)
+#   renamed_col varchar(2)
+#   col1 varchar(1)
+#   col3 varchar(2)
+#
+#   changelog
+#   -----------------
+#   whocares varchar(1)
+#
+#

@@ -11,8 +11,8 @@ import yaml
 from cStringIO import StringIO
 from contextlib import closing
 
+import cache
 import errors
-import yaml_cache
 
 
 #=============================================================================
@@ -112,12 +112,12 @@ class Table(object):
     def load_from_file(self, filename):
         self.clear()
         with file(filename, 'r') as stream:
-            data = yaml.load(stream)
-            self.load_from_dict(data)
+            string = stream.read()
+        self.load_from_str(string)
 
-    def save_to_file(self, filename, verbose=False):
-        with file(filename, 'w') as stream:
-            stream.write(self.get_yml(verbose))
+    def load_from_str(self, string):
+        data = yaml.load(string)
+        self.load_from_dict(data)
 
     def load_from_dict(self, data):
         assert "columns" in data
@@ -128,8 +128,11 @@ class Table(object):
             column = Column()
             column.load_from_dict(d)
             self.columns.append(column)
-
         # constraints
+
+    def save_to_file(self, filename, verbose=False):
+        with file(filename, 'w') as stream:
+            stream.write(self.get_yml(verbose))
 
     def add_column(self, name, col_type, default=None,
                  nullable=Column.NULLABLE_DEFAULT, key=Column.KEY_DEFAULT, autoincrement=Column.AUTOINCREMENT_DEFAULT):
@@ -152,34 +155,39 @@ class Table(object):
 # Tables
 #=============================================================================
 
-class Tables(dict):
+class Tables(object):
+    def __init__(self):
+        self.table_dict = {}
 
+    def __repr__(self):
+        return "<tables=%s>" % len(self.table_dict)
+
+    def __str__(self):
+        return self.__repr__()
 #    def __getstate__(self):
 #        return self.__dict__
 #
 #    def __setstate__(self, d):
 #        self.__dict__.update(d)
 
-    def __getitem__(self, key):
-        if key in self:
-            return dict.__getitem__(self, key)
+    def __iter__(self):
+        return self.table_dict.__iter__()
 
-#    def __getattr__(self, name):
-#        return self[name]
-#
-#    def __setattr__(self, name, value):
-#        assert value.name
-#        assert "columns" in value.__dict__
-#        if name == value.name:
-#            self[name] = value
-#        else:
-#            raise KeyError(name)
+    def __getitem__(self, key):
+        if key in self.table_dict:
+            return self.table_dict.__getitem__(key)
+
+    def __setitem__(self, key, value):
+        self.table_dict.__setitem__(key, value)
+
+    def __len__(self):
+        return len(self.table_dict)
 
     def __eq__(self, other):
         if (other is None):
             return False
         else:
-            equal = self.items() == other.items()
+            equal = self.table_dict.items() == other.table_dict.items()
             return equal
 
 
@@ -202,56 +210,234 @@ class Procedure(object):
 
 
 #=============================================================================
-# Command
+# Commands
 #=============================================================================
 
+
 class Command(object):
+    actions = {}
 
-    valid_commands = ['create_table', 'drop_table', 'rename_table',  # table commands
-                      'add_column', 'remove_column', 'change_column', 'rename_column',  # column commands
-                      'add_index', 'remove_index',
-                      'sql']
+    def __init__(self):
+        self.params = {}
 
-    def __init__(self, table=None, name=None, old=None, column=None):
-        self.name = name
-        self.table = table
-        self.old = old
-        self.column = column
-        self._validate()
-
-    def __repr__(self):
-        return "<command table='%s' name='%s'>" % (self.table, self.name)
+    @staticmethod
+    def register(command):
+        Command.actions[command.action] = command
 
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
-            s.write("{ ")
-            _write_str(s, "table: %s", self.table, verbose=True, quote=True)
-            _write_str(s, ", name: %s", self.name, verbose=True, quote=True)
-            _write_str(s, ", column: %s", self.column, verbose=verbose, quote=True)
-            _write_str(s, ", old: %s", self.old, verbose=verbose, quote=True)
-            s.write(" }")
+            _write_str(s, 'action: %s\n', self.action, verbose=True, quote=False)
+            if self.params:
+                s.write('params:\n')
+                s.write(indent(output_yaml(self.params, ['table', 'columns', 'renameto'])))
             return s.getvalue().strip()
 
-    def load_from_dict(self, data):
-        self.name = data["name"]
-        self.table = data["table"]
-        self.old = data["old"] if "old" in data else None
-        self.column = data["column"] if "column" in data else None
-        self._validate()
+    @staticmethod
+    def load_from_dict(data):
+        constructor = Command.actions[data['action']]
+        cmd = constructor()
+        cmd.params = data['params']
+        return cmd
+#action: alter_table
+#      params:
+#          table: changelog_mybatis
+#          columns:
+#              - add_column: col1
+#              - rename_column: old_col renamed_col
+#              - create_column: old_col
+#              - remove_column: col2
+#              - change_column: col3
+#                    _write_str(s, "params\n", self.action, verbose=True, quote=False)
 
-    def _validate(self):
-        if not self.name is None and not self.name in Command.valid_commands:
-            raise errors.AppError("%s is not a valid command" % self.name)
 
-    def display(self, sync=False, force=False):
-        _format_str = RED
-        _format_str = GREEN
-        if sync:
-            _sync = "[sync]"
-        if force:
-            _sync = "[force]"
-        s = "{:7} {:13} {:20}".format(_sync, "new table:", self.table)
-        return "{}".format(_format_str.format(s))
+class TableMigration(object):
+
+    def __init__(self):
+        self._table_name = None
+        self._commands = {}
+
+    def __repr__(self):
+        return "<%s table='%s'>" % (self.action, self._table)
+
+    @property
+    def table_name(self):
+        return self._table_name
+
+    @table_name.setter
+    def table_name(self, table_name):
+        self._table_name = table_name
+
+    @property
+    def commands(self):
+        return self._commands
+
+    def get_yml(self, verbose=False):
+        with closing(StringIO()) as s:
+            _write_str(s, '%s:\n', self._table_name, verbose=True, quote=False)
+            sorted_commands = sorted(self._commands.keys(), key=lambda c: c.lower())
+            for key in sorted_commands:
+                cmd = self._commands[key]
+                s.write(indent(cmd.get_yml(verbose) + '\n'))
+            return s.getvalue().strip()
+
+    @staticmethod
+    def load_from_dict(data):
+        constructor = Command.actions[data['action']]
+        cmd = constructor()
+        cmd.params = data['params']
+        return cmd
+
+    def create(self):
+        cmd = CreateTableCommand()
+        self.add_command(cmd)
+
+    def drop(self):
+        cmd = DropTableCommand()
+        self.add_command(cmd)
+
+    def rename(self, rename_from):
+        cmd = RenameTableCommand()
+        cmd.rename_from = rename_from
+        self.add_command(cmd)
+
+    def add_command(self, cmd):
+        self._commands[cmd.action] = cmd
+
+
+class TableCommand(object):
+
+    def get_yml(self, verbose=False):
+        return '%s: ~' % self.action
+
+
+class CreateTableCommand(TableCommand):
+    action = "create_table"
+    display = "create table"
+    sort_order = 2
+
+
+class DropTableCommand(TableCommand):
+    action = "drop_table"
+    display = "drop table"
+    sort_order = 4
+
+
+class RenameTableCommand(TableCommand):
+    action = "rename_table"
+    display = "rename table"
+    sort_order = 1
+
+    def __init__(self):
+        self._rename_from = None
+
+    def __repr__(self):
+        return "<rename_table rename_from='%s'>" % self._rename_from
+
+    @property
+    def rename_from(self):
+        return self._rename_from
+
+    @rename_from.setter
+    def rename_from(self, rename_from):
+        self._rename_from = rename_from
+
+    def get_yml(self, verbose=False):
+        return '%s: %s' % (self.action, self._rename_from)
+
+
+class AlterTableCommand(TableCommand):
+    action = "alter_table"
+    display = "alter table"
+    sort_order = 3
+
+    def __init__(self):
+        self._columns = []
+
+    def add_command(self, cmd):
+        self._columns.append(cmd)  # [cmd.column_name] = cmd
+
+    def add(self, column_name):
+        cmd = AddColumnCommand()
+        cmd.column_name = column_name
+        self.add_command(cmd)
+
+    def rename(self, column_name, rename_from):
+        cmd = RenameColumnCommand()
+        cmd.column_name = column_name
+        cmd.rename_from = rename_from
+        self.add_command(cmd)
+
+    def remove(self, column_name):
+        cmd = RemoveColumnCommand()
+        cmd.column_name = column_name
+        self.add_command(cmd)
+
+    def change(self, column_name):
+        cmd = ChangeColumnCommand()
+        cmd.column_name = column_name
+        self.add_command(cmd)
+
+    def nochange(self, column_name):
+        cmd = NochangeColumnCommand()
+        cmd.column_name = column_name
+        self.add_command(cmd)
+
+    def get_yml(self, verbose=False):
+        with closing(StringIO()) as s:
+            s.write('%s:\n' % self.action)
+            for cmd in self._columns:
+                s.write(indent(cmd.get_yml(verbose) + '\n', is_list=True))
+            return s.getvalue().strip()
+
+
+class ColumnCommand(object):
+    action = None
+
+    def __init__(self):
+        self._column_name = None
+
+    @property
+    def column_name(self):
+        return self._column_name
+
+    @column_name.setter
+    def column_name(self, column_name):
+        self._column_name = column_name
+
+    def get_yml(self, verbose=False):
+        if self.action:
+            return '%s %s' % (self.action, self._column_name)
+        else:
+            return '%s' % self._column_name
+
+
+class NochangeColumnCommand(ColumnCommand):
+    pass
+
+
+class AddColumnCommand(ColumnCommand):
+    action = 'add'
+
+
+class RemoveColumnCommand(ColumnCommand):
+    action = 'remove'
+
+
+class ChangeColumnCommand(ColumnCommand):
+    action = 'change'
+
+
+class RenameColumnCommand(ColumnCommand):
+    action = 'rename'
+
+    def __init__(self):
+        self.rename_from = None
+
+
+Command.register(CreateTableCommand)
+Command.register(DropTableCommand)
+Command.register(RenameTableCommand)
+Command.register(AlterTableCommand)
 
 
 #=============================================================================
@@ -261,45 +447,42 @@ class Command(object):
 class Migration(object):
     def __init__(self, previous=None):
         self.previous = previous
-        self.commands = []
+        #self.commands = []
         self._tables = {}
 
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
             _write_str(s, "previous: %s\n", self.previous, True)
-            if self.commands:
-                s.write("commands:\n")
-                sorted_commands = sorted(self.commands,
-                                         key=lambda c: ("%s %s %s" % (c.table, c.name, c.column)).lower())
-                for c in sorted_commands:
-                    s.write(indent(c.get_yml(verbose) + "\n", is_list=True))
+            if self._tables:
+                s.write("tables:\n")
+                sorted_tables = sorted(self._tables, key=lambda t: t.lower())
+                for table_name in sorted_tables:
+                    m = self._tables[table_name]
+                    s.write(indent(m.get_yml(verbose) + "\n"))
             else:
-                s.write("commands: ~\n")
+                s.write("tables: ~\n")
 
             return s.getvalue().strip()
 
     def clear(self):
-        self.commands = []
+        self._tables = {}
 
     def load_from_dict(self, data):
         self.clear()
         self.previous = data["previous"] if "previous" in data else None
         if data["commands"]:
             for d in data["commands"]:
-                command = Command()
-                command.load_from_dict(d)
+                command = Command.load_from_dict(d)
                 self.add_command(command)
 
     def save_to_file(self, filename, verbose=False):
         with file(filename, 'w') as stream:
             stream.write(self.get_yml(verbose))
 
-    def add_command(self, command):
-        self.commands.append(command)
-        table_name = command.table
-        if not table_name in self._tables:
-            self._tables[table_name] = []
-        self._tables[table_name].append(command)
+    def add_table_migration(self, table_migration):
+        table_name = table_migration.table_name
+        self._tables[table_name] = table_migration
+        print(table_name)
 
     @property
     def tables(self):
@@ -317,27 +500,35 @@ class Migration(object):
 class Schema(object):
     def __init__(self):
         self.version = None
-        self.tables = Tables()
+        self._tables = Tables()
 
     def __repr__(self):
-        return "<schema tables=%s>" % self.tables
+        return "<schema %s>" % repr(self.tables)
 
     def __eq__(self, other):
         if other is None:
             return False
         else:
-            result = self.tables.items() == other.tables.items()
+            result = self.tables == other.tables
             return result
+
+    @property
+    def tables(self):
+        return self._tables
+
+    @tables.setter
+    def tables(self, tables):
+        self._tables = tables
 
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
             s.write("tables:")
-            if (self.tables):
+            if (self._tables):
                 s.write("\n")
 
-                names = sorted(self.tables, key=str.lower)
+                names = sorted(self._tables, key=str.lower)
                 for name in names:
-                    table = self.tables[name]
+                    table = self._tables[name]
                     s.write(indent(table.get_yml(verbose), is_list=True))
                     s.write("\n\n")
             else:
@@ -354,14 +545,14 @@ class Schema(object):
         return self.__nonzero__() > 0
 
     def clear(self):
-        self.tables = Tables
+        self._tables = Tables()
 
-    def load_from_path(self, path):
+    def load_from_path(self, path, project_root):
         self.clear()
         # Tables
-        for filename in glob.glob(os.path.join(path, 'tables/*.yml')):
-            t = Table()
-            t.load_from_file(filename)
+        longpath = os.path.join(path, 'tables/*.yml')
+        for filename in glob.glob(longpath):
+            t = cache.load(project_root, filename, Table)
             self.add_table(t)
 
     def load_from_str(self, string):
@@ -382,18 +573,18 @@ class Schema(object):
         # Tables
         if not os.path.exists(path + "/tables"):
             os.mkdir(path + "/tables")
-        for table_name in self.tables:
-            table = self.tables[table_name]
+        for table_name in self._tables:
+            table = self._tables[table_name]
             filename = "%s/tables/%s.yml" % (path, table.name)
             table.save_to_file(filename, verbose)
         # Procedures
 
     def remove_table(self, name):
-        del self.tables[name]
+        del self._tables[name]
 
     def add_table(self, table):
         assert table.name
-        self.tables[table.name] = table
+        self._tables[table.name] = table
 
 
 #=============================================================================
@@ -412,8 +603,8 @@ class Release(object):
 #=============================================================================
 
 class Versions(object):
-    def __init__(self, path):
-        self.path = path
+    def __init__(self, project_root):
+        self.project_root = project_root
         self.versions = []
         self._head = None
         self._bootstrap = None
@@ -422,43 +613,39 @@ class Versions(object):
         self.versions.append(version)
 
     def get_version_by_name(self, name):
-        print("Versions.get_version_by_name(%s)" % name)
         filename = "/versions/%s.yml" % name
-        if os.path.exists(self.path + filename):
-            version = yaml_cache.load(self.path, filename, Version)
+        if os.path.exists(self.project_root + filename):
+            version = cache.load(self.project_root, filename, Version)
             return version
         else:
-            print("Does not exist ehere")
             return None
 
     def get_bootstrap(self):
-        print("Versions.get_bootstrap")
         if not self._bootstrap:
             self._bootstrap = self.get_version_by_name('bootstrap')
         return self._bootstrap
 
     def get_head(self):
-        print("Versions.get_head")
         if not self._head:
             self._head = self.get_version_by_name('head')
         return self._head
 
     def get_previous(self, version):
-        print("Versions.get_previous(%s)" % version.migration.previous)
         if version is None:
             return None
         else:
             previous = self.get_version_by_name(version.migration.previous)
             return previous
 
-    def get_from_path(self):
-        print("Versions.get_from_path(%s)" % self.path + "/schema/*.yml")
+    def load_from_path(self):
         v = Version()
         v.name = "path"
-        for filename in glob.glob(self.path + "/schema/*.yml"):
-            with file(filename, 'r') as stream:
-                data = yaml.load(stream)
-                v.load_from_dict(data)
+        v.schema.load_from_path(self.project_root + "/schema", project_root=self.project_root)
+#        for filename in glob.glob(self.path + "/schema/tables/*.yml"):
+#            print(filename)
+#            with file(filename, 'r') as stream:
+#                data = yaml.load(stream)
+#                v.load_from_dict(data)
         return v
 
 
@@ -475,7 +662,7 @@ class Version(object):
         self.filehash = None
 
     def __repr__(self):
-        return "<version name='%s' schema.tables=%s>" % (self.name, len(self._schema.tables))
+        return "<version name='%s' %s>" % (self.name, repr(self._schema.tables))
 
     def __eq__(self, other):
         return (self.get_yml() == other.get_yml())
@@ -507,22 +694,14 @@ class Version(object):
 #        if filename:
 #            self.filename = filename
 #        with file(self.filename, 'r') as stream:
-#            data = yaml.load(stream)
-#            self.load_from_dict(data)
-
-    def load_from_file(self, filename=None):
-        if filename:
-            self.filename = filename
-        with file(self.filename, 'r') as stream:
-            string = stream.read()
-        data = yaml.load(string)
-        self.load_from_dict(data)
+#            string = stream.read()
+#        data = yaml.load(string)
+#        self.load_from_dict(data)
 
     def load_from_dict(self, data):
         if "version" in data:
             self.name = data["version"]
         self._schema.load_from_dict(data)
-        self.migration = Migration()
         if "migration" in data:
             self.migration.load_from_dict(data["migration"])
 
@@ -583,7 +762,7 @@ def indent(value, indent=1, is_list=False):
     if is_list:
         first += "- "
         others += "  "
-
+    #print("strings=%s"%strings)
     newlist = [first + strings[0]]
     for i in range(1, len(strings)):
         newlist.append(others + strings[i])
@@ -594,9 +773,53 @@ def indent(value, indent=1, is_list=False):
     return newstr
 
 
-RED = "\033[31m{}\033[0m"
-GREEN = "\033[32m{}\033[0m"
-YELLOW = "\033[33m{}\033[0m"
+def output_yaml(value, key_order=None):
+    if type(value) is dict:
+        if dict:
+            with closing(StringIO()) as s:
+                if key_order:
+                    sorted_keys = key_order
+                else:
+                    sorted_keys = sorted(value.keys(), key=lambda s: s.lower())
+                for key in sorted_keys:
+                    if key in value:
+                        v = value[key]
+                        if type(v) is list or type(v) is dict:
+                            if value[key]:
+                                yml_output = output_yaml(value[key])
+                                s.write('%s:\n' % key)
+                                s.write(indent(yml_output + '\n'))
+                            else:
+                                s.write('%s: ~\n' % key)
+                        else:
+                            s.write('%s: %s\n' % (key, value[key]))
+                r = s.getvalue().strip()
+                return r
+        else:
+            return '~'
+    elif type(value) is list:
+        if value:
+            with closing(StringIO()) as s:
+                #s.write('%s:\n' % name)
+                for item in value:
+                    if type(item) is list:
+                        s.write('-\n')
+                        s.write(indent(output_yaml(item) + '\n'))
+                    elif type(item) is dict:
+                        s.write(indent(output_yaml(item) + '\n', indent=0, is_list=True))
+                    else:
+                        s.write('- %s\n' % item)
+                return s.getvalue().strip()
+        else:
+            return '~'
+    else:
+        try:
+            yml = value.get_yml()
+            print('returning get_yml!!!!')
+            return yml
+        except:
+            print('returning value!!!!%s' % value)
+            return value
 
 
 #=============================================================================
