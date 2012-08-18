@@ -4,4 +4,4 @@ version: bootstrap
 tables: ~
 migration:
     previous: ~
-    commands: ~
+    tables: ~

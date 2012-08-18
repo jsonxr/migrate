@@ -1,0 +1,5 @@
+name: changelog
+columns:
+    - { name: "old_col", type: "varchar(1)" }
+    - { name: "col2", type: "varchar(1)" }
+    - { name: "col3", type: "varchar(1)" }

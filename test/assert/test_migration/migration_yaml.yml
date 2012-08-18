@@ -1,39 +1,20 @@
 previous: bootstrap
 tables:
-    changelog: 
-        create_table: ~
+    changelog:
+        renameto: changelog_old
+        create: ~
     changelog_old:
-        alter_table:
-            - old_col: add
-            - renamed_col: { renamefrom: old_col }
-            - col1: add
-            - col3: change
-            - col4: ~
-            - col2: remove
-        rename_table: changelog
+        alter:
+            col1: add
+            col2: remove
+            col3: nochange
+            col4: change
+            old_col: add
+            renamed_col: rename old_col
     old_table: 
-        drop_table: ~
-    contacts:
-        alter_table:
-            col1: add_column
-
-tables:
-    changelog: 
-        create_table: ~
-    changelog_old:
-        alter_table:
-            - add old_col
-            - rename old_col renamed_col
-            - add col1
-            - nochange col3
-            - change col4
-            - remove col2
-        rename_table: changelog
-    old_table: 
-        drop_table: ~
-    contacts:
-        alter_table:
-            col1: add_column
+        drop: ~
+# The informers
+# Aliens
 
 
 #commands:
@@ -60,8 +41,18 @@ tables:
 #   rename:  changelog -> changelog_old
 #   create:  changelog
 #   alter:   changelog_old
+#   drop:    old_table
+#
+#
+#
+#
+# Status
+#
+#   rename:  changelog -> changelog_old
+#   create:  changelog
+#   alter:   changelog_old
 #                + old_col varchar(2)
-#                  old_col -> renamed_col, varchar(2) -> varchar(255)
+#                  old_col varchar(2) -> renamed_col varchar(255)
 #                + col1 varchar(1)
 #                  col3 varchar(2)
 #                  col4 varchar(255) -> varchar(2)

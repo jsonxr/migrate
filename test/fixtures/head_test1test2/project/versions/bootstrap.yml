@@ -10,4 +10,4 @@ tables:
           - { name: "col2", type: "char(2)" }
 migration:
     previous: ~
-    commands: ~
+    tables: ~

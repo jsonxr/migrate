@@ -1,0 +1,6 @@
+name: changelog_old
+columns:
+    - { name: "old_col", type: "varchar(2)" }
+    - { name: "renamed_col", type: "varchar(2)" }
+    - { name: "col1", type: "varchar(1)" }
+    - { name: "col3", type: "varchar(2)" }

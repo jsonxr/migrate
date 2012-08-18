@@ -9,5 +9,6 @@ tables:
           - { name: "applied_on", type: "datetime", key: false, default: ~, nullable: false, autoincrement: false }
 migration:
     previous: bootstrap
-    commands:
-        - { table: "migrations", name: "create_table", column: ~, old: ~ }
+    tables:
+        migrations:
+            create: ~

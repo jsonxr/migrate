@@ -93,43 +93,40 @@ class TestMigration(unittest.TestCase):
         value = schema.output_yaml(COMPLEX)
         assert value == YML_COMPLEX, '\n%s' % value
 
+    @unittest.skip('Skip while we are developing the alter_table command.')
+    def test_migration_load_yaml(self):
+        with fixtures.TestFixture() as tf:
+            expected = tf.get_assert_file("/test_migration/migration_yaml.yml")
+            migration = schema.Migration()
+            migration.load_from_str(expected)
+            yml = migration.get_yml()
+            tf.assert_yml_equal_str(yml, expected)
+
     def test_migration_yaml(self):
         with fixtures.TestFixture() as tf:
             migration = schema.Migration()
             migration.previous = 'bootstrap'
-            # create
-            m = schema.TableMigration()
-            m.table_name = 'changelog'
-            m.create()
-            migration.add_table_migration(m)
+            migration.create_table('changelog')
+            migration.rename_table('changelog', 'changelog_old')
+            migration.drop_table('old_table')
 
-            # rename
-            m = schema.TableMigration()
-            m.table_name = 'changelog_old'
-            m.rename('changelog')
-            # alter
-            c = schema.AlterTableCommand()
-#            old_col: add_column
-#            renamed_col: { renamefrom: old_col }
-#            col1: add_column
-#            col3: ~
-#            col4: change_column
-#            col2: remove_column
-            c.add('old_col')
-            c.rename('renamed_col', 'old_col')
-            c.add('col1')
-            c.change('col3')
-            c.nochange('col4')
-            c.remove('col2')
-            m.add_command(c)
-            #m.add_command(c)
-            migration.add_table_migration(m)
+            old_table = schema.Table()
+            old_table.name = 'changelog'
+            old_table.columns.add('old_col', 'varchar(2)')
+            old_table.columns.add('col1', 'varchar(1)')
+            old_table.columns.add('col2', 'varchar(2)')
+            old_table.columns.add('col3', 'varchar(1)')
 
-            # drop
-            m = schema.TableMigration()
-            m.table_name = 'old_table'
-            m.drop()
-            migration.add_table_migration(m)
+            new_table = schema.Table()
+            new_table.name = 'changelog_old'
+            new_table.columns.add('old_col', 'varchar1')
+            new_table.columns.add('renamed_col', 'varchar(2)')
+            new_table.columns.add('col1', 'varchar(1)')
+            new_table.columns.add('col4', 'varchar(255)')
+            new_table.columns.add('col3', 'varchar1')
+
+            migration.alter_table(old_table, new_table)
+            migration.rename_column('changelog_old', 'old_col', 'renamed_col')
 
             # Let's compare!
             yml = migration.get_yml()

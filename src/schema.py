@@ -7,12 +7,12 @@ Copyright (c) 2012 Jason Rowland. All rights reserved.
 
 import glob
 import os
+import re
 import yaml
 from cStringIO import StringIO
 from contextlib import closing
 
 import cache
-import errors
 
 
 #=============================================================================
@@ -20,7 +20,10 @@ import errors
 #=============================================================================
 
 class Columns(list):
-    pass
+    def add(self, name, col_type, default=None, nullable=True, key=False, autoincrement=False):
+        column = Column(name, col_type, default=default, nullable=nullable, key=key, autoincrement=autoincrement)
+        self.append(column)
+
 #    def __getstate__(self):
 #        return self.__dict__
 #
@@ -142,6 +145,12 @@ class Table(object):
         self.columns.append(column)
         return column
 
+    def get_column(self, name):
+        for col in self.columns:
+            if col.name == name:
+                return col
+        return None
+
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
             _write_str(s, "name: %s\n", self.name, verbose=True)
@@ -212,52 +221,48 @@ class Procedure(object):
 #=============================================================================
 # Commands
 #=============================================================================
-
-
-class Command(object):
-    actions = {}
-
-    def __init__(self):
-        self.params = {}
-
-    @staticmethod
-    def register(command):
-        Command.actions[command.action] = command
-
-    def get_yml(self, verbose=False):
-        with closing(StringIO()) as s:
-            _write_str(s, 'action: %s\n', self.action, verbose=True, quote=False)
-            if self.params:
-                s.write('params:\n')
-                s.write(indent(output_yaml(self.params, ['table', 'columns', 'renameto'])))
-            return s.getvalue().strip()
-
-    @staticmethod
-    def load_from_dict(data):
-        constructor = Command.actions[data['action']]
-        cmd = constructor()
-        cmd.params = data['params']
-        return cmd
-#action: alter_table
-#      params:
-#          table: changelog_mybatis
-#          columns:
-#              - add_column: col1
-#              - rename_column: old_col renamed_col
-#              - create_column: old_col
-#              - remove_column: col2
-#              - change_column: col3
-#                    _write_str(s, "params\n", self.action, verbose=True, quote=False)
+#
+#
+#class Command(object):
+#    actions = {}
+#
+#    def __init__(self):
+#        self.params = {}
+#
+#    @staticmethod
+#    def register(command):
+#        Command.actions[command.action] = command
+#
+#    def get_yml(self, verbose=False):
+#        with closing(StringIO()) as s:
+#            _write_str(s, 'action: %s\n', self.action, verbose=True, quote=False)
+#            if self.params:
+#                s.write('params:\n')
+#                s.write(indent(output_yaml(self.params, ['table', 'columns', 'renameto'])))
+#            return s.getvalue().strip()
+#
+#    @staticmethod
+#    def load_from_dict(data):
+#        constructor = Command.actions[data['action']]
+#        cmd = constructor()
+#        cmd.params = data['params']
+#        return cmd
 
 
 class TableMigration(object):
-
     def __init__(self):
         self._table_name = None
         self._commands = {}
 
     def __repr__(self):
-        return "<%s table='%s'>" % (self.action, self._table)
+        action = None
+        for cmd_name in self._commands:
+            cmd = self._commands[cmd_name]
+            if action:
+                action += ',' + cmd.action
+            else:
+                action = cmd.action
+        return "<TableMigration table=%s actions=%s>" % (self._table_name, action)
 
     @property
     def table_name(self):
@@ -280,81 +285,83 @@ class TableMigration(object):
                 s.write(indent(cmd.get_yml(verbose) + '\n'))
             return s.getvalue().strip()
 
-    @staticmethod
-    def load_from_dict(data):
-        constructor = Command.actions[data['action']]
-        cmd = constructor()
-        cmd.params = data['params']
-        return cmd
-
-    def create(self):
-        cmd = CreateTableCommand()
-        self.add_command(cmd)
-
-    def drop(self):
-        cmd = DropTableCommand()
-        self.add_command(cmd)
-
-    def rename(self, rename_from):
-        cmd = RenameTableCommand()
-        cmd.rename_from = rename_from
-        self.add_command(cmd)
+    def load_from_dict(self, data):
+        for action in data:
+            constructor = TableCommand.actions[action]
+            cmd = constructor()
+            d = data[action]
+            if d != None:
+                cmd.load_from_dict(d)
+            self._commands[action] = cmd
+#
+#    def create(self):
+#        cmd = CreateTableCommand()
+#        self.add_command(cmd)
+#
+#    def drop(self):
+#        cmd = DropTableCommand()
+#        self.add_command(cmd)
+#
+#    def rename(self, rename_from):
+#        cmd = RenameTableCommand()
+#        cmd.rename_from = rename_from
+#        self.add_command(cmd)
 
     def add_command(self, cmd):
         self._commands[cmd.action] = cmd
 
 
 class TableCommand(object):
+    actions = {}
+
+    @staticmethod
+    def register(command):
+        TableCommand.actions[command.action] = command
 
     def get_yml(self, verbose=False):
         return '%s: ~' % self.action
 
 
 class CreateTableCommand(TableCommand):
-    action = "create_table"
+    action = "create"
     display = "create table"
     sort_order = 2
 
 
 class DropTableCommand(TableCommand):
-    action = "drop_table"
+    action = "drop"
     display = "drop table"
     sort_order = 4
 
 
 class RenameTableCommand(TableCommand):
-    action = "rename_table"
+    action = "renameto"
     display = "rename table"
     sort_order = 1
 
     def __init__(self):
-        self._rename_from = None
+        self.rename_to = None
 
     def __repr__(self):
-        return "<rename_table rename_from='%s'>" % self._rename_from
-
-    @property
-    def rename_from(self):
-        return self._rename_from
-
-    @rename_from.setter
-    def rename_from(self, rename_from):
-        self._rename_from = rename_from
+        return "<rename_table rename_to='%s'>" % self.rename_to
 
     def get_yml(self, verbose=False):
-        return '%s: %s' % (self.action, self._rename_from)
+        return '%s: %s' % (self.action, self.rename_to)
+
+    def load_from_dict(self, data):
+        self.rename_to = data
 
 
 class AlterTableCommand(TableCommand):
-    action = "alter_table"
+    action = "alter"
     display = "alter table"
     sort_order = 3
 
     def __init__(self):
-        self._columns = []
+        self._columns = {}
 
     def add_command(self, cmd):
-        self._columns.append(cmd)  # [cmd.column_name] = cmd
+        self._columns[cmd.column_name] = cmd  # [cmd.column_name] = cmd
 
     def add(self, column_name):
         cmd = AddColumnCommand()
@@ -364,7 +371,7 @@ class AlterTableCommand(TableCommand):
     def rename(self, column_name, rename_from):
         cmd = RenameColumnCommand()
         cmd.column_name = column_name
-        cmd.rename_from = rename_from
+        cmd.params = rename_from
         self.add_command(cmd)
 
     def remove(self, column_name):
@@ -385,34 +392,45 @@ class AlterTableCommand(TableCommand):
     def get_yml(self, verbose=False):
         with closing(StringIO()) as s:
             s.write('%s:\n' % self.action)
-            for cmd in self._columns:
-                s.write(indent(cmd.get_yml(verbose) + '\n', is_list=True))
+            #sorted_tables = sorted(self._tables, key=lambda t: t.lower())
+            for col_name in sorted(self._columns.keys(), key=lambda t: t.lower()):
+                cmd = self._columns[col_name]
+                s.write(indent(cmd.get_yml(verbose) + '\n'))
             return s.getvalue().strip()
+
+    def load_from_dict(self, data):
+        for col_name in data:
+            value = data[col_name]
+            cmd = ColumnCommand()
+            cmd.column_name = col_name
+            cmd.load_from_string(value)
+            self._columns[col_name] = cmd
 
 
 class ColumnCommand(object):
     action = None
 
     def __init__(self):
-        self._column_name = None
-
-    @property
-    def column_name(self):
-        return self._column_name
-
-    @column_name.setter
-    def column_name(self, column_name):
-        self._column_name = column_name
+        self.column_name = None
+        self.params = None
 
     def get_yml(self, verbose=False):
-        if self.action:
-            return '%s %s' % (self.action, self._column_name)
+        if self.params:
+            return '%s: %s %s' % (self.column_name, self.action, self.params)
         else:
-            return '%s' % self._column_name
+            return '%s: %s' % (self.column_name, self.action)
+
+    def load_from_string(self, s):
+        m = re.search('(\\w*) (.*)', s)
+        if m is None:
+            self.action = s
+        else:
+            self.action = m.group(1)
+            self.params = m.group(2)
 
 
 class NochangeColumnCommand(ColumnCommand):
-    pass
+    action = 'nochange'
 
 
 class AddColumnCommand(ColumnCommand):
@@ -430,14 +448,17 @@ class ChangeColumnCommand(ColumnCommand):
 class RenameColumnCommand(ColumnCommand):
     action = 'rename'
 
-    def __init__(self):
-        self.rename_from = None
 
+#ColumnCommand.register(NochangeColumnCommand)
+#ColumnCommand.register(AddColumnCommand)
+#ColumnCommand.register(RemoveColumnCommand)
+#ColumnCommand.register(ChangeColumnCommand)
+#ColumnCommand.register(RenameColumnCommand)
 
-Command.register(CreateTableCommand)
-Command.register(DropTableCommand)
-Command.register(RenameTableCommand)
-Command.register(AlterTableCommand)
+TableCommand.register(CreateTableCommand)
+TableCommand.register(DropTableCommand)
+TableCommand.register(RenameTableCommand)
+TableCommand.register(AlterTableCommand)
 
 
 #=============================================================================
@@ -457,8 +478,8 @@ class Migration(object):
                 s.write("tables:\n")
                 sorted_tables = sorted(self._tables, key=lambda t: t.lower())
                 for table_name in sorted_tables:
-                    m = self._tables[table_name]
-                    s.write(indent(m.get_yml(verbose) + "\n"))
+                    table_migration = self._tables[table_name]
+                    s.write(indent(table_migration.get_yml(verbose) + "\n"))
             else:
                 s.write("tables: ~\n")
 
@@ -470,10 +491,22 @@ class Migration(object):
     def load_from_dict(self, data):
         self.clear()
         self.previous = data["previous"] if "previous" in data else None
-        if data["commands"]:
-            for d in data["commands"]:
-                command = Command.load_from_dict(d)
-                self.add_command(command)
+        if data["tables"]:
+            for table_name in data["tables"]:
+                table_migration = TableMigration()
+                table_migration.table_name = table_name
+                table_migration.load_from_dict(data["tables"][table_name])
+                self._tables[table_name] = table_migration
+
+    def load_from_file(self, filename):
+        self.clear()
+        with file(filename, 'r') as stream:
+            string = stream.read()
+        self.load_from_str(string)
+
+    def load_from_str(self, string):
+        data = yaml.load(string)
+        self.load_from_dict(data)
 
     def save_to_file(self, filename, verbose=False):
         with file(filename, 'w') as stream:
@@ -482,7 +515,69 @@ class Migration(object):
     def add_table_migration(self, table_migration):
         table_name = table_migration.table_name
         self._tables[table_name] = table_migration
-        print(table_name)
+
+    def get_or_create_table_migration(self, table_name):
+        if table_name in self._tables:
+            table_migration = self._tables[table_name]
+        else:
+            table_migration = TableMigration()
+            table_migration.table_name = table_name
+            self._tables[table_name] = table_migration
+        return table_migration
+
+    def create_table(self, table_name):
+        table_migration = self.get_or_create_table_migration(table_name)
+        cmd = CreateTableCommand()
+        table_migration.add_command(cmd)
+
+    def drop_table(self, table_name):
+        table_migration = self.get_or_create_table_migration(table_name)
+        cmd = DropTableCommand()
+        table_migration.add_command(cmd)
+
+    def rename_table(self, old_name, new_name):
+        table_migration = self.get_or_create_table_migration(old_name)
+        cmd = RenameTableCommand()
+        cmd.rename_to = new_name
+        table_migration.add_command(cmd)
+
+    def alter_table(self, old_table, new_table):
+        if new_table.name != old_table.name:
+            self.rename_table(old_table.name, new_table.name)
+
+        table_migration = self.get_or_create_table_migration(new_table.name)
+        #if AlterTableCommand.action in table_migration.commands:
+        #    old_alter = table_migration.commands[AlterTableCommand.action]
+        cmd = AlterTableCommand()
+        # TODO: Get the rename commands and add them first
+        # TODO: In create/drop, check to see if the column is in the appropriate rename command first
+        #
+        # Find all the column differences
+        for col in new_table.columns:
+            old_col = old_table.get_column(col.name)
+            if old_col:
+                if col == old_col:
+                    cmd.nochange(col.name)
+                else:
+                    cmd.change(col.name)
+            else:
+                cmd.add(col.name)
+        # Find all the columns that were dropped
+        for old_col in old_table.columns:
+            if not new_table.get_column(old_col.name):
+                cmd.remove(old_col.name)
+
+        table_migration.add_command(cmd)
+        #cmd = table_migration.get_alter_command()
+
+    def rename_column(self, table_name, old_column, new_column):
+        pass
+
+#    m.rename_table("migration", "migration_bak")  # m.add_command(schema.Command("migration_bak", "rename_table", old="migration"))
+#    m.rename_column("altered_table", "old_column", "renamed_column")  # m.add_command(schema.Command("altered_table", "rename_column", column="renamed_column", old="old_column"))
+#    m.add_column("altered_table", "added_column")
+#    m.remove_column("altered_table", "dropped_column")
+#    m.change_column("algtered_table", "changed_column")
 
     @property
     def tables(self):
@@ -716,14 +811,15 @@ class Version(object):
             os.makedirs(path)
         self.schema.save_to_path(path, verbose)
         self.migration.save_to_file(path + "/migration.yml", verbose)
-
-    def drop_table(self, name):
-        self.schema.remove_table(name)
-        self.migration.add_command(Command(name, 'drop_table'))
+#
+#    def drop_table(self, name):
+#        self.schema.remove_table(name)
+#        self.migration.add_command(Command(name, 'drop_table'))
+#
 
     def create_table(self, table):
         self.schema.add_table(table)
-        self.migration.add_command(Command(table.name, 'create_table'))
+        self.migration.create_table(table.name)
 
 
 #=============================================================================
@@ -815,10 +911,10 @@ def output_yaml(value, key_order=None):
     else:
         try:
             yml = value.get_yml()
-            print('returning get_yml!!!!')
+            #print('returning get_yml!!!!')
             return yml
         except:
-            print('returning value!!!!%s' % value)
+            #print('returning value!!!!%s' % value)
             return value
 
 

@@ -134,22 +134,21 @@ def get_status_changes_not_added(project):
     if path_tables == head_tables:
         return None
 
-    actual_tables = project.actual_schema.tables
-    expected_tables = project.expected_version.schema.tables
+    #actual_tables = project.actual_schema.tables
+    #expected_tables = project.expected_version.schema.tables
 
     with closing(StringIO()) as s:
         for table_name in project.path_version.schema.tables:
-            path_table = path_tables[table_name]
+            #path_table = path_tables[table_name]
             if not table_name in head_tables:
-                if not table_name in project.path_version.migration.tables[] 
-                c = schema.CreateTableCommand()
-                c.table = table_name
-                project.path_version.migration.add_command(c)
+                if not table_name in project.path_version.migration.tables:
+                    c = schema.CreateTableCommand()
+                    c.table = table_name
+                    project.path_version.migration.add_command(c)
                 #s.write("create %s\n" % table_name)
         for table_name in project.head_version.schema.tables:
             if not table_name in path_tables:
                 s.write('drop %s\n' % table_name)
-
 
 #            head_table = head_tables[table_name]
 #            if path_table != head_table:

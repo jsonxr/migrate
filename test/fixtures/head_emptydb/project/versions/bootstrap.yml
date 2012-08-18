@@ -1,4 +1,4 @@
 version: bootstrap
 migration:
     previous: ~
-    commands: ~
+    tables: ~
