@@ -163,10 +163,11 @@ def _create_yml_migration():
     m.create_table("migration")  # m.add_command(schema.Command("migration", "create_table"))
     m.rename_table("migration", "migration_bak")  # m.add_command(schema.Command("migration_bak", "rename_table", old="migration"))
     m.drop_table("migration_old")  # m.add_command(schema.Command("migration_old", "drop_table"))
-    #m.rename_column("altered_table", "old_column", "renamed_column")  # m.add_command(schema.Command("altered_table", "rename_column", column="renamed_column", old="old_column"))
-    #m.add_column("altered_table", "added_column")
-    #m.remove_column("altered_table", "dropped_column")
-    #m.change_column("algtered_table", "changed_column")
+    
+    m.rename_column("altered_table", "old_column", "renamed_column")
+    m.add_column("altered_table", "added_column")
+    m.change_column("altered_table", "changed_column")
+    m.remove_column("altered_table", "dropped_column")
     return m
 
 

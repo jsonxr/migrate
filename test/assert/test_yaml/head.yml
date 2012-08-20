@@ -7,5 +7,6 @@ tables:
           - { name: "col2", type: "string", key: true, default: ~, nullable: false, autoincrement: false }
 migration:
     previous: bootstrap
-    commands:
-        - { table: "test1", name: "create_table", column: ~, old: ~ }
+    tables:
+        test1:
+            create: ~

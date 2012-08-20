@@ -1,9 +1,14 @@
 previous: ~
-commands:
-    - { table: altered_table, name: add_column, column: added_column }
-    - { table: altered_table, name: change_column, column: changed_column }
-    - { table: altered_table, name: remove_column, column: dropped_column }
-    - { table: altered_table, name: rename_column, column: renamed_column, old: old_column }
-    - { table: migration, name: create_table }
-    - { table: migration_bak, name: rename_table, old: migration }
-    - { table: migration_old, name: drop_table }
+tables:
+    altered_table:
+        alter:
+            added_column: add
+            changed_column: change
+            dropped_column: remove
+            renamed_column: renamefrom old_column
+    migration: 
+        create: ~
+    migration_bak:
+        renamefrom: migration
+    migration_old:
+        drop: ~

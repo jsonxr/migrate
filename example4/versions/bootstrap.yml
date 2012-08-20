@@ -2164,4 +2164,4 @@ tables:
           - { name: "updated_at", type: "datetime" }
 migration:
     previous: ~
-    commands: ~
+    tables: ~

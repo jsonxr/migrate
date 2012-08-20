@@ -103,7 +103,9 @@ def get_status_changes_to_sync(project):
             syncable = actual_table == expected_table
             needs_sync = head_table != actual_table
             if needs_sync and syncable:
-                cmd_array = project.head_version.migration.tables[table_name]
+                cmd_array = project.head_version.migration.tables[table_name].commands
+                print('cmd_array')
+                print(cmd_array)
                 s.write(get_commands_display(table_name, cmd_array, actual_table, expected_table, head_table, GREEN))
         s.write('#\n')
         syncable = s.getvalue()
@@ -121,8 +123,9 @@ def get_status_changes_to_sync(project):
 
 def get_commands_display(table_name, cmd_array, actual_table, expected_table, head_table, color):
     with closing(StringIO()) as s:
-        for cmd in cmd_array:
-            cmd_display = "{:13}   {:20}".format(cmd.display + ':', cmd.table)
+        for cmd_name in cmd_array:
+            cmd = cmd_array[cmd_name]
+            cmd_display = "{:13}   {:20}".format(cmd.display + ':', cmd.table_name)
             s.write('#       %s\n' % color.format(cmd_display))
         return s.getvalue()
 

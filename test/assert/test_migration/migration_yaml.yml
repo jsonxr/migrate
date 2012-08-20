@@ -1,7 +1,6 @@
 previous: bootstrap
 tables:
     changelog:
-        renameto: changelog_old
         create: ~
     changelog_old:
         alter:
@@ -10,7 +9,8 @@ tables:
             col3: nochange
             col4: change
             old_col: add
-            renamed_col: rename old_col
+            renamed_col: renamefrom old_col
+        renamefrom: changelog
     old_table: 
         drop: ~
 # The informers
@@ -31,10 +31,11 @@ tables:
 #            col2: remove_column
 #    old_table: 
 #        drop_table: ~
-  
-  
-# changelog.rename_table.renameto
-# changelog_old.alter_table.columns.old_col.rename_column.renameto
+
+
+
+
+
 
 # Status
 #
@@ -69,6 +70,7 @@ tables:
 #   old_col varchar(1)
 #   col2 varchar(1)
 #   col3 varchar(1)
+#   col4 varchar(255)
 #
 #   old_table
 #   -----------------

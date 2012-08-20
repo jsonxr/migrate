@@ -13,6 +13,7 @@ from cStringIO import StringIO
 from contextlib import closing
 
 import cache
+from errors import AppError
 
 
 #=============================================================================
@@ -327,29 +328,36 @@ class CreateTableCommand(TableCommand):
     display = "create table"
     sort_order = 2
 
+    def __init__(self):
+        self.table_name = None
+
 
 class DropTableCommand(TableCommand):
     action = "drop"
     display = "drop table"
     sort_order = 4
 
+    def __init__(self):
+        self.table_name = None
+
 
 class RenameTableCommand(TableCommand):
-    action = "renameto"
+    action = "renamefrom"
     display = "rename table"
     sort_order = 1
 
     def __init__(self):
-        self.rename_to = None
+        self.table_name = None
+        self.rename_from = None
 
     def __repr__(self):
-        return "<rename_table rename_to='%s'>" % self.rename_to
+        return "<rename_table renamefrom='%s'>" % self.rename_from
 
     def get_yml(self, verbose=False):
-        return '%s: %s' % (self.action, self.rename_to)
+        return '%s: %s' % (self.action, self.rename_from)
 
     def load_from_dict(self, data):
-        self.rename_to = data
+        self.rename_from = data
 
 
 class AlterTableCommand(TableCommand):
@@ -358,10 +366,11 @@ class AlterTableCommand(TableCommand):
     sort_order = 3
 
     def __init__(self):
-        self._columns = {}
+        self.table_name = None
+        self.columns = {}
 
     def add_command(self, cmd):
-        self._columns[cmd.column_name] = cmd  # [cmd.column_name] = cmd
+        self.columns[cmd.column_name] = cmd  # [cmd.column_name] = cmd
 
     def add(self, column_name):
         cmd = AddColumnCommand()
@@ -371,7 +380,7 @@ class AlterTableCommand(TableCommand):
     def rename(self, column_name, rename_from):
         cmd = RenameColumnCommand()
         cmd.column_name = column_name
-        cmd.params = rename_from
+        cmd.rename_from = rename_from
         self.add_command(cmd)
 
     def remove(self, column_name):
@@ -393,8 +402,8 @@ class AlterTableCommand(TableCommand):
         with closing(StringIO()) as s:
             s.write('%s:\n' % self.action)
             #sorted_tables = sorted(self._tables, key=lambda t: t.lower())
-            for col_name in sorted(self._columns.keys(), key=lambda t: t.lower()):
-                cmd = self._columns[col_name]
+            for col_name in sorted(self.columns.keys(), key=lambda t: t.lower()):
+                cmd = self.columns[col_name]
                 s.write(indent(cmd.get_yml(verbose) + '\n'))
             return s.getvalue().strip()
 
@@ -404,7 +413,7 @@ class AlterTableCommand(TableCommand):
             cmd = ColumnCommand()
             cmd.column_name = col_name
             cmd.load_from_string(value)
-            self._columns[col_name] = cmd
+            self.columns[col_name] = cmd
 
 
 class ColumnCommand(object):
@@ -412,21 +421,12 @@ class ColumnCommand(object):
 
     def __init__(self):
         self.column_name = None
-        self.params = None
 
     def get_yml(self, verbose=False):
-        if self.params:
-            return '%s: %s %s' % (self.column_name, self.action, self.params)
-        else:
-            return '%s: %s' % (self.column_name, self.action)
+        return '%s: %s' % (self.column_name, self.action)
 
     def load_from_string(self, s):
-        m = re.search('(\\w*) (.*)', s)
-        if m is None:
             self.action = s
-        else:
-            self.action = m.group(1)
-            self.params = m.group(2)
 
 
 class NochangeColumnCommand(ColumnCommand):
@@ -446,7 +446,19 @@ class ChangeColumnCommand(ColumnCommand):
 
 
 class RenameColumnCommand(ColumnCommand):
-    action = 'rename'
+    action = 'renamefrom'
+
+    def __init__(self):
+        self.column_name = None
+        self.rename_from = None
+
+    def get_yml(self, verbose=False):
+        return '%s: %s %s' % (self.column_name, self.action, self.rename_from)
+
+    def load_from_string(self, s):
+        m = re.search('(\\w*) (.*)', s)
+        self.action = m.group(1)
+        self.rename_from = m.group(2)
 
 
 #ColumnCommand.register(NochangeColumnCommand)
@@ -528,56 +540,94 @@ class Migration(object):
     def create_table(self, table_name):
         table_migration = self.get_or_create_table_migration(table_name)
         cmd = CreateTableCommand()
+        cmd.table_name = table_name
         table_migration.add_command(cmd)
 
     def drop_table(self, table_name):
         table_migration = self.get_or_create_table_migration(table_name)
         cmd = DropTableCommand()
+        cmd.table_name = table_name
         table_migration.add_command(cmd)
 
     def rename_table(self, old_name, new_name):
-        table_migration = self.get_or_create_table_migration(old_name)
+        table_migration = self.get_or_create_table_migration(new_name)
         cmd = RenameTableCommand()
-        cmd.rename_to = new_name
+        cmd.table_name = new_name
+        cmd.rename_from = old_name
         table_migration.add_command(cmd)
 
     def alter_table(self, old_table, new_table):
         if new_table.name != old_table.name:
             self.rename_table(old_table.name, new_table.name)
-
+        # Check for renames
         table_migration = self.get_or_create_table_migration(new_table.name)
-        #if AlterTableCommand.action in table_migration.commands:
-        #    old_alter = table_migration.commands[AlterTableCommand.action]
         cmd = AlterTableCommand()
-        # TODO: Get the rename commands and add them first
-        # TODO: In create/drop, check to see if the column is in the appropriate rename command first
-        #
-        # Find all the column differences
+        cmd.table_name = new_table.name
+        renames = {}
+        if AlterTableCommand.action in table_migration.commands:
+            old_alter = table_migration.commands[AlterTableCommand.action]
+            for col_name in old_alter.columns:
+                old_action = old_alter.columns[col_name]
+                if old_action.action == RenameColumnCommand.action:
+                    cmd.columns[col_name] = old_action
+                    renames[old_action.rename_from] = old_action
+                    renames[col_name] = old_action
+        # Add change,nochange,add
         for col in new_table.columns:
             old_col = old_table.get_column(col.name)
             if old_col:
                 if col == old_col:
                     cmd.nochange(col.name)
                 else:
-                    cmd.change(col.name)
+                    if not col.name in renames:
+                        cmd.change(col.name)
+                    else:
+                        cmd.add(col.name)
             else:
-                cmd.add(col.name)
+                if not col.name in renames:
+                    cmd.add(col.name)
         # Find all the columns that were dropped
         for old_col in old_table.columns:
             if not new_table.get_column(old_col.name):
-                cmd.remove(old_col.name)
-
+                if not old_col.name in renames:
+                    cmd.remove(old_col.name)
         table_migration.add_command(cmd)
-        #cmd = table_migration.get_alter_command()
+
+    def get_or_create_table_command(self, table_name, clazz):
+        table_migration = self.get_or_create_table_migration(table_name)
+        if clazz.action in table_migration.commands:
+            cmd = table_migration.commands[clazz.action]
+        else:
+            cmd = clazz()
+            cmd.table_name = table_name
+            table_migration.add_command(cmd)
+        return cmd
 
     def rename_column(self, table_name, old_column, new_column):
-        pass
+        cmd = self.get_or_create_table_command(table_name, AlterTableCommand)
+        if old_column in cmd.columns:
+            if cmd.columns[old_column].action == 'remove':
+                del cmd.columns[old_column]
+            if cmd.columns[old_column].action == 'change':
+                cmd.add(old_column)
+        if new_column in cmd.columns:
+            if cmd.columns[new_column].action == 'add':
+                del cmd.columns[new_column]
+            else:
+                raise AppError('can not rename %s to %s' % (old_column, new_column))
+        cmd.rename(new_column, old_column)
 
-#    m.rename_table("migration", "migration_bak")  # m.add_command(schema.Command("migration_bak", "rename_table", old="migration"))
-#    m.rename_column("altered_table", "old_column", "renamed_column")  # m.add_command(schema.Command("altered_table", "rename_column", column="renamed_column", old="old_column"))
-#    m.add_column("altered_table", "added_column")
-#    m.remove_column("altered_table", "dropped_column")
-#    m.change_column("algtered_table", "changed_column")
+    def add_column(self, table_name, column_name):
+        cmd = self.get_or_create_table_command(table_name, AlterTableCommand)
+        cmd.add(column_name)
+
+    def change_column(self, table_name, column_name):
+        cmd = self.get_or_create_table_command(table_name, AlterTableCommand)
+        cmd.change(column_name)
+
+    def remove_column(self, table_name, column_name):
+        cmd = self.get_or_create_table_command(table_name, AlterTableCommand)
+        cmd.remove(column_name)
 
     @property
     def tables(self):

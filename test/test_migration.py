@@ -113,20 +113,21 @@ class TestMigration(unittest.TestCase):
             old_table = schema.Table()
             old_table.name = 'changelog'
             old_table.columns.add('old_col', 'varchar(2)')
-            old_table.columns.add('col1', 'varchar(1)')
             old_table.columns.add('col2', 'varchar(2)')
             old_table.columns.add('col3', 'varchar(1)')
+            old_table.columns.add('col4', 'varchar(255)')
 
             new_table = schema.Table()
             new_table.name = 'changelog_old'
             new_table.columns.add('old_col', 'varchar1')
             new_table.columns.add('renamed_col', 'varchar(2)')
             new_table.columns.add('col1', 'varchar(1)')
-            new_table.columns.add('col4', 'varchar(255)')
-            new_table.columns.add('col3', 'varchar1')
+            new_table.columns.add('col4', 'varchar(2)')
+            new_table.columns.add('col3', 'varchar(1)')
 
             migration.alter_table(old_table, new_table)
             migration.rename_column('changelog_old', 'old_col', 'renamed_col')
+            migration.alter_table(old_table, new_table)
 
             # Let's compare!
             yml = migration.get_yml()

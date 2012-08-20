@@ -2171,7 +2171,6 @@ tables:
           - { name: "updated_at", type: "datetime" }
 migration:
     previous: bootstrap
-    commands:
-        - action: create_table
-          params:
-              table: migrations
+    tables:
+        migrations:
+            create: ~
