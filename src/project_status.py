@@ -17,6 +17,8 @@ RED = "\033[31m{}\033[0m"
 GREEN = "\033[32m{}\033[0m"
 YELLOW = "\033[33m{}\033[0m"
 
+use_color = True
+
 
 def get_status(project):
     # Get all the versions
@@ -126,6 +128,8 @@ def get_commands_display(table_name, cmd_array, actual_table, expected_table, he
         for cmd_name in cmd_array:
             cmd = cmd_array[cmd_name]
             cmd_display = "{:13}   {:20}".format(cmd.display + ':', cmd.table_name)
+            if not use_color:
+                color = "{}"
             s.write('#       %s\n' % color.format(cmd_display))
         return s.getvalue()
 
@@ -148,6 +152,7 @@ def get_status_changes_not_added(project):
                     c = schema.CreateTableCommand()
                     c.table = table_name
                     project.path_version.migration.add_command(c)
+                    
                 #s.write("create %s\n" % table_name)
         for table_name in project.head_version.schema.tables:
             if not table_name in path_tables:

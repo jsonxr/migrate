@@ -29,6 +29,8 @@ class TestProject(unittest.TestCase):
 
     def test_project_bootstrap_emptydb_status(self):
         with fixtures.TestFixture("head_emptydb", clean=True) as tf:
+            import project_status
+            project_status.use_color = False
             p = project.Project(tf.temp_path)
             print(p.status())
 
